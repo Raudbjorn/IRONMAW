@@ -1,0 +1,45 @@
+{
+  "projectId": "ba980cbf-2ac8-4f57-90f9-8feabda6459c",
+  "pkg": "@svnbjrn/ironmaw",
+  "globalName": "Ironmaw",
+  "shape": "storybook",
+  "storybookConfigDir": ".storybook",
+  "storybookStatic": ".design-sync/sb-reference",
+  "buildCmd": "pnpm run build && node .design-sync/react-adapter/build.mjs",
+  "entry": ".design-sync/react-dist/index.js",
+  "cssEntry": "index.css",
+  "tokensPkg": "@svnbjrn/ironmaw",
+  "tokensGlob": "dist/tokens/*.css",
+  "extraFonts": [
+    "../../dist/tokens/fonts.css"
+  ],
+  "provider": {
+    "component": "ThemeRoot",
+    "props": {
+      "theme": "oxide"
+    }
+  },
+  "overrides": {
+    "Text": {
+      "cardMode": "column"
+    },
+    "NavBar": {
+      "cardMode": "column"
+    },
+    "DocumentEntry": {
+      "cardMode": "column"
+    },
+    "SourceEntry": {
+      "cardMode": "column"
+    },
+    "SearchField": {
+      "cardMode": "column"
+    }
+  },
+  "titleMap": {
+    "Colors": null,
+    "Typography": null,
+    "Geometry": null
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

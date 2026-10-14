@@ -1,0 +1,147 @@
+{
+  "$description": "Raw value pool. Never emitted as CSS variables; referenced from edition files via {primitive.color.*} aliases. The four brand anchors (teal, slate, rust, charcoal) come from the owner's identity board B2 and are also emitted verbatim as --wm-brand-* in the base layer.",
+  "primitive": {
+    "color": {
+      "$type": "color",
+      "charcoal-900": {
+        "$value": "#0F1416",
+        "$description": "Brand anchor: Charcoal. Primary canvas."
+      },
+      "charcoal-850": {
+        "$value": "#141B1E"
+      },
+      "charcoal-800": {
+        "$value": "#192327"
+      },
+      "charcoal-750": {
+        "$value": "#1F2B30"
+      },
+      "charcoal-650": {
+        "$value": "#2A3940",
+        "$description": "Quiet divider on charcoal (non-text boundary)."
+      },
+      "charcoal-selected": {
+        "$value": "#17262A",
+        "$description": "Teal-tinted selected-row fill on charcoal."
+      },
+      "mark-charcoal": {
+        "$value": "#101715",
+        "$description": "The exact ground of the supplied bear raster; Mark paints this so the opaque PNG sits seamlessly."
+      },
+      "mist-100": {
+        "$value": "#F3F6F7"
+      },
+      "mist-200": {
+        "$value": "#D9E1E4"
+      },
+      "mist-400": {
+        "$value": "#9EB1BA",
+        "$description": "AA (>=4.5:1) on charcoal-750, the deepest surface muted text sits on."
+      },
+      "mist-500": {
+        "$value": "#86999F",
+        "$description": "AA (>=4.5:1) on charcoal-850 for faint text."
+      },
+      "teal-500": {
+        "$value": "#3CA0A0",
+        "$description": "Brand anchor: Teal. 5.94:1 on charcoal."
+      },
+      "teal-700": {
+        "$value": "#1A6E6E",
+        "$description": "Bone-edition accent; AA on bone-100."
+      },
+      "rust-500": {
+        "$value": "#D0602B",
+        "$description": "Brand anchor: Rust. 4.76:1 on charcoal."
+      },
+      "rust-400": {
+        "$value": "#DB7343",
+        "$description": "Hover lift for the rust action on oxide (5.8:1 under charcoal ink). Deepening to rust-600 would fall to 3.77:1 under the same ink."
+      },
+      "rust-600": {
+        "$value": "#B8521F",
+        "$description": "Reviewed accessible action fill (4.92:1 under white). Not used under charcoal ink (3.77:1)."
+      },
+      "rust-700": {
+        "$value": "#A6461A",
+        "$description": "Bone-edition action; AA on bone-100."
+      },
+      "rust-800": {
+        "$value": "#8F3B14"
+      },
+      "slate-500": {
+        "$value": "#5F7E8F",
+        "$description": "Brand anchor: Slate. 4.30:1 on charcoal — borders and shapes, never small text."
+      },
+      "slate-300": {
+        "$value": "#8EA6B3",
+        "$description": "Lighter slate for small text on charcoal surfaces (AA)."
+      },
+      "slate-700": {
+        "$value": "#4B6676"
+      },
+      "slate-800": {
+        "$value": "#405A69"
+      },
+      "bone-100": {
+        "$value": "#EDE6D8",
+        "$description": "Bone edition canvas."
+      },
+      "bone-200": {
+        "$value": "#E6DECE"
+      },
+      "bone-300": {
+        "$value": "#DFD6C4"
+      },
+      "bone-400": {
+        "$value": "#D7CDB9"
+      },
+      "bone-600": {
+        "$value": "#C9BEA8"
+      },
+      "bone-selected": {
+        "$value": "#DCE3DC"
+      },
+      "ink-900": {
+        "$value": "#0F1416"
+      },
+      "ink-800": {
+        "$value": "#1F2729"
+      },
+      "ink-600": {
+        "$value": "#45565D"
+      },
+      "ink-550": {
+        "$value": "#52646C"
+      },
+      "paper-ink": {
+        "$value": "#F6F1E7",
+        "$description": "Label ink on bone-edition fills."
+      },
+      "green-400": {
+        "$value": "#5CB38B"
+      },
+      "green-700": {
+        "$value": "#276E4C"
+      },
+      "amber-400": {
+        "$value": "#E2A33B"
+      },
+      "amber-700": {
+        "$value": "#7F5200"
+      },
+      "red-400": {
+        "$value": "#E86052"
+      },
+      "red-700": {
+        "$value": "#AE3327"
+      },
+      "white": {
+        "$value": "#FFFFFF"
+      },
+      "black": {
+        "$value": "#000000"
+      }
+    }
+  }
+}

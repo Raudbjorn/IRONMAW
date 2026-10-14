@@ -1,0 +1,11 @@
+/* The preview canvas is a consumer of the system: token background, token
+   text, token fonts. Stories inherit the edition instead of a hardcoded white. */
+body {
+  background: var(--wm-bg);
+  color: var(--wm-text);
+  font-family: var(--wm-font-sans);
+}
+.sbdocs.sbdocs-wrapper {
+  background: var(--wm-bg);
+  color: var(--wm-text);
+}

@@ -1,0 +1,8 @@
+/* Layer order for the whole system, declared before any styles land:
+   base scale < built-in editions < user overrides. Unlayered consumer CSS
+   still beats all of these (CSS Cascade L5) — to override tokens below an
+   edition, write into @layer wm.user. */
+@layer wm.base, wm.theme, wm.user;
+@import './fonts.css';
+@import './colors.css';
+@import './scale.css';

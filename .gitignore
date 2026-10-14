@@ -1,0 +1,30 @@
+node_modules/
+.DS_Store
+*.log
+.claude/
+dist/
+.svelte-kit/
+storybook-static/
+*storybook.log
+screenshots/
+
+# owner references and chat correspondence — never committed
+.do-not-commit/
+.do-no-commit/
+
+# Iosevka Nerd TTF sources (13 MB each) — see scripts/build-fonts.mjs
+assets/fonts-src/IosevkaNerdFont-*.ttf
+
+# graft index
+graft/
+
+# design-sync (claude.ai/design) — transient state; the durable set
+# (.design-sync/{config.json,NOTES.md,conventions.md,previews/,react-adapter/})
+# is committed.
+.design-sync/sb-reference/
+.design-sync/learnings/
+.design-sync/.cache/
+.design-sync/node_modules
+.design-sync/react-dist/
+.ds-sync/
+ds-bundle/

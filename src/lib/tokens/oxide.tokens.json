@@ -1,0 +1,29 @@
+{
+  "$description": "WORMIAN — OXIDE. The charcoal, teal, rust and slate expression; the default edition emitted at :root. Contrast gates live in palette.test.ts.",
+  "color": {
+    "$type": "color",
+    "bg": { "$value": "{primitive.color.charcoal-900}" },
+    "surface-1": { "$value": "{primitive.color.charcoal-850}" },
+    "surface-2": { "$value": "{primitive.color.charcoal-800}" },
+    "surface-3": { "$value": "{primitive.color.charcoal-750}" },
+    "border": { "$value": "{primitive.color.charcoal-650}", "$description": "Quiet separators between surfaces." },
+    "border-strong": { "$value": "{primitive.color.slate-500}", "$description": "Outlined fields and secondary controls (3:1+ on every surface)." },
+    "text": { "$value": "{primitive.color.mist-200}" },
+    "text-strong": { "$value": "{primitive.color.mist-100}" },
+    "text-muted": { "$value": "{primitive.color.mist-400}" },
+    "text-faint": { "$value": "{primitive.color.mist-500}" },
+    "accent": { "$value": "{primitive.color.teal-500}", "$description": "Teal: search emphasis, focus, selected controls, filter state." },
+    "accent-ink": { "$value": "{primitive.color.charcoal-900}", "$description": "Label ink on a solid accent fill." },
+    "action": { "$value": "{primitive.color.rust-500}", "$description": "Rust: the main action, active tab underline, navigation indicator." },
+    "action-hover": { "$value": "{primitive.color.rust-400}", "$description": "Hover lifts on oxide; the label ink stays charcoal." },
+    "action-ink": { "$value": "{primitive.color.charcoal-900}", "$description": "Label ink on a solid action fill." },
+    "structure": { "$value": "{primitive.color.slate-500}", "$description": "Slate: dividers, supporting shapes, secondary outlines." },
+    "structure-text": { "$value": "{primitive.color.slate-300}", "$description": "Slate lifted for small text." },
+    "selected": { "$value": "{primitive.color.charcoal-selected}", "$description": "Tonal fill of the selected result row; pairs with an action-coloured edge." },
+    "mark-bg": { "$value": "{primitive.color.mark-charcoal}" },
+    "mix-target": { "$value": "{primitive.color.white}", "$description": "hover lightens in oxide" },
+    "success": { "$value": "{primitive.color.green-400}" },
+    "warning": { "$value": "{primitive.color.amber-400}", "$description": "Amber, not rust: a notice must never read as a routine action." },
+    "error": { "$value": "{primitive.color.red-400}" }
+  }
+}

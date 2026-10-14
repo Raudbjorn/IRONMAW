@@ -1,0 +1,29 @@
+{
+  "$description": "WORMIAN — BONE. Proposed paper-toned expression for documents and reading. Opt-in via data-theme=\"bone\"; not yet owner-approved as a product theme. Same gates as oxide.",
+  "color": {
+    "$type": "color",
+    "bg": { "$value": "{primitive.color.bone-100}" },
+    "surface-1": { "$value": "{primitive.color.bone-200}" },
+    "surface-2": { "$value": "{primitive.color.bone-300}" },
+    "surface-3": { "$value": "{primitive.color.bone-400}" },
+    "border": { "$value": "{primitive.color.bone-600}" },
+    "border-strong": { "$value": "{primitive.color.slate-700}" },
+    "text": { "$value": "{primitive.color.ink-800}" },
+    "text-strong": { "$value": "{primitive.color.ink-900}" },
+    "text-muted": { "$value": "{primitive.color.ink-600}" },
+    "text-faint": { "$value": "{primitive.color.ink-550}" },
+    "accent": { "$value": "{primitive.color.teal-700}" },
+    "accent-ink": { "$value": "{primitive.color.paper-ink}" },
+    "action": { "$value": "{primitive.color.rust-700}" },
+    "action-hover": { "$value": "{primitive.color.rust-800}" },
+    "action-ink": { "$value": "{primitive.color.paper-ink}" },
+    "structure": { "$value": "{primitive.color.slate-700}" },
+    "structure-text": { "$value": "{primitive.color.slate-800}" },
+    "selected": { "$value": "{primitive.color.bone-selected}" },
+    "mark-bg": { "$value": "{primitive.color.mark-charcoal}" },
+    "mix-target": { "$value": "{primitive.color.black}", "$description": "hover darkens on bone" },
+    "success": { "$value": "{primitive.color.green-700}" },
+    "warning": { "$value": "{primitive.color.amber-700}" },
+    "error": { "$value": "{primitive.color.red-700}" }
+  }
+}
