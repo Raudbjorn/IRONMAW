@@ -1,7 +1,8 @@
 node_modules/
 .DS_Store
 *.log
-.claude/
+.claude/*
+!.claude/agents/
 dist/
 .svelte-kit/
 storybook-static/

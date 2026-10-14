@@ -21,7 +21,8 @@
   onSubmit, onRemove, onOpen, onCopy, onDismiss, onClear, readOnly.
 - **Non-component exports pass through unwrapped**: `REVIEW_STATUS`,
   `reviewStatusCopy`, `sortReviewStatuses`, `contrastRatio`, `brand`, `oxide`,
-  `bone`, `editions`, `bearMark`, `BEAR_MARK_WIDTH/HEIGHT`. Re-exported from
+  `bone`, `editions`, `bearMark`, `BEAR_MARK_WIDTH/HEIGHT`, `bearEmblem`,
+  `BEAR_EMBLEM_WIDTH/HEIGHT`. Re-exported from
   dist in `index.js`, hand-typed in `index.d.ts`.
 - **The adapter build is `cfg.buildCmd`'s second half** — `pnpm run build`
   (tokens, fonts, assets, svelte-package) then
@@ -77,13 +78,19 @@
   "Metadata only" → `MetadataOnly`, "Identical content, six locations" →
   `IdenticalContentSixLocations`, "Partial record" → `PartialRecord`,
   "All states" → `AllStates`, "Three tones" → `ThreeTones`.
-- The `Mark` bear is a 40 KB base64 SVG data URL baked into the bundle —
+- The `Mark` full bear and compact emblem are base64 SVG data URLs baked into the bundle —
   `[ASSETS_BLOCKED]` has nothing to fire on; no story loads a remote image.
 - `.design-sync/tsconfig.json` exists purely for the EDITOR (quarantines
   previews/*.tsx onto the React types via paths); the pipeline compiles
   previews with esbuild and never reads it.
 
 ## Fixes log
+
+- **2026-10-14 resource reconciliation**: the supplied compact bear emblem is
+  used in small lockups; `Panel terrain` adds the contour and mountain treatment
+  for brand surfaces; active NavBar items use the reference's rust underline.
+  Added matching owned previews for the new Mark and Panel stories. Re-sync
+  and compare are still needed before claiming parity in claude.ai/design.
 
 - **2026-10-13 first sync** into project **IRONMAW**
   (`ba980cbf-2ac8-4f57-90f9-8feabda6459c`, incremental path). 21 components /

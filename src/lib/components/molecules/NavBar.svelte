@@ -1,9 +1,8 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  // Compact branded shell: Mark at left, destinations as angular items
-  // (active = rust fill with the chamfer, exactly the board's selected
-  // navigation), actions at right. Below 768px the destinations collapse
+  // Compact branded shell: Mark at left, destinations with a rust active
+  // underline (as in the supplied UI board), actions at right. Below 768px they collapse
   // behind a labelled toggle — never a clipped row.
   interface NavItem {
     href: string;
@@ -73,7 +72,7 @@
     align-items: center;
     min-height: var(--wm-control-sm);
     padding: 0 var(--wm-space-3);
-    border: 1px solid var(--wm-border-strong);
+    border: 1px solid transparent;
     color: var(--wm-text);
     font-family: var(--wm-font-display);
     font-weight: var(--wm-display-weight);
@@ -85,14 +84,14 @@
     transition: color 0.12s ease, background-color 0.12s ease;
   }
   [data-wm='navitem']:hover { background: var(--wm-surface-2); color: var(--wm-text-strong); }
-  [data-wm='navitem'][data-active] { border-color: transparent; color: var(--wm-action-ink); font-weight: var(--wm-display-weight-bold); }
-  [data-wm='navitem'][data-active]::before {
+  [data-wm='navitem'][data-active] { color: var(--wm-text-strong); font-weight: var(--wm-display-weight-bold); }
+  [data-wm='navitem'][data-active]::after {
     content: '';
     position: absolute;
-    inset: -1px;
-    z-index: -1;
+    inset-inline: -1px;
+    bottom: -1px;
+    height: 3px;
     background: var(--wm-action);
-    clip-path: polygon(0 0, calc(100% - var(--wm-chamfer)) 0, 100% var(--wm-chamfer), 100% 100%, 0 100%);
   }
   [data-wm='navitem']:focus-visible { outline: 2px solid var(--wm-accent); outline-offset: 2px; }
 
@@ -132,5 +131,6 @@
     .links[data-open='true'] { display: flex; }
     .items { flex-direction: column; }
     [data-wm='navitem'] { min-height: 44px; }
+    [data-wm='navitem'][data-active]::after { inset-inline: auto; left: -1px; top: -1px; bottom: -1px; width: 3px; height: auto; }
   }
 </style>

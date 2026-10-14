@@ -149,12 +149,12 @@ export interface SpinnerProps {
 export declare const Spinner: React.FC<SpinnerProps>;
 
 /**
- * The identity. bear = the owner's traced vector master (transparent);
- * wordmark = IRONMAW in the display face with the rust tick; lockup = both.
+ * The identity. bear = the full supplied vector; emblem = the compact mark;
+ * wordmark = IRONMAW in the display face; small lockups use the emblem.
  * plate seats the bear on its charcoal plate (brand-board treatment).
  */
 export interface MarkProps {
-  variant?: 'bear' | 'wordmark' | 'lockup';
+  variant?: 'bear' | 'emblem' | 'wordmark' | 'lockup';
   /** The name on paper. Default "IRONMAW". */
   name?: string;
   /** Second line, e.g. "Wormian Bones" or the product name. */
@@ -186,6 +186,8 @@ export interface PanelProps {
   surface?: 1 | 2 | 3;
   padding?: 0 | 2 | 3 | 4 | 6;
   elevated?: boolean;
+  /** Contour and mountain treatment for brand headers and empty states. */
+  terrain?: boolean;
   'aria-label'?: string;
   header?: React.ReactNode;
   footer?: React.ReactNode;
@@ -346,3 +348,6 @@ export declare const editions: { oxide: Record<string, string>; bone: Record<str
 export declare const bearMark: string;
 export declare const BEAR_MARK_WIDTH: number;
 export declare const BEAR_MARK_HEIGHT: number;
+export declare const bearEmblem: string;
+export declare const BEAR_EMBLEM_WIDTH: number;
+export declare const BEAR_EMBLEM_HEIGHT: number;

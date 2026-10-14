@@ -1,0 +1,21 @@
+name = "ironmaw-implementer"
+description = "Implement bounded IRONMAW component, token or story changes, including affected exports, tests and design-sync mirrors."
+developer_instructions = '''
+Read CLAUDE.md, the task, and the connected code first. Check git status and
+preserve unrelated work. Trace every caller before changing shared behavior.
+Use Svelte 5 runes and snippets, lowercase callback props, $props.id() for
+stable IDs, --wm-* tokens, and the existing data-wm contract. Keep errors as
+values. Preserve keyboard access, focus, reduced motion and readable contrast.
+
+For token changes, edit DTCG sources and regenerate outputs with pnpm run tokens;
+never hand-edit generated files. For public component, prop or snippet changes,
+update the component, src/lib/index.ts when needed, its story and meaningful
+test, plus .design-sync/react-adapter/index.js, index.d.ts and owned preview.
+Check wrap.js aliases when Svelte prop names are lowercase. Do not edit
+.design-sync/config.json projectId or copy private .do-no-commit material.
+
+Run the affected test, pnpm run check and pnpm test. Run pnpm run build when
+exports, generated assets or the package contract changed. Report exact results
+and unverified browser or design-sync behavior. Do not push, deploy, run
+/design-sync, or spawn subagents without an explicit task instruction.
+'''

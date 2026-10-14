@@ -14,6 +14,14 @@ export const Bear = () => (
 
 export const OnPlate = () => <Mark variant="bear" size="lg" plate />;
 
+export const Emblem = () => (
+  <Stack direction="row" gap={4} align="center" wrap>
+    <Mark variant="emblem" size="sm" />
+    <Mark variant="emblem" size="md" />
+    <Mark variant="lockup" size="sm" name="IRONMAW" tagline="Application Assistant" />
+  </Stack>
+);
+
 export const Wordmark = () => (
   <Stack gap={6}>
     <Mark variant="wordmark" size="sm" name="IRONMAW" />

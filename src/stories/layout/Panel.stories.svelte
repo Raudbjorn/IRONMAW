@@ -17,6 +17,16 @@
   });
 </script>
 
+<Story name="Terrain" asChild>
+  <Panel as="header" terrain>
+    <Stack gap={1}>
+      <Kicker>Application Assistant</Kicker>
+      <Heading level={2} display>Library</Heading>
+      <Text size="sm" tone="muted">A quiet contour and mountain field for brand headers.</Text>
+    </Stack>
+  </Panel>
+</Story>
+
 <Story name="Basic">
   {#snippet template({ children: _, ...args })}
     <Panel {...args}>

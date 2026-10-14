@@ -63,12 +63,12 @@
       </Notice>
     {/if}
 
-    <Stack direction="row" gap={4} align="end" justify="between" wrap>
+    <Panel as="header" terrain>
       <Stack gap={1}>
         <Heading level={1} display>Library</Heading>
         <Text size="sm" tone="muted">Index updated 2026-10-13 10:15 · keyword search of titles, file paths and extracted text</Text>
       </Stack>
-    </Stack>
+    </Panel>
 
     <div class="controls">
       <SearchField bind:value={query} busy={false} />

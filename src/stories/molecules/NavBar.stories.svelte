@@ -18,7 +18,7 @@
     argTypes: { brand: { table: { disable: true } }, children: { table: { disable: true } } },
     parameters: {
       layout: 'fullscreen',
-      docs: { description: { component: 'Compact branded shell: Mark at left, angular destinations (active = rust fill with the chamfer), actions at right. Below 768px the destinations collapse behind a labelled toggle — never a clipped row.' } }
+      docs: { description: { component: 'Compact branded shell: supplied small bear emblem at left, rust underline on the active destination, actions at right. Below 768px the destinations collapse behind a labelled toggle.' } }
     }
   });
 </script>

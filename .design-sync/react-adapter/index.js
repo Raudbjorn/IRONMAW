@@ -63,3 +63,4 @@ export { REVIEW_STATUS, reviewStatusCopy, sortReviewStatuses } from '../../dist/
 export { contrastRatio } from '../../dist/internal/contrast.js';
 export { brand, oxide, bone, editions } from '../../dist/tokens/palette.js';
 export { bearMark, BEAR_MARK_WIDTH, BEAR_MARK_HEIGHT } from '../../dist/assets/bear-mark.js';
+export { bearEmblem, BEAR_EMBLEM_WIDTH, BEAR_EMBLEM_HEIGHT } from '../../dist/assets/bear-emblem.js';

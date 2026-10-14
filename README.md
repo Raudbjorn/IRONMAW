@@ -53,12 +53,26 @@ pnpm add @svnbjrn/ironmaw   # once published; today: pnpm link from this repo
 | Layout | `Stack`, `Panel`, `Suture` |
 | Molecules | `SearchField`, `Tabs`, `Notice`, `NavBar` |
 | Library | `DocumentEntry`, `SourceEntry`, `LoadMore` |
-| Data | `REVIEW_STATUS`, `reviewStatusCopy`, `sortReviewStatuses`, `brand`, `oxide`, `bone`, `contrastRatio`, `bearMark` |
+| Data | `REVIEW_STATUS`, `reviewStatusCopy`, `sortReviewStatuses`, `brand`, `oxide`, `bone`, `contrastRatio`, `bearMark`, `bearEmblem` |
 
 Rules the parts enforce: teal is interactive emphasis; rust is the one action
 and the active indicator; warnings are amber, never rust; display lettering
 (Rajdhani) is for short labels only; review labels have three tones and no
-"Verified"; the chamfer is one size; the suture is the only ornament.
+"Verified"; the chamfer is one size. Contours and mountain lines belong on
+brand headers and empty states; the suture marks actual joins in dense UI.
+
+## From the supplied references
+
+| Reference | System use |
+|---|---|
+| Full bear SVG and compact favicon SVG | `Mark` uses the full vector at medium/large sizes and the emblem in small lockups; the artwork colours remain intact. |
+| Topographic banner and cover-letter headers | `Panel terrain` draws quiet contour and mountain lines on brand headers, away from document text and controls. |
+| Interface board | `NavBar` uses a rust active underline; primary buttons retain the single chamfer, and selected chips remain teal. |
+| Identity board | The four anchor colours remain exact in the DTCG tokens. |
+| Light and dark cover-letter previews | The existing Oxide/Bone split keeps prose in Inter and the mark in the header; the document copy stays outside the component library. |
+
+The supplied alternate cyan/orange and pixel bear concepts remain visual
+references; they are distinct marks, not automatic variants of the master.
 
 ## Develop
 
@@ -75,8 +89,8 @@ Tokens are DTCG JSON in `src/lib/tokens/*.tokens.json`; `pnpm run tokens`
 regenerates `colors.css`, `scale.css`, `palette.ts` and `resolved/*.json`.
 Never hand-edit the generated files. Fonts (Inter, Iosevka Nerd, Rajdhani — all
 OFL, full Icelandic coverage) are subset from `assets/fonts-src/` by
-`pnpm run fonts`. The bear is the owner's vector master in `assets/brand/`,
-inlined by `pnpm run assets`.
+`pnpm run fonts`. The full bear and compact emblem are owner-supplied vectors
+in `assets/brand/`, inlined by `pnpm run assets`.
 
 ## Sync to claude.ai/design
 

@@ -7,10 +7,10 @@
     component: Mark,
     args: { variant: 'lockup', name: 'IRONMAW', tagline: 'Wormian Bones', size: 'md', plate: false },
     argTypes: {
-      variant: { control: 'inline-radio', options: ['bear', 'wordmark', 'lockup'] },
+      variant: { control: 'inline-radio', options: ['bear', 'emblem', 'wordmark', 'lockup'] },
       size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] }
     },
-    parameters: { docs: { description: { component: 'The identity. The bear is the owner\'s traced vector master (reference B1) with a transparent ground; `plate` seats it on its charcoal plate. The wordmark is the typographic form for compact chrome.' } } }
+    parameters: { docs: { description: { component: 'The identity. The full bear is the supplied vector master; the supplied emblem holds at small sizes. Small lockups use the emblem. `plate` seats either mark on charcoal.' } } }
   });
 </script>
 
@@ -26,6 +26,14 @@
 
 <Story name="On plate" asChild>
   <Mark variant="bear" size="lg" plate />
+</Story>
+
+<Story name="Emblem" asChild>
+  <Stack direction="row" gap={4} align="center" wrap>
+    <Mark variant="emblem" size="sm" />
+    <Mark variant="emblem" size="md" />
+    <Mark variant="lockup" size="sm" name="IRONMAW" tagline="Application Assistant" />
+  </Stack>
 </Story>
 
 <Story name="Wordmark" asChild>

@@ -25,11 +25,11 @@ Wrap every app root in `<ThemeRoot>`: it sets the library's theming contract
 ## Rules the components encode
 
 - **Teal** = interactive emphasis: focus, selection, filter state, links. Solid teal fills take a charcoal label.
-- **Rust** = the main action and the active indicator (primary Button, active tab underline, active NavBar item, selected-row edge). One filled rust control per view.
+- **Rust** = the main action and the active indicator (primary Button, active tab and NavBar underlines, selected-row edge). One filled rust control per view.
 - **Warnings are amber, never rust.** A `Notice` must not look like an action.
 - **Display lettering** (Rajdhani, uppercase, tracked) is for short labels only: `Kicker`, `Button`, `Tabs`, `NavBar`, `Heading display`. Document titles, excerpts, warnings and Icelandic prose stay in Inter sentence case (`Text`, `Heading`).
 - **Review labels have three tones** (`StatusLabel`): act (filled rust + ▲, "Known issues"), care (rust outline), context (slate outline). No green, no "Verified". Unknown stored values render raw.
-- **The chamfer** is one 10px clipped corner on primary controls — one size, never scaled. **The suture** (`Suture`) is the only ornament: a slate seam with a rust tick, always at a real join.
+- **The chamfer** is one 10px clipped corner on primary controls — one size, never scaled. **The suture** (`Suture`) marks real joins. `Panel terrain` carries quiet contours, a mountain ridge and pines only on brand headers and empty states.
 - Copy is sentence case, plain verbs, named by what the user controls: "Search library", "Copy passage with source", "Back to results". Counts: "N file locations" and "N more matches" are different things and are never summed.
 
 ## Styling idiom — tokens and props, never CSS classes
@@ -56,7 +56,7 @@ Gotchas that matter:
 - **Event callbacks use Svelte's lowercase names**: `onclick`, `onsubmit`, `onremove`, `onopen`, `oncopy`, `ondismiss` (camelCase aliases are accepted).
 - `children`, Panel's `header`/`footer`, NavBar's `brand`, Notice's `action`, DocumentEntry's `excerpt`/`extra` take normal React nodes.
 - `StatusLabel` takes the **stored** status value (`"known-errors"`), not display copy; `REVIEW_STATUS` / `reviewStatusCopy` expose the mapping.
-- `Mark variant="bear"` is the owner's vector master, transparent; add `plate` to seat it on charcoal.
+- `Mark variant="bear"` is the owner's full vector master; `variant="emblem"` is the supplied small-format bear. Small lockups use the emblem automatically. Add `plate` to seat either on charcoal.
 
 ## Where the truth lives
 

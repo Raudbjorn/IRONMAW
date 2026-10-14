@@ -1,8 +1,8 @@
 <script lang="ts">
   // The seam — the system's signature. Wormian bones sit inside the skull's
   // sutures; here a suture is a thin slate line that admits a short rust
-  // tick and, optionally, a display label. It is the only ornament the
-  // interface allows itself, and it always marks a real join between parts.
+  // tick and, optionally, a display label. It marks a real join between parts;
+  // terrain art is reserved for brand headers and empty states.
   interface Props {
     /** Uppercase display label set into the line. */
     label?: string;
