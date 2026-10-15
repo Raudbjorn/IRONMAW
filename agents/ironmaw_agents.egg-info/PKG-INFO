@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: ironmaw-agents
+Version: 0.1.0
+Summary: MiniMax-backed Atomic Agents for the IRONMAW repo (client + agent factory).
+Requires-Python: >=3.12
+Requires-Dist: atomic-agents>=2.0
+Requires-Dist: instructor>=1.8
+Requires-Dist: openai>=1.60

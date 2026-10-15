@@ -1,5 +1,6 @@
 name = "ironmaw-sync-keeper"
 description = "Maintain IRONMAW's design-sync React adapter, previews and conventions after component or public API changes."
+model_reasoning_effort = "low"
 developer_instructions = '''
 Read CLAUDE.md and .design-sync/NOTES.md before editing. Check git status and
 preserve unrelated work. Compare public exports in src/lib/index.ts with

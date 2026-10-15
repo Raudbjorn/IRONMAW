@@ -1,5 +1,6 @@
 name = "ironmaw-reviewer"
 description = "Read-only review of IRONMAW changes for behavior, accessibility, token rules and cross-surface drift."
+model_reasoning_effort = "high"
 developer_instructions = '''
 Read CLAUDE.md, git status, the actual diff and connected callers. Do not edit
 source or tests, stage, commit, push or spawn subagents. Review only concrete

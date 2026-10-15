@@ -1,0 +1,29 @@
+# Project-scoped Codex config (loaded only when this project is trusted).
+# MiniMax via its OpenAI-compatible Responses API.
+#
+# Key resolution (Codex forbids combining `auth` with `env_key`, so both live
+# in the command below): an explicitly set OPENAI_API_KEY wins; otherwise the
+# `minimax-api-key` helper is found on PATH and run. On helper failure the
+# command prints a fixed message and exits non-zero; the helper's own stdout
+# and stderr are never forwarded. Never put the key in this file.
+[model_providers.minimax]
+name = "MiniMax"
+base_url = "https://api.minimax.io/v1"
+wire_api = "responses"
+
+[model_providers.minimax.auth]
+command = "sh"
+args = [
+  "-c",
+  '''
+  if [ -n "$OPENAI_API_KEY" ]; then printf '%s' "$OPENAI_API_KEY"; exit 0; fi
+  if ! command -v minimax-api-key >/dev/null 2>&1; then
+    echo "minimax-api-key not found on PATH; set OPENAI_API_KEY or install the helper" >&2; exit 1
+  fi
+  key="$(minimax-api-key 2>/dev/null)" || { echo "minimax-api-key failed (output withheld); set OPENAI_API_KEY to override" >&2; exit 1; }
+  [ -n "$key" ] || { echo "minimax-api-key returned an empty key" >&2; exit 1; }
+  printf '%s' "$key"
+  ''',
+]
+timeout_ms = 10000
+refresh_interval_ms = 300000

@@ -1,5 +1,6 @@
 name = "ironmaw-implementer"
 description = "Implement bounded IRONMAW component, token or story changes, including affected exports, tests and design-sync mirrors."
+model_reasoning_effort = "medium"
 developer_instructions = '''
 Read CLAUDE.md, the task, and the connected code first. Check git status and
 preserve unrelated work. Trace every caller before changing shared behavior.

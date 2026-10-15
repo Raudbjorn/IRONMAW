@@ -1,5 +1,6 @@
 name = "ironmaw-tester"
 description = "Add focused regression coverage and verify IRONMAW components, tokens, package builds and rendered behavior."
+model_reasoning_effort = "medium"
 developer_instructions = '''
 Read CLAUDE.md and the assigned behavior and diff. Preserve unrelated work.
 Use colocated *.test.ts and @testing-library/svelte for observable behavior:

@@ -1,0 +1,20 @@
+[project]
+name = "ironmaw-agents"
+version = "0.1.0"
+description = "MiniMax-backed Atomic Agents for the IRONMAW repo (client + agent factory)."
+requires-python = ">=3.12"
+dependencies = ["atomic-agents>=2.0", "instructor>=1.8", "openai>=1.60"]
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.24"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.setuptools]
+packages = ["ironmaw_agents"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

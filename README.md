@@ -85,6 +85,42 @@ pnpm dev              # the Library screen composed from the system
 pnpm run storybook    # every part, both editions
 ```
 
+To run Codex and the five `.codex/agents/` roles through MiniMax:
+
+```bash
+./scripts/codex-minimax.sh
+./scripts/codex-minimax.sh exec 'Review Panel using ironmaw-reviewer'
+```
+
+The launcher uses an existing `OPENAI_API_KEY`, or finds `minimax-api-key` on
+`PATH` when it is unset. It selects MiniMax's Responses endpoint and model
+catalog. Subagents inherit the parent provider and model; their TOML files
+set only reasoning effort.
+A session started with plain `codex` keeps its normal provider.
+
+Python Atomic Agents can use the same MiniMax credentials through the separate
+`ironmaw_agents` package:
+
+```bash
+uv venv
+uv pip install -e '.[test]'
+source .venv/bin/activate
+python - <<'PY'
+from atomic_agents import BasicChatInputSchema
+from ironmaw_agents import create_minimax_agent
+
+agent = create_minimax_agent(reasoning_effort="medium")
+print(agent.run(BasicChatInputSchema(chat_message="Summarize IRONMAW in one sentence.")))
+PY
+```
+
+`minimax_client()` uses an explicitly set `OPENAI_API_KEY`, otherwise it runs
+`minimax-api-key` from `PATH`. The client fixes the MiniMax endpoint, 60 second
+timeout, two transport retries, and 16,384 completion tokens. The agent factory
+accepts a `model` override and uses function tools for typed outputs; JSON
+response modes are rejected before making a request. Run its checks with
+`python -m pytest -q tests/test_minimax.py`.
+
 Tokens are DTCG JSON in `src/lib/tokens/*.tokens.json`; `pnpm run tokens`
 regenerates `colors.css`, `scale.css`, `palette.ts` and `resolved/*.json`.
 Never hand-edit the generated files. Fonts (Inter, Iosevka Nerd, Rajdhani — all

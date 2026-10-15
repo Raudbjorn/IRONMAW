@@ -1,0 +1,3 @@
+atomic-agents>=2.0
+instructor>=1.8
+openai>=1.60

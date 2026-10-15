@@ -8,6 +8,9 @@ dist/
 storybook-static/
 *storybook.log
 screenshots/
+.venv/
+__pycache__/
+.pytest_cache/
 
 # owner references and chat correspondence — never committed
 .do-not-commit/
@@ -29,3 +32,11 @@ graft/
 .design-sync/react-dist/
 .ds-sync/
 ds-bundle/
+
+# python (agents/)
+__pycache__/
+.venv/
+.pytest_cache/
+
+# generated imagery (agents/)
+agents/.out/
