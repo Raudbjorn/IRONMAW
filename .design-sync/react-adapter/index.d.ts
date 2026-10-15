@@ -4,7 +4,8 @@
 // header, footer, brand, action, excerpt, extra) accept React nodes.
 // Lowercase Svelte event names remain canonical; matching React camelCase
 // aliases (onClick, onSubmit, onRemove, onOpen, onCopy, onDismiss, onClear,
-// onChange, onInput) are also accepted.
+// onChange, onInput, onSelect, onMove, onVisibility, onExpand, onMenu) are
+// also accepted.
 import * as React from 'react';
 
 /** Edition frame: sets data-theme and paints the token canvas. */
@@ -14,6 +15,51 @@ export interface ThemeRootProps {
   children?: React.ReactNode;
 }
 export declare const ThemeRoot: React.FC<ThemeRootProps>;
+
+/** Every icon in the IRONMAW set (24-unit grid, one stroke weight). */
+export type IconName =
+  'arrow-left' | 'chevron-down' | 'chevron-up' | 'chevron-left' | 'chevron-right' | 'more' |
+  'menu' | 'grip' | 'plus' | 'minus' | 'close' | 'check' | 'search' | 'write' | 'design' |
+  'checklist' | 'history' | 'assist' | 'share' | 'download' | 'copy' | 'trash' | 'zoom-fit' |
+  'heading' | 'eye' | 'eye-off' | 'saved' | 'unsaved' | 'warning' | 'info' | 'error' | 'success' |
+  'refresh' | 'file' | 'code' | 'image' | 'camera' | 'tag' | 'mail' | 'phone' | 'location' |
+  'external' | 'link' | 'globe' | 'user' | 'users' | 'summary' | 'experience' | 'education' | 'skills' |
+  'projects' | 'awards' | 'certifications' | 'publications' | 'volunteer' | 'languages' |
+  'interests' | 'references' | 'profiles' | 'mountain';
+/** Icon path data, shared with native consumers. Render stroke-only: fill="none" stroke="currentColor". */
+export declare const ICONS: Record<IconName, string>;
+export declare const ICON_NAMES: IconName[];
+/** Stroke width in grid units for a pixel size (heavier at 12/16px). */
+export declare function iconStroke(size: number): number;
+
+/** One drawn line icon. Decorative unless label is set. */
+export interface IconProps {
+  name: IconName;
+  size?: 12 | 16 | 20 | 24;
+  /** Accessible name; without it the icon is aria-hidden. */
+  label?: string;
+  tone?: 'inherit' | 'muted' | 'accent' | 'action' | 'warning' | 'error' | 'success';
+}
+export declare const Icon: React.FC<IconProps>;
+
+/** Short figure or tag riding on a control (a count of open checks, "New"). Numbers are Iosevka, tabular. Never a placeholder count. */
+export interface BadgeProps {
+  value: number | string;
+  tone?: 'neutral' | 'accent' | 'warning' | 'error';
+  /** Accessible text when the bare value is ambiguous, e.g. "6 checks to review". */
+  label?: string;
+}
+export declare const Badge: React.FC<BadgeProps>;
+
+/** Numbered finding dot tying a list item to its place on the page. Warning = amber (never rust). */
+export interface MarkerProps {
+  value: number | string;
+  tone?: 'warning' | 'error' | 'accent' | 'neutral';
+  size?: 'sm' | 'md';
+  /** Accessible text, e.g. "Finding 3"; without it the marker is decorative. */
+  label?: string;
+}
+export declare const Marker: React.FC<MarkerProps>;
 
 /** Body text. Inter for interface and prose; mono = Iosevka for paths and locators. */
 export interface TextProps {
@@ -53,9 +99,10 @@ export declare const Kicker: React.FC<KickerProps>;
  * Renders an anchor when href is set.
  */
 export interface ButtonProps {
-  /** primary = rust fill (chamfered), secondary = slate outline, ghost = text only, danger = error fill. */
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+  /** primary = rust fill (chamfered), secondary = slate outline, ghost = text only, danger = error fill, dashed = empty slot inviting an addition ("Add section"). */
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'dashed';
+  /** xs = 28px in-row controls. */
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   href?: string;
   type?: 'button' | 'submit';
   disabled?: boolean;
@@ -63,13 +110,19 @@ export interface ButtonProps {
   loading?: boolean;
   /** The clipped corner. Defaults on for primary and danger, off otherwise. */
   chamfer?: boolean;
-  /** Icon-only button: children are the glyph; label is the accessible name. */
+  /** Icon-only button: set label (accessible name) + icon, no children. */
   label?: string;
+  /** Leading icon from the IRONMAW set. */
+  icon?: IconName;
+  /** Trailing icon, e.g. chevron-down on a menu trigger. */
+  iconEnd?: IconName;
   'aria-expanded'?: boolean;
   'aria-controls'?: string;
+  'aria-haspopup'?: 'menu' | 'listbox' | 'dialog' | boolean;
+  'aria-pressed'?: boolean;
   /** Svelte 5 callback prop — lowercase. */
   onclick?: (e: MouseEvent) => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 export declare const Button: React.FC<ButtonProps>;
 
@@ -116,9 +169,17 @@ export interface InputProps {
   label?: string;
   hint?: string;
   error?: string | boolean;
-  type?: 'text' | 'email' | 'password' | 'search' | 'url';
+  type?: 'text' | 'email' | 'password' | 'search' | 'url' | 'tel' | 'number';
   placeholder?: string;
   mono?: boolean;
+  /** Unit after the value inside the outline, e.g. "pt" or "×". */
+  unit?: string;
+  /** Decorative icon at the end of the field. */
+  icon?: IconName;
+  /** Content before the value, e.g. a colour swatch. */
+  leading?: React.ReactNode;
+  /** Control after the value, e.g. a reveal button. */
+  trailing?: React.ReactNode;
   disabled?: boolean;
   readonly?: boolean;
   oninput?: (e: Event) => void;
@@ -351,3 +412,247 @@ export declare const BEAR_MARK_HEIGHT: number;
 export declare const bearEmblem: string;
 export declare const BEAR_EMBLEM_WIDTH: number;
 export declare const BEAR_EMBLEM_HEIGHT: number;
+
+/** A contact line item in a document header. email/phone get mailto:/tel: links when href is absent. */
+export type DocContact = {
+  kind: 'email' | 'phone' | 'location' | 'website' | 'profile' | 'other';
+  value: string;
+  href?: string;
+};
+/** Document title block: name (h1), headline, contact list with icons, rust-ticked rule below. Renders inside a PageSheet. */
+export interface DocHeaderProps {
+  name: string;
+  headline?: string;
+  contacts?: DocContact[];
+}
+export declare const DocHeader: React.FC<DocHeaderProps>;
+/** Document section: h2 in the display face with a rust tick; columns=2 lays children in a two-column grid. */
+export interface DocSectionProps {
+  title: string;
+  columns?: 1 | 2;
+  children?: React.ReactNode;
+}
+export declare const DocSection: React.FC<DocSectionProps>;
+/** One document entry (role, school, skill group): title/subtitle left, date/location right, optional body. */
+export interface DocEntryProps {
+  title: string;
+  subtitle?: string;
+  date?: string;
+  location?: string;
+  children?: React.ReactNode;
+}
+export declare const DocEntry: React.FC<DocEntryProps>;
+
+/** Editor top bar: back, document title (or a heading snippet such as a Menu), status line, centre switch, end actions. Centre drops to its own row below 768px. */
+export interface AppHeaderProps {
+  back?: { label: string; href?: string; onclick?: () => void };
+  title?: string;
+  heading?: React.ReactNode;
+  status?: React.ReactNode;
+  center?: React.ReactNode;
+  end?: React.ReactNode;
+}
+export declare const AppHeader: React.FC<AppHeaderProps>;
+/** One finding: numbered Marker, small category label, title, explanation, actions. active = the finding shown on the page (teal border, selected fill). */
+export interface IssueCardProps {
+  index: number | string;
+  category?: string;
+  title: string;
+  tone?: 'warning' | 'error' | 'accent';
+  active?: boolean;
+  children: React.ReactNode;
+  actions?: React.ReactNode;
+}
+export declare const IssueCard: React.FC<IssueCardProps>;
+/** Editor shell: header row, scrolling sidebar (surface-1) and main canvas. fill = 100dvh with internal scrolling. Stacks below 1024px. */
+export interface WorkspaceProps {
+  header?: React.ReactNode;
+  sidebar: React.ReactNode;
+  children: React.ReactNode;
+  sidebarLabel: string;
+  /** CSS length; default var(--wm-sidebar) (320px). */
+  sidebarWidth?: string;
+  fill?: boolean;
+}
+export declare const Workspace: React.FC<WorkspaceProps>;
+/** Scrolling preview area for page sheets. zoom in percent or 'fit' (fits pageWidth to the available width). Needs a parent with a definite height. */
+export interface PageCanvasProps {
+  children: React.ReactNode;
+  /** Sticky top-centre control, e.g. a SegmentedControl. */
+  toolbar?: React.ReactNode;
+  /** Floating bottom-centre control, e.g. a ZoomControl. */
+  overlay?: React.ReactNode;
+  zoom?: number | 'fit';
+  pageWidth?: number;
+  'aria-label'?: string;
+}
+export declare const PageCanvas: React.FC<PageCanvasProps>;
+/** A physical page (A4 or Letter at 96 dpi) with page-margin padding. Defaults to the Bone edition: the paper. label shows above the sheet, e.g. "Page 1 · A4". */
+export interface PageSheetProps {
+  size?: 'a4' | 'letter';
+  label?: string;
+  edition?: 'bone' | 'oxide' | 'inherit';
+  'aria-label'?: string;
+  children: React.ReactNode;
+}
+export declare const PageSheet: React.FC<PageSheetProps>;
+/** Marks a finding on the page without changing its text: numbered Marker in the left page margin + wavy underline. Hidden in print. Place at the sheet's content edge. */
+export interface PageAnnotationProps {
+  index: number | string;
+  label: string;
+  tone?: 'warning' | 'error' | 'accent';
+  active?: boolean;
+  as?: 'div' | 'span';
+  children: React.ReactNode;
+}
+export declare const PageAnnotation: React.FC<PageAnnotationProps>;
+
+/** On/off setting (role=switch). Teal track when on. Clicking the label toggles. */
+export interface SwitchProps {
+  checked?: boolean;
+  label: string;
+  description?: string;
+  disabled?: boolean;
+  onchange?: (checked: boolean) => void;
+  id?: string;
+}
+export declare const Switch: React.FC<SwitchProps>;
+/** Person initials (Icelandic letters kept) or photo; falls back to initials if the photo fails. */
+export interface AvatarProps {
+  name: string;
+  src?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+export declare const Avatar: React.FC<AvatarProps>;
+/** Keyboard keys, e.g. ['⌥', '↑', '↓'] for a move hint. */
+export interface KbdProps {
+  keys: string[];
+  /** Spoken form, e.g. "Alt plus Up or Down". */
+  label?: string;
+}
+export declare const Kbd: React.FC<KbdProps>;
+/** Circular meter (role=meter): teal arc, figure in the centre. Pass only scores the data can back. */
+export interface ScoreRingProps {
+  value: number;
+  max?: number;
+  label: string;
+  size?: 'md' | 'lg';
+  tone?: 'accent' | 'warning' | 'error';
+}
+export declare const ScoreRing: React.FC<ScoreRingProps>;
+/** Save state line: Saved / Saving… / Not saved / Couldn't save (role=status). */
+export interface SaveStatusProps {
+  state: 'saved' | 'saving' | 'unsaved' | 'error';
+  label?: string;
+}
+export declare const SaveStatus: React.FC<SaveStatusProps>;
+export type SegmentOption = {
+  id: string;
+  label: string;
+  icon?: IconName;
+  count?: number;
+  countTone?: 'neutral' | 'warning' | 'accent';
+  countLabel?: string;
+  disabled?: boolean;
+};
+/** Mode switch (radiogroup): teal-filled selected segment, icon + tracked label, optional count badge. */
+export interface SegmentedControlProps {
+  options: SegmentOption[];
+  value?: string;
+  onchange?: (id: string) => void;
+  'aria-label': string;
+  size?: 'sm' | 'md';
+  /** Labels become accessible names only. */
+  iconOnly?: boolean;
+}
+export declare const SegmentedControl: React.FC<SegmentedControlProps>;
+export type Swatch = { value: string; label: string };
+/** Colour choice grid (radiogroup, 2-D arrow keys). Values are any CSS colour. */
+export interface SwatchPickerProps {
+  colors: Swatch[];
+  value?: string;
+  onchange?: (value: string) => void;
+  'aria-label': string;
+  columns?: number;
+}
+export declare const SwatchPicker: React.FC<SwatchPickerProps>;
+
+export type MenuEntry =
+  | { id: string; label: string; icon?: IconName; hint?: string; danger?: boolean; disabled?: boolean; wide?: boolean; submenu?: boolean }
+  | { separator: true; id?: string };
+/** Trigger button + popup menu (role=menu). columns=2 for a grid of choices (e.g. "Add section"); wide items span the row. Popup is position:fixed (avoid transformed ancestors). */
+export interface MenuProps {
+  /** Trigger accessible name. */
+  label: string;
+  /** Visible trigger text; omit for icon-only. */
+  text?: string;
+  /** Default 'more'. */
+  icon?: IconName;
+  iconEnd?: IconName;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'dashed';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  items: MenuEntry[];
+  columns?: 1 | 2;
+  /** Small heading inside the popup. */
+  title?: string;
+  open?: boolean;
+  disabled?: boolean;
+  placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+  chamfer?: boolean;
+  onselect?: (id: string) => void;
+}
+export declare const Menu: React.FC<MenuProps>;
+/** Main action with an attached options menu, one unit; chamfer on the outer corner. */
+export interface SplitButtonProps {
+  label: string;
+  icon?: IconName;
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  onclick?: (e: MouseEvent) => void;
+  /** Accessible name of the menu half, e.g. "More download options". */
+  menuLabel: string;
+  items: MenuEntry[];
+  onselect?: (id: string) => void;
+  loading?: boolean;
+  disabled?: boolean;
+}
+export declare const SplitButton: React.FC<SplitButtonProps>;
+/** Zoom toolbar: out / value (Fit or %) / in, optional page count. Floating = raised surface for canvas overlays. */
+export interface ZoomControlProps {
+  value: number | 'fit';
+  min?: number;
+  max?: number;
+  step?: number;
+  onchange?: (value: number | 'fit') => void;
+  pageCount?: number;
+  floating?: boolean;
+}
+export declare const ZoomControl: React.FC<ZoomControlProps>;
+/** Collapsible group. section = plain header row; card = bordered surface-1 panel (e.g. a profile card with an Avatar in leading). Content stays mounted when closed. */
+export interface DisclosureProps {
+  title: string;
+  open?: boolean;
+  onchange?: (open: boolean) => void;
+  meta?: string;
+  leading?: React.ReactNode;
+  actions?: React.ReactNode;
+  children: React.ReactNode;
+  variant?: 'section' | 'card';
+  headingLevel?: 2 | 3 | 4;
+}
+export declare const Disclosure: React.FC<DisclosureProps>;
+export type ReorderItem = { id: string; label: string; count?: number; hidden?: boolean; expanded?: boolean; meta?: string };
+/** Ordered, controlled list of sections: grip (drag or Alt+Up/Down), label, count, show/hide, expand, row menu. The consumer reorders items in onmove. */
+export interface ReorderListProps {
+  items: ReorderItem[];
+  'aria-label': string;
+  onmove?: (id: string, toIndex: number) => void;
+  onvisibility?: (id: string, hidden: boolean) => void;
+  onexpand?: (id: string, expanded: boolean) => void;
+  menu?: MenuEntry[];
+  onmenu?: (itemId: string, actionId: string) => void;
+  /** Rendered under an expanded row. */
+  detail?: (item: ReorderItem) => React.ReactNode;
+  moveHint?: string;
+}
+export declare const ReorderList: React.FC<ReorderListProps>;

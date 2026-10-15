@@ -86,6 +86,16 @@
 
 ## Fixes log
 
+- **2026-10-15 re-sync into a NEW project**: the pinned project
+  `ba980cbf-…` returned 404 under the current login (deleted, or the first
+  sync ran under a different account). On the owner's call, created a fresh
+  **IRONMAW** (`1dff7fc2-dd42-4e4d-a56b-0c480c101b40`) and re-pinned. If the
+  old project turns up under another account, it's an orphan — delete it.
+  Reference storybook rebuilt; Mark/NavBar/Panel re-graded after their
+  2026-10-14 story edits (owned previews already mirrored them), Heading and
+  StatusLabel spot-checked; 16 carried forward. 21/21 match, receipt clean,
+  anchor uploaded.
+
 - **2026-10-14 resource reconciliation**: the supplied compact bear emblem is
   used in small lockups; `Panel terrain` adds the contour and mountain treatment
   for brand surfaces; active NavBar items use the reference's rust underline.
@@ -112,6 +122,21 @@
 - No overlay components (no Modal/Sheet) — no fixed-position sizing fixes needed.
 
 ## Re-sync risks
+
+- **2026-10-15 editor parts (not yet synced).** 24 new components (Icon, Badge,
+  Marker, Switch, Avatar, Kbd, ScoreRing, SaveStatus, SegmentedControl,
+  SwatchPicker, Menu, SplitButton, ZoomControl, Disclosure, ReorderList,
+  IssueCard, AppHeader, Workspace, PageCanvas, PageSheet, PageAnnotation,
+  DocHeader, DocSection, DocEntry) plus Button/Input extensions and drawn icons
+  replacing unicode glyphs in Notice/StatusLabel/Chip/SearchField/NavBar. All
+  have owned previews and adapter entries; none are graded yet. Expect every
+  touched component to re-grade. Watch: Menu popup is `position: fixed`
+  (overlay → likely `cardMode: "single"` for Menu/SplitButton stories that open
+  it); PageCanvas needs a definite-height parent (its previews wrap it);
+  Workspace `fill` uses 100dvh (column card); ReorderList `detail` is a
+  render-function snippet.
+- `Examples/CV editor` is a showcase composition (`src/examples/`, not
+  packaged) — excluded via `titleMap: {"CV editor": null}`.
 
 - **Adapter drift**: a new component added to `src/lib/index.ts` must ALSO be
   added to `.design-sync/react-adapter/index.js` (wrap call + snippet-prop

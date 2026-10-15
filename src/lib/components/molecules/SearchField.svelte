@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../atoms/Icon.svelte';
   import Button from '../atoms/Button.svelte';
 
   // "Search library" — explicit submit, obvious clear. Never disabled: it
@@ -61,10 +62,7 @@
   <label data-wm="search-label" for={id}>{label}</label>
   <div class="row">
     <div class="well" data-error={error ? true : undefined}>
-      <svg class="glass" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-        <circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6" />
-        <path d="M10 10l4.2 4.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-      </svg>
+      <span class="glass"><Icon name="search" /></span>
       <input
         bind:this={input}
         {id}
@@ -79,7 +77,7 @@
         bind:value
       />
       {#if value}
-        <button type="button" class="clear" aria-label={clearLabel} onclick={clear}><span aria-hidden="true">×</span></button>
+        <button type="button" class="clear" aria-label={clearLabel} onclick={clear}><Icon name="close" /></button>
       {/if}
     </div>
     <Button type="submit" variant="primary" loading={busy}>{busy ? busyLabel : submitLabel}</Button>
@@ -122,7 +120,7 @@
     box-shadow: 0 0 0 2px color-mix(in oklab, var(--wm-accent), transparent 70%);
   }
   .well[data-error] { border-color: var(--wm-error); }
-  .glass { flex: none; width: 16px; height: 16px; color: var(--wm-structure-text); }
+  .glass { flex: none; display: inline-flex; color: var(--wm-structure-text); }
   .well:focus-within .glass { color: var(--wm-accent); }
   input {
     flex: 1;

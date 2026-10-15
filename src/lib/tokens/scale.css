@@ -32,8 +32,18 @@
     --wm-control-sm: 32px;
     --wm-control-md: 40px;
     --wm-control-lg: 48px;
+    --wm-control-xs: 28px;
     --wm-row: 48px;
     --wm-measure: 68ch;
+    --wm-icon-sm: 16px;
+    --wm-icon-md: 20px;
+    --wm-icon-lg: 24px;
+    --wm-sidebar: 320px;
+    --wm-page-a4-width: 794px;
+    --wm-page-a4-height: 1123px;
+    --wm-page-letter-width: 816px;
+    --wm-page-letter-height: 1056px;
+    --wm-page-margin: 56px;
     --wm-fs-xs: 0.75rem;
     --wm-fs-sm: 0.8125rem;
     --wm-fs-base: 0.875rem;

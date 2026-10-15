@@ -11,7 +11,7 @@ const items = [
 
 export const Default = () => (
   <NavBar items={items} brand={<Mark href="#home" variant="lockup" size="sm" name="IRONMAW" tagline="Application Assistant" />}>
-    <Button variant="ghost" size="sm" label="Search">⌕</Button>
+    <Button variant="ghost" size="sm" label="Search" icon="search" />
   </NavBar>
 );
 

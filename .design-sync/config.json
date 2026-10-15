@@ -1,5 +1,5 @@
 {
-  "projectId": "ba980cbf-2ac8-4f57-90f9-8feabda6459c",
+  "projectId": "1dff7fc2-dd42-4e4d-a56b-0c480c101b40",
   "pkg": "@svnbjrn/ironmaw",
   "globalName": "Ironmaw",
   "shape": "storybook",
@@ -39,7 +39,8 @@
   "titleMap": {
     "Colors": null,
     "Typography": null,
-    "Geometry": null
+    "Geometry": null,
+    "CV editor": null
   },
   "readmeHeader": ".design-sync/conventions.md"
 }

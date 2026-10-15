@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../atoms/Icon.svelte';
   import type { Snippet } from 'svelte';
 
   // Page-level and inline notices: service unavailable, index refreshed,
@@ -19,19 +20,21 @@
 
   let { tone = 'info', title, children, action, dismissLabel, ondismiss }: Props = $props();
 
-  const marks = { info: 'i', success: '✓', warning: '▲', error: '▲', status: '↻' } as const;
+  const marks = { info: 'info', success: 'success', warning: 'warning', error: 'error', status: 'refresh' } as const;
   const live = $derived(tone === 'error' || tone === 'warning' ? 'alert' : 'status');
 </script>
 
 <div data-wm="notice" data-tone={tone} role={live}>
-  <span class="mark" aria-hidden="true">{marks[tone]}</span>
-  <div class="body">
-    {#if title}<span class="title">{title}</span>{/if}
-    <span class="text">{@render children()}</span>
+  <span class="mark"><Icon name={marks[tone]} size={20} /></span>
+  <div class="main">
+    <div class="body">
+      {#if title}<span class="title">{title}</span>{/if}
+      <span class="text">{@render children()}</span>
+    </div>
+    {#if action}<div class="action">{@render action()}</div>{/if}
   </div>
-  {#if action}<div class="action">{@render action()}</div>{/if}
   {#if ondismiss}
-    <button type="button" class="dismiss" aria-label={dismissLabel ?? 'Dismiss'} onclick={ondismiss}><span aria-hidden="true">×</span></button>
+    <button type="button" class="dismiss" aria-label={dismissLabel ?? 'Dismiss'} onclick={ondismiss}><Icon name="close" /></button>
   {/if}
 </div>
 
@@ -40,8 +43,7 @@
     --tone: var(--wm-accent);
     display: flex;
     gap: var(--wm-space-3);
-    align-items: center;
-    flex-wrap: wrap;
+    align-items: flex-start;
     padding: var(--wm-space-3) var(--wm-space-4);
     border: 1px solid var(--tone);
     border-radius: var(--wm-radius-sm);
@@ -58,20 +60,9 @@
   .mark {
     flex: none;
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 1.5px solid var(--tone);
     color: var(--tone);
-    font-family: var(--wm-font-mono);
-    font-size: var(--wm-fs-xs);
-    font-weight: 700;
-    line-height: 1;
   }
-  [data-tone='warning'] .mark,
-  [data-tone='error'] .mark { border: 0; font-size: var(--wm-fs-lg); }
+  .main { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--wm-space-2) var(--wm-space-3); }
   .body { flex: 1 1 24ch; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   .title { color: var(--wm-text-strong); font-weight: var(--wm-font-weight-semibold); }
   .action { flex: none; margin-inline-start: auto; }

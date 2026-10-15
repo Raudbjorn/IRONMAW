@@ -130,7 +130,7 @@
               <Kicker>CVs · Applications · Landsnet</Kicker>
               <Stack direction="row" gap={1}>
                 <Button variant="ghost" size="sm" chamfer={false} label="Expand reader">⤢</Button>
-                <Button variant="ghost" size="sm" chamfer={false} label="Close reader">×</Button>
+                <Button variant="ghost" size="sm" chamfer={false} label="Close reader" icon="close" />
               </Stack>
             </Stack>
             <Heading level={2}>cv-sveinbjorn-geirsson.is.pdf</Heading>

@@ -76,6 +76,11 @@ export function wrap(name, SvelteComponent, snippetProps = []) {
       onClear: 'onclear',
       onInput: 'oninput',
       onClose: 'onclose',
+      onSelect: 'onselect',
+      onMove: 'onmove',
+      onVisibility: 'onvisibility',
+      onExpand: 'onexpand',
+      onMenu: 'onmenu',
       readOnly: 'readonly',
     };
     const aliasedTargets = new Set();

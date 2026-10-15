@@ -40,3 +40,7 @@ __pycache__/
 
 # generated imagery (agents/)
 agents/.out/
+
+# impeccable — transient review captures and detector cache
+.impeccable/review/
+.impeccable/hook.cache.json

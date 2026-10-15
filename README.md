@@ -1,6 +1,6 @@
 # IRONMAW
 
-**Wormian Bones**, day to day. *I am worn bones.*
+**IRONMAW** on paper; **IRONMAW** or **Wormian Bones** day to day. *I am worn bones.*
 
 A system of uncommon parts: charcoal, teal, rust and slate for the
 Application Assistant library and reader. Svelte 5, token-first, dark-first,

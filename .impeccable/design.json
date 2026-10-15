@@ -1,0 +1,596 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-15T14:19:50.062049+00:00",
+  "title": "Design System: IRONMAW",
+  "extensions": {
+    "colorMeta": {
+      "charcoal": {
+        "role": "neutral",
+        "displayName": "Charcoal",
+        "canonical": "#0F1416",
+        "tonalRamp": [
+          "#070C0E",
+          "#212628",
+          "#3D4345",
+          "#5C6265",
+          "#7D8486",
+          "#9FA6A9",
+          "#C3CACD",
+          "#E9F0F3"
+        ]
+      },
+      "teal": {
+        "role": "primary",
+        "displayName": "Teal",
+        "canonical": "#3CA0A0",
+        "tonalRamp": [
+          "#001417",
+          "#003133",
+          "#005051",
+          "#007171",
+          "#2C9393",
+          "#56B7B7",
+          "#7CDCDC",
+          "#A2FFFF"
+        ]
+      },
+      "rust": {
+        "role": "primary",
+        "displayName": "Rust",
+        "canonical": "#D0602B",
+        "tonalRamp": [
+          "#2C0000",
+          "#4F0000",
+          "#732500",
+          "#974621",
+          "#BD6843",
+          "#E38B66",
+          "#FFAF89",
+          "#FFD4AD"
+        ]
+      },
+      "slate": {
+        "role": "secondary",
+        "displayName": "Slate",
+        "canonical": "#5F7E8F",
+        "tonalRamp": [
+          "#000D1A",
+          "#0A2937",
+          "#294656",
+          "#486676",
+          "#688799",
+          "#8AAABC",
+          "#AECFE1",
+          "#D2F4FF"
+        ]
+      },
+      "surface-1": {
+        "role": "neutral",
+        "displayName": "Surface 1",
+        "canonical": "#141B1E",
+        "tonalRamp": [
+          "#060C0F",
+          "#1F262A",
+          "#3C4347",
+          "#5A6366",
+          "#7B8488",
+          "#9EA7AB",
+          "#C1CBCF",
+          "#E7F0F5"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Surface 2",
+        "canonical": "#192327",
+        "tonalRamp": [
+          "#050D10",
+          "#1D272B",
+          "#394448",
+          "#586368",
+          "#79858A",
+          "#9BA7AD",
+          "#BFCCD1",
+          "#E4F1F7"
+        ]
+      },
+      "surface-3": {
+        "role": "neutral",
+        "displayName": "Surface 3",
+        "canonical": "#1F2B30",
+        "tonalRamp": [
+          "#040D11",
+          "#1B272C",
+          "#38444A",
+          "#566469",
+          "#77858B",
+          "#99A8AE",
+          "#BDCCD3",
+          "#E2F1F8"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Border",
+        "canonical": "#2A3940",
+        "tonalRamp": [
+          "#020D13",
+          "#19272E",
+          "#35454C",
+          "#54646C",
+          "#74858D",
+          "#97A8B1",
+          "#BACDD5",
+          "#DFF2FB"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Text",
+        "canonical": "#D9E1E4",
+        "tonalRamp": [
+          "#070C0E",
+          "#202628",
+          "#3D4346",
+          "#5C6365",
+          "#7C8486",
+          "#9FA6A9",
+          "#C3CBCE",
+          "#E8F0F3"
+        ]
+      },
+      "text-strong": {
+        "role": "neutral",
+        "displayName": "Text strong",
+        "canonical": "#F3F6F7",
+        "tonalRamp": [
+          "#0A0B0C",
+          "#232526",
+          "#404243",
+          "#5F6262",
+          "#808384",
+          "#A3A5A6",
+          "#C7CACB",
+          "#ECEFF0"
+        ]
+      },
+      "text-muted": {
+        "role": "neutral",
+        "displayName": "Text muted",
+        "canonical": "#9EB1BA",
+        "tonalRamp": [
+          "#020D13",
+          "#18282F",
+          "#34454C",
+          "#53646C",
+          "#73868E",
+          "#96A8B1",
+          "#B9CDD6",
+          "#DEF2FC"
+        ]
+      },
+      "text-faint": {
+        "role": "neutral",
+        "displayName": "Text faint",
+        "canonical": "#86999F",
+        "tonalRamp": [
+          "#010D12",
+          "#18282D",
+          "#34454A",
+          "#53656A",
+          "#73868C",
+          "#96A9AF",
+          "#B9CDD3",
+          "#DEF3F9"
+        ]
+      },
+      "structure-text": {
+        "role": "secondary",
+        "displayName": "Structure text",
+        "canonical": "#8EA6B3",
+        "tonalRamp": [
+          "#000D16",
+          "#132832",
+          "#304551",
+          "#4F6571",
+          "#6F8693",
+          "#91A9B6",
+          "#B5CEDB",
+          "#DAF3FF"
+        ]
+      },
+      "rust-hover": {
+        "role": "primary",
+        "displayName": "Rust hover",
+        "canonical": "#DB7343",
+        "tonalRamp": [
+          "#2C0000",
+          "#4F0000",
+          "#732500",
+          "#97471F",
+          "#BD6842",
+          "#E38B65",
+          "#FFAF88",
+          "#FFD5AC"
+        ]
+      },
+      "selected": {
+        "role": "neutral",
+        "displayName": "Selected",
+        "canonical": "#17262A",
+        "tonalRamp": [
+          "#020D11",
+          "#19282C",
+          "#354549",
+          "#546569",
+          "#74868B",
+          "#97A9AE",
+          "#BACDD2",
+          "#DFF2F8"
+        ]
+      },
+      "mark-plate": {
+        "role": "neutral",
+        "displayName": "Mark plate",
+        "canonical": "#101715",
+        "tonalRamp": [
+          "#070D0B",
+          "#1F2725",
+          "#3C4442",
+          "#5B6361",
+          "#7C8582",
+          "#9EA7A5",
+          "#C2CCC9",
+          "#E7F1EE"
+        ]
+      },
+      "success": {
+        "role": "status",
+        "displayName": "Success",
+        "canonical": "#5CB38B",
+        "tonalRamp": [
+          "#001500",
+          "#003314",
+          "#005230",
+          "#0D734F",
+          "#3D966F",
+          "#63B991",
+          "#87DFB5",
+          "#ADFFD9"
+        ]
+      },
+      "warning": {
+        "role": "status",
+        "displayName": "Warning",
+        "canonical": "#E2A33B",
+        "tonalRamp": [
+          "#240000",
+          "#441500",
+          "#653500",
+          "#875500",
+          "#AB7719",
+          "#D09A45",
+          "#F6BE6A",
+          "#FFE490"
+        ]
+      },
+      "error": {
+        "role": "status",
+        "displayName": "Error",
+        "canonical": "#E86052",
+        "tonalRamp": [
+          "#2D0000",
+          "#510000",
+          "#752019",
+          "#9A4238",
+          "#C06458",
+          "#E6877A",
+          "#FFAB9D",
+          "#FFD0C1"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Short uppercase brand and section labels only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page and document titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Panel and group titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Interface copy, excerpts, notices."
+      },
+      "prose": {
+        "displayName": "Prose",
+        "purpose": "Reader text at a 68ch measure."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Kickers, field labels, nav, tabs, buttons."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Paths, identifiers, counts."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sm",
+        "value": "0px 1px 2px rgb(0 0 0 / 0.35)",
+        "purpose": "Subtle lift for small floating elements."
+      },
+      {
+        "name": "md",
+        "value": "0px 6px 16px rgb(0 0 0 / 0.4)",
+        "purpose": "Panels explicitly marked elevated."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state",
+        "value": "0.12s ease",
+        "purpose": "Colour, border and background transitions; none under reduced motion."
+      },
+      {
+        "name": "spin",
+        "value": "0.8s linear infinite",
+        "purpose": "Busy ring and Spinner."
+      },
+      {
+        "name": "meter",
+        "value": "240ms ease",
+        "purpose": "Score ring arc; none under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1440px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one main action per view; rust fill with the single 10px chamfer.",
+      "html": "<button class=\"ds-btn-primary\">Copy passage with source</button>",
+      "css": ".ds-btn-primary{position:relative;isolation:isolate;min-height:40px;padding:0 16px;border:0;background:transparent;color:#0F1416;font-family:var(--wm-font-display);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;font-size:0.875rem;line-height:1;cursor:pointer;transition:color .12s ease}.ds-btn-primary::before{content:'';position:absolute;inset:0;z-index:-1;background:#D0602B;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);transition:background-color .12s ease}.ds-btn-primary:hover::before{background:#DB7343}.ds-btn-primary:focus-visible{outline:2px solid #3CA0A0;outline-offset:2px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Supporting actions; slate border, no fill at rest.",
+      "html": "<button class=\"ds-btn-secondary\">Open original</button>",
+      "css": ".ds-btn-secondary{min-height:40px;padding:0 16px;border:1px solid #5F7E8F;border-radius:2px;background:transparent;color:#D9E1E4;font-family:var(--wm-font-display);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;font-size:0.875rem;line-height:1;cursor:pointer;transition:background-color .12s ease,color .12s ease}.ds-btn-secondary:hover{background:#192327;color:#F3F6F7}.ds-btn-secondary:focus-visible{outline:2px solid #3CA0A0;outline-offset:2px}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Low-emphasis toolbar actions.",
+      "html": "<button class=\"ds-btn-ghost\">Clear filters</button>",
+      "css": ".ds-btn-ghost{min-height:40px;padding:0 16px;border:1px solid transparent;border-radius:2px;background:transparent;color:#9EB1BA;font-family:var(--wm-font-display);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;font-size:0.875rem;line-height:1;cursor:pointer;transition:background-color .12s ease,color .12s ease}.ds-btn-ghost:hover{background:#192327;color:#D9E1E4}.ds-btn-ghost:focus-visible{outline:2px solid #3CA0A0;outline-offset:2px}"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Field with a Rajdhani label; teal border and halo on focus.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Search the library</span><input class=\"ds-input\" placeholder=\"ferilskrá, Landsnet…\"></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:8px}.ds-field-label{font-family:var(--wm-font-display);font-weight:600;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.14em;color:#9EB1BA}.ds-input{min-height:40px;padding:0 12px;background:#141B1E;border:1px solid #5F7E8F;border-radius:2px;color:#D9E1E4;font-family:var(--wm-font-sans);font-size:0.875rem;outline:none;transition:border-color .12s ease,box-shadow .12s ease}.ds-input::placeholder{color:#86999F}.ds-input:focus-visible{border-color:#3CA0A0;box-shadow:0 0 0 2px rgb(60 160 160 / .3)}"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "navbar",
+      "description": "Sticky shell; the active destination carries a 3px rust underline.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-item\" href=\"#\">Applications</a><a class=\"ds-nav-item\" href=\"#\">Ledger</a><a class=\"ds-nav-item is-active\" href=\"#\" aria-current=\"page\">Library</a></nav>",
+      "css": ".ds-nav{display:flex;gap:8px;justify-content:flex-end;padding:8px 16px;background:#0F1416;border-bottom:1px solid #2A3940}.ds-nav-item{position:relative;display:inline-flex;align-items:center;min-height:32px;padding:0 12px;color:#D9E1E4;font-family:var(--wm-font-display);font-weight:600;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.14em;text-decoration:none;transition:background-color .12s ease,color .12s ease}.ds-nav-item:hover{background:#192327;color:#F3F6F7}.ds-nav-item.is-active{color:#F3F6F7;font-weight:700}.ds-nav-item.is-active::after{content:'';position:absolute;left:0;right:0;bottom:-9px;height:3px;background:#D0602B}.ds-nav-item:focus-visible{outline:2px solid #3CA0A0;outline-offset:2px}"
+    },
+    {
+      "name": "Filter Chips",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Slate-outlined filters; selected fills teal.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip is-selected\">CVs <span class=\"ds-count\">12</span></button><button class=\"ds-chip\">Letters <span class=\"ds-count\">4</span></button></div>",
+      "css": ".ds-chips{display:flex;gap:8px}.ds-chip{display:inline-flex;align-items:center;gap:8px;min-height:28px;padding:0 12px;border:1px solid #5F7E8F;border-radius:2px;background:transparent;color:#D9E1E4;font-family:var(--wm-font-sans);font-size:0.8125rem;line-height:1;cursor:pointer;transition:background-color .12s ease}.ds-chip:hover{background:#192327}.ds-chip.is-selected{background:#3CA0A0;border-color:#3CA0A0;color:#0F1416}.ds-count{font-family:var(--wm-font-mono);font-size:0.75rem;opacity:.8}.ds-chip:focus-visible{outline:2px solid #3CA0A0;outline-offset:2px}"
+    },
+    {
+      "name": "Review Status Labels",
+      "kind": "custom",
+      "refersTo": "status-act",
+      "description": "Three tones only: act (filled rust with the warning icon), care (rust outline), context (slate outline).",
+      "html": "<div class=\"ds-statuses\"><span class=\"ds-status ds-act\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5L21.5 20h-19zM12 10v4M12 16.8v.2\"/></svg>Known issues</span><span class=\"ds-status ds-care\">Review before reuse</span><span class=\"ds-status\">Preserved snapshot</span></div>",
+      "css": ".ds-statuses{display:flex;gap:4px;flex-wrap:wrap}.ds-status{display:inline-flex;align-items:center;gap:.35em;min-height:22px;padding:2px 8px;border:1px solid #5F7E8F;border-radius:2px;color:#D9E1E4;font-family:var(--wm-font-sans);font-size:0.75rem;line-height:1.4;white-space:nowrap}.ds-care{border-color:#D0602B}.ds-act{background:#D0602B;border-color:#D0602B;color:#0F1416;font-weight:550}"
+    },
+    {
+      "name": "Document Row",
+      "kind": "card",
+      "refersTo": "document-row-selected",
+      "description": "Library row; selection lights a 3px rust bar.",
+      "html": "<div class=\"ds-row is-selected\"><span class=\"ds-row-title\">cv-sveinbjorn-geirsson.is.pdf</span><span class=\"ds-row-context\">CVs / Applications / Landsnet</span><p class=\"ds-row-excerpt\">Yfirlit yfir starfsreynslu, menntun og tæknikunnáttu.</p></div>",
+      "css": ".ds-row{position:relative;display:flex;flex-direction:column;gap:8px;min-height:48px;padding:12px 16px 12px 19px;border-bottom:1px solid #2A3940;background:#0F1416;color:#D9E1E4;font-family:var(--wm-font-sans);transition:background-color .12s ease}.ds-row:hover{background:#141B1E}.ds-row.is-selected{background:#17262A}.ds-row.is-selected::before{content:'';position:absolute;inset-block:0;left:0;width:3px;background:#D0602B}.ds-row-title{color:#F3F6F7;font-weight:550;font-size:1rem}.ds-row-title:hover{color:#3CA0A0}.ds-row-context{font-family:var(--wm-font-mono);font-size:0.75rem;color:#8EA6B3}.ds-row-excerpt{margin:0;font-size:0.875rem;line-height:1.5;max-width:68ch}"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "custom",
+      "refersTo": "segmented-control-selected",
+      "description": "One choice among a few modes; the selected segment fills teal with charcoal ink, counts sit in a badge.",
+      "html": "<div class=\"ds-seg\" role=\"radiogroup\" aria-label=\"Editor mode\"><button class=\"ds-seg-btn\" role=\"radio\" aria-checked=\"false\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 20h4L19 9a2.83 2.83 0 0 0-4-4L4 16zM13.5 6.5l4 4\"/></svg>Write</button><button class=\"ds-seg-btn\" role=\"radio\" aria-checked=\"false\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z\"/></svg>Design</button><button class=\"ds-seg-btn\" role=\"radio\" aria-checked=\"true\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M11 6h9M11 12h9M11 18h9M4 6l1.5 1.5L8 5M4 12l1.5 1.5L8 11M4 18l1.5 1.5L8 17\"/></svg>Check<span class=\"ds-seg-badge\">3</span></button></div>",
+      "css": ".ds-seg{display:inline-flex;border:1px solid var(--wm-border-strong);border-radius:var(--wm-radius-sm);background:var(--wm-surface-1);overflow:hidden}.ds-seg-btn{display:inline-flex;align-items:center;gap:var(--wm-space-2);min-height:var(--wm-control-sm);padding:2px var(--wm-space-3);border:0;background:none;color:var(--wm-text-muted);font-family:var(--wm-font-display);font-weight:var(--wm-display-weight);font-size:var(--wm-fs-sm);text-transform:uppercase;letter-spacing:var(--wm-tracking-display);line-height:1.1;cursor:pointer;transition:background-color .12s ease,color .12s ease}.ds-seg-btn+.ds-seg-btn{border-left:1px solid var(--wm-border)}.ds-seg-btn:hover:not([aria-checked='true']){background:var(--wm-surface-2);color:var(--wm-text)}.ds-seg-btn[aria-checked='true']{background:var(--wm-accent);color:var(--wm-accent-ink);font-weight:var(--wm-display-weight-bold)}.ds-seg-btn:focus-visible{outline:2px solid var(--wm-accent);outline-offset:2px;position:relative}.ds-seg-btn[aria-checked='true']:focus-visible{outline-color:var(--wm-accent-ink);outline-offset:-4px}.ds-seg-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border:1px solid var(--wm-surface-1);border-radius:var(--wm-radius-sm);background:var(--wm-surface-1);color:var(--wm-text-strong);font-family:var(--wm-font-mono);font-weight:400;font-size:var(--wm-fs-xs);letter-spacing:0;font-variant-numeric:tabular-nums}@media (prefers-reduced-motion:reduce){.ds-seg-btn{transition:none}}"
+    },
+    {
+      "name": "Issue Card",
+      "kind": "card",
+      "refersTo": "issue-card",
+      "description": "One finding: an amber numbered marker matching the page, title, explanation and actions; active takes a teal border.",
+      "html": "<article class=\"ds-issue\" tabindex=\"0\"><span class=\"ds-marker\" aria-hidden=\"true\">2</span><div class=\"ds-issue-body\"><h3 class=\"ds-issue-title\">Dates use two formats</h3><p class=\"ds-issue-text\">\"2019–2021\" and \"mars 2022\" appear in the same section. Parsers read one format more reliably.</p><div class=\"ds-issue-actions\"><button class=\"ds-issue-btn\">Show on page</button></div></div></article>",
+      "css": ".ds-issue{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--wm-space-3);padding:var(--wm-space-3) 14px;background:var(--wm-surface-1);border:1px solid var(--wm-border);border-radius:var(--wm-radius-md);font-family:var(--wm-font-sans);transition:border-color .12s ease,background-color .12s ease}.ds-issue:hover{border-color:var(--wm-border-strong)}.ds-issue:focus-visible{outline:none;border-color:var(--wm-accent);background:var(--wm-selected)}.ds-marker{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-top:2px;border-radius:50%;background:var(--wm-warning);color:var(--wm-bg);font-family:var(--wm-font-mono);font-weight:700;font-size:var(--wm-fs-xs);font-variant-numeric:tabular-nums;line-height:1}.ds-issue-body{display:flex;flex-direction:column;gap:var(--wm-space-1);min-width:0}.ds-issue-title{margin:0;font-size:var(--wm-fs-base);font-weight:var(--wm-font-weight-semibold);line-height:var(--wm-lh-tight);color:var(--wm-text-strong)}.ds-issue-text{margin:0;font-size:var(--wm-fs-sm);line-height:var(--wm-lh-normal);color:var(--wm-text-muted)}.ds-issue-actions{display:flex;flex-wrap:wrap;gap:var(--wm-space-2);margin-top:var(--wm-space-3)}.ds-issue-btn{min-height:var(--wm-control-xs);padding:0 var(--wm-space-2);border:1px solid var(--wm-border-strong);border-radius:var(--wm-radius-sm);background:transparent;color:var(--wm-text);font-family:var(--wm-font-display);font-weight:var(--wm-display-weight);font-size:var(--wm-fs-xs);text-transform:uppercase;letter-spacing:var(--wm-tracking-wide);cursor:pointer;transition:background-color .12s ease}.ds-issue-btn:hover{background:var(--wm-surface-2);color:var(--wm-text-strong)}.ds-issue-btn:focus-visible{outline:2px solid var(--wm-accent);outline-offset:2px}@media (prefers-reduced-motion:reduce){.ds-issue,.ds-issue-btn{transition:none}}"
+    },
+    {
+      "name": "Switch",
+      "kind": "custom",
+      "refersTo": "switch-on",
+      "description": "On/off setting with a label beside it; the one pill shape (10px radius), teal track when on.",
+      "html": "<div class=\"ds-switch\"><button class=\"ds-switch-track\" role=\"switch\" aria-checked=\"true\" aria-labelledby=\"ds-sw-l\"><span class=\"ds-switch-knob\"></span></button><div class=\"ds-switch-text\"><span id=\"ds-sw-l\" class=\"ds-switch-label\">Show page numbers</span><span class=\"ds-switch-desc\">Printed in the footer of every page.</span></div></div>",
+      "css": ".ds-switch{display:flex;align-items:flex-start;gap:var(--wm-space-3);font-family:var(--wm-font-sans)}.ds-switch-track{position:relative;flex:none;box-sizing:border-box;width:36px;height:20px;padding:0;border:1px solid var(--wm-border-strong);border-radius:10px;background:var(--wm-surface-2);cursor:pointer;transition:background-color .12s ease,border-color .12s ease}.ds-switch-track:hover{border-color:var(--wm-accent)}.ds-switch-knob{position:absolute;top:3px;left:3px;width:12px;height:12px;border-radius:50%;background:var(--wm-text-muted);transition:transform .12s ease,background-color .12s ease}.ds-switch-track[aria-checked='true']{background:var(--wm-accent);border-color:var(--wm-accent)}.ds-switch-track[aria-checked='true'] .ds-switch-knob{background:var(--wm-accent-ink);transform:translateX(16px)}.ds-switch-track:focus-visible{outline:2px solid var(--wm-accent);outline-offset:2px}.ds-switch-text{display:flex;flex-direction:column;gap:2px}.ds-switch-label{font-size:var(--wm-fs-sm);line-height:var(--wm-lh-normal);color:var(--wm-text)}.ds-switch-desc{font-size:var(--wm-fs-xs);color:var(--wm-text-faint)}@media (prefers-reduced-motion:reduce){.ds-switch-track,.ds-switch-knob{transition:none}}"
+    },
+    {
+      "name": "Page Annotation",
+      "kind": "custom",
+      "refersTo": "page-sheet-a4",
+      "description": "A finding on Bone paper: amber marker in the page margin and a wavy underline; the text itself is untouched.",
+      "html": "<div class=\"ds-paper\" data-theme=\"bone\"><div class=\"ds-annot\" tabindex=\"0\"><span class=\"ds-annot-marker\" aria-label=\"Finding 2: Dates use two formats\">2</span><p class=\"ds-annot-text\">Hugbúnaðarsérfræðingur, Dæmafyrirtæki ehf. — Kópavogur, 2019–2021, mars 2022 – í dag.</p></div></div>",
+      "css": ".ds-paper{position:relative;padding:var(--wm-space-6) var(--wm-page-margin);background:var(--wm-bg);color:var(--wm-text);font-family:var(--wm-font-sans);box-shadow:var(--wm-shadow-md);border-radius:0}.ds-annot{--tone:var(--wm-warning);position:relative;padding-bottom:4px;border-radius:var(--wm-radius-sm);transition:background-color .12s ease}.ds-annot::after{content:'';position:absolute;inset:auto 0 0 0;height:4px;background:var(--tone);-webkit-mask-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4'%3E%3Cpath d='M0 3 Q2 0 4 2 T8 2' fill='none' stroke='black' stroke-width='1.2'/%3E%3C/svg%3E\");mask-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4'%3E%3Cpath d='M0 3 Q2 0 4 2 T8 2' fill='none' stroke='black' stroke-width='1.2'/%3E%3C/svg%3E\");-webkit-mask-repeat:repeat-x;mask-repeat:repeat-x;-webkit-mask-size:8px 4px;mask-size:8px 4px}.ds-annot:hover,.ds-annot:focus-visible{background:color-mix(in srgb,var(--tone) 10%,transparent)}.ds-annot:focus-visible{outline:2px solid var(--wm-accent);outline-offset:2px}.ds-annot-marker{position:absolute;top:0.2em;left:calc(var(--wm-space-4) - var(--wm-page-margin));display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--tone);color:var(--wm-bg);font-family:var(--wm-font-mono);font-weight:700;font-size:0.625rem;line-height:1}.ds-annot-text{margin:0;font-size:var(--wm-fs-sm);line-height:var(--wm-lh-relaxed)}@media (prefers-reduced-motion:reduce){.ds-annot{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Uncommon Parts",
+    "overview": "**Creative North Star: \"The Uncommon Parts\"**\n\nWormian bones are accessory bones inside the skull's sutures: unexpected pieces within an ordered structure. IRONMAW takes that literally. Interfaces are built from fitted parts with visible seams, each part carefully differentiated, held in a dark charcoal ground. The structure is quiet and orderly; the character lives in a small number of precise, deliberate details: one chamfered corner, a rust tick, a tracked uppercase label, a suture line where two regions actually join.\n\nComponents are machined and quiet. Radii are small, borders are hairlines, surfaces step by tone rather than float on shadow, and colour is assigned by job rather than decoration. Teal means \"you can act on this\", rust means \"this is the one action\" or \"you are here\", amber means \"be careful\", and slate holds the structure together. Density suits long working sessions over documents in Icelandic and English, so legibility outranks expression everywhere except brand headers and empty states.\n\nTwo editions share every part. **Oxide** (the values in this file) is the default. **Bone** is an opt-in, paper-toned proposal for documents and reading, selected only with `data-theme=\"bone\"` and never by `prefers-color-scheme`; its values live in `src/lib/tokens/bone.tokens.json`. The skull is the metaphor, never the picture: no skull illustrations.\n\nThe editor parts extend the same discipline to authoring. An Oxide shell (header, sidebar, canvas) holds the work; the document itself sits on a sheet of Bone paper inside it, so what you edit looks like what you print. Findings about the document are amber, numbered and pinned in the page margin; they annotate the text without touching it.",
+    "keyCharacteristics": [
+      "Dark charcoal ground with three tonal surface steps; one shadow, used only for genuinely raised panels.",
+      "Colour by job: teal interactive, rust the single action and active indicator, amber warnings, slate structure.",
+      "Rajdhani display lettering, uppercase and tracked, for short labels only; Inter for everything people read; Iosevka for paths and identifiers.",
+      "One chamfer size, on the primary action. Small radii (2–6px) everywhere else.",
+      "Seams are real: sutures mark actual joins, terrain lines belong to brand headers and empty states.",
+      "Authored line icons on a 24 grid, never unicode glyphs.",
+      "Documents are Bone paper inside the Oxide shell; findings are amber margin markers, never rust."
+    ],
+    "rules": [
+      {
+        "name": "The One Rust Rule",
+        "body": "One filled rust control per view. Rust also marks \"you are here\", so a second filled rust button makes two things claim the same meaning.",
+        "section": "colors"
+      },
+      {
+        "name": "The Amber Is Not Rust Rule",
+        "body": "Warnings are amber and must not look like the main action. The contrast tests enforce that warning and action stay distinct in every edition.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Green Tick Rule",
+        "body": "Review statuses have three tones: `act` (filled rust with the warning icon), `care` (rust outline) and `context` (slate outline). There is no green status and no \"Verified\" label, because the index cannot establish correctness.",
+        "section": "colors"
+      },
+      {
+        "name": "The Paper Edition Rule",
+        "body": "A document being written renders on a page sheet in the Bone edition, scoped to the sheet, while the shell around it stays Oxide. The sheet is the one place an app may mix editions; set it to inherit only when the reader asked for the app's edition.",
+        "section": "colors"
+      },
+      {
+        "name": "The Amber Finding Rule",
+        "body": "A finding about the document is amber: a numbered amber marker in the page margin, a 4px amber wavy underline under the passage it concerns, and the same number on its issue card in the sidebar. Rust never marks a finding; error red is for findings that block parsing.",
+        "section": "colors"
+      },
+      {
+        "name": "The Teal Selection Rule",
+        "body": "Choosing one of several states fills teal with charcoal ink: the selected segment, the switch track when on, the selected chip. Rust stays the action and the \"you are here\" mark, so selection and position never share a colour.",
+        "section": "colors"
+      },
+      {
+        "name": "The Measured Contrast Rule",
+        "body": "Anchor hexes are brand colours, not proof of accessibility. Every edition's derived pairs must pass text 4.5:1 and boundaries 3:1 (`src/lib/tokens/palette.test.ts`) before they ship.",
+        "section": "colors"
+      },
+      {
+        "name": "The Short Label Rule",
+        "body": "Rajdhani is for short uppercase labels only. Titles, excerpts, warnings and Icelandic prose stay in Inter, in sentence case.",
+        "section": "typography"
+      },
+      {
+        "name": "The Name Is Not A Label Rule",
+        "body": "Names, document titles and anything the user typed are never uppercased or tracked. A button whose text is a name or title uses the plain style: Inter semibold, sentence case, no tracking.",
+        "section": "typography"
+      },
+      {
+        "name": "The Small Numeral Exception",
+        "body": "The 16px marker and the 24px avatar set their figures at 10px (0.625rem), below the 0.75rem floor of the type scale, because two characters must fit a small circle. Nothing else uses 10px.",
+        "section": "typography"
+      },
+      {
+        "name": "The Icelandic Glyph Rule",
+        "body": "Every shipped face is subset to cover Latin Extended-A, so þ, ð, æ and ö render in the intended face, never in a fallback.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces sit flat at rest. Reach for a lighter surface step before a shadow; a shadow means the panel genuinely floats above its neighbours.",
+        "section": "elevation"
+      },
+      {
+        "name": "The One Chamfer Rule",
+        "body": "The chamfer is one size (10px) and belongs to the primary action. It is not a general corner style.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Pill Track Exception",
+        "body": "The switch track (36 × 20px) is the one pill in the system: its 10px radius is half its height, outside the 2–6px corner scale by design. Nothing else rounds a rectangle that far.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Real Seam Rule",
+        "body": "A suture marks an actual join in dense UI. Contour and mountain lines are reserved for brand headers and empty states and never run behind document text or controls.",
+        "section": "shapes"
+      },
+      {
+        "name": "The No Glyph Rule",
+        "body": "Icons come from the IRONMAW set, never from unicode symbols or emoji. Arrows and symbols may appear as text only where they are the content itself, such as the \"↑\" on a keycap.",
+        "section": "components"
+      },
+      {
+        "name": "The Computed Score Rule",
+        "body": "A score ring shows only a score the system computed. With no score it shows \"—\" and says \"No score yet\". The ring is teal while the verdict is positive and turns amber when it is negative; it never turns rust.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** keep exactly one filled rust control per view, and use rust for \"you are here\" (3px underline, 3px row bar, 18px tick).",
+      "**Do** use teal for every focus ring (2px outline, 2px offset) and for selection state on chips and filters.",
+      "**Do** step surfaces (surface 1 → 2 → 3) to show nesting before reaching for a shadow.",
+      "**Do** set file paths, identifiers and counts in Iosevka, and everything people read in Inter sentence case.",
+      "**Do** style through component props and `--wm-*` tokens; unlayered consumer CSS overrides the `wm.base` and `wm.theme` layers.",
+      "**Do** keep the Bone edition opt-in through `data-theme=\"bone\"`; the page sheet is the one part that opts in by default.",
+      "**Do** render documents on a page sheet (A4 794 × 1123px or Letter 816 × 1056px, 56px margins) and keep their text real and parseable.",
+      "**Do** mark findings with an amber numbered marker in the page margin, a wavy underline, and a matching issue card.",
+      "**Do** use the plain button style for names and document titles, and fill selected segments and switches teal.",
+      "**Do** draw every icon from the IRONMAW set at 12, 16, 20 or 24px."
+    ],
+    "donts": [
+      "**Don't** colour a warning rust; warnings are amber and must not look like an action.",
+      "**Don't** add a green status or a \"Verified\" label, and never show a count the data cannot back.",
+      "**Don't** set titles, excerpts, warnings or Icelandic prose in Rajdhani or in uppercase.",
+      "**Don't** use the chamfer at any size other than 10px, or on anything but the primary action.",
+      "**Don't** run terrain contours behind document text or controls; they belong to brand headers and empty states.",
+      "**Don't** illustrate skulls; the Wormian idea lives in the structure, not the imagery.",
+      "**Don't** hand-edit generated token outputs; change the DTCG sources and rebuild.",
+      "**Don't** use unicode symbols or emoji as icons.",
+      "**Don't** mark a finding in rust, or turn a score ring rust; findings and negative verdicts are amber.",
+      "**Don't** show a score ring without a computed score; show \"—\" instead.",
+      "**Don't** uppercase or track a person's name, a document title or user-entered text.",
+      "**Don't** add a second rust control beside the primary split button; header actions around it are ghost or secondary.",
+      "**Don't** reuse 10px numerals or the 10px pill radius outside the small marker, small avatar and switch track."
+    ]
+  }
+}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from './Icon.svelte';
   import { reviewStatusCopy, type ReviewTone } from '../../review-status.ts';
 
   // Three tones only. Text stays in --wm-text (never rust) so the label is
@@ -20,7 +21,7 @@
 </script>
 
 <span data-wm="status" data-tone={resolvedTone} data-status={status}>
-  {#if resolvedTone === 'act'}<span class="mark" aria-hidden="true">▲</span>{/if}
+  {#if resolvedTone === 'act'}<span class="mark"><Icon name="warning" size={12} /></span>{/if}
   {text}
 </span>
 
@@ -47,5 +48,5 @@
     color: var(--wm-action-ink);
     font-weight: var(--wm-font-weight-medium);
   }
-  .mark { font-size: 0.75em; line-height: 1; }
+  .mark { display: inline-flex; }
 </style>

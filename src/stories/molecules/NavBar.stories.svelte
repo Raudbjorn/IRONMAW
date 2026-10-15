@@ -27,7 +27,7 @@
   {#snippet template(args)}
     <NavBar {...args}>
       {#snippet brand()}<Mark href="#home" variant="lockup" size="sm" name="IRONMAW" tagline="Application Assistant" />{/snippet}
-      <Button variant="ghost" size="sm" label="Search">⌕</Button>
+      <Button variant="ghost" size="sm" label="Search" icon="search" />
     </NavBar>
   {/snippet}
 </Story>

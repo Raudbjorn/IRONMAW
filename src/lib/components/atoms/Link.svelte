@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from './Icon.svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {
@@ -22,7 +23,7 @@
   target={external ? '_blank' : undefined}
   {onclick}
 >
-  {@render children()}{#if external}<span aria-hidden="true"> ↗</span>{/if}
+  {@render children()}{#if external}<span class="ext"><Icon name="external" size={12} /></span>{/if}
 </a>
 
 <style>
@@ -42,4 +43,5 @@
     outline: 2px solid var(--wm-accent);
     outline-offset: 2px;
   }
+  .ext { display: inline-flex; margin-inline-start: 0.2em; vertical-align: -0.05em; }
 </style>

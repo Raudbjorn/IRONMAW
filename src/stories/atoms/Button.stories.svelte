@@ -7,8 +7,8 @@
     component: Button,
     args: { variant: 'primary', size: 'md', disabled: false, loading: false },
     argTypes: {
-      variant: { control: 'select', options: ['primary', 'secondary', 'ghost', 'danger'] },
-      size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+      variant: { control: 'select', options: ['primary', 'secondary', 'ghost', 'danger', 'dashed'] },
+      size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
       chamfer: { control: 'boolean' },
       href: { control: 'text' },
       label: { control: 'text' },
@@ -60,10 +60,26 @@
 
 <Story name="Icon only" asChild>
   <Stack direction="row" gap={3} align="center" wrap>
-    <Button variant="ghost" label="Close reader">×</Button>
-    <Button variant="secondary" label="Expand reader">⤢</Button>
-    <Button variant="primary" label="Submit search">→</Button>
+    <Button variant="ghost" label="Close reader" icon="close" />
+    <Button variant="secondary" label="Expand reader" icon="zoom-fit" />
+    <Button variant="primary" label="Submit search" icon="chevron-right" />
+    <Button variant="ghost" size="xs" label="Hide section" icon="eye" />
   </Stack>
+</Story>
+
+<Story name="With icons" asChild>
+  <Stack direction="row" gap={3} align="center" wrap>
+    <Button icon="download">Download PDF</Button>
+    <Button variant="secondary" icon="share">Share</Button>
+    <Button variant="secondary" size="sm" icon="heading">Use the standard heading</Button>
+    <Button variant="ghost" size="sm" iconEnd="chevron-down">Sveinbjörn Geirsson</Button>
+  </Stack>
+</Story>
+
+<Story name="Dashed" asChild>
+  <div style="max-width: 320px">
+    <Button variant="dashed" icon="plus">Add section</Button>
+  </div>
 </Story>
 
 <Story name="As link" args={{ href: '#library', variant: 'secondary' }}>

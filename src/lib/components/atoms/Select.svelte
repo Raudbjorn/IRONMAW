@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from './Icon.svelte';
   import type { HTMLSelectAttributes } from 'svelte/elements';
 
   // Native select in the outlined-field dress. Used for the five library
@@ -34,7 +35,7 @@
         <option value={o.value}>{o.label}</option>
       {/each}
     </select>
-    <span data-wm="select-caret" aria-hidden="true">▾</span>
+    <span data-wm="select-caret"><Icon name="chevron-down" /></span>
   </div>
 </div>
 
@@ -76,7 +77,7 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--wm-structure-text);
+    display: inline-flex;
     pointer-events: none;
-    font-size: 0.8em;
   }
 </style>

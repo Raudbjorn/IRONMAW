@@ -1,13 +1,16 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import type { IconName } from '../../icons.ts';
+  import Icon from './Icon.svelte';
 
   // Primary = rust fill, charcoal label, one clipped corner (the chamfer from
   // component board B3). Secondary = slate outline. Ghost = text only.
-  // Danger = error fill. Labels are display face, uppercase, tracked — short
+  // Danger = error fill. Dashed = an empty slot inviting an addition ("Add
+  // section"): dashed slate outline, full width of its container. Labels are display face, uppercase, tracked — short
   // verbs only ("Search", "Copy passage with source").
   interface Props {
-    variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
-    size?: 'sm' | 'md' | 'lg';
+    variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'dashed';
+    size?: 'xs' | 'sm' | 'md' | 'lg';
     /** When set, renders an anchor. */
     href?: string;
     type?: 'button' | 'submit';
@@ -21,8 +24,16 @@
     /** Disclosure state, for toggles that reveal a region. */
     'aria-expanded'?: boolean;
     'aria-controls'?: string;
+    /** Leading icon from the IRONMAW set. With `label` and no children, renders icon-only. */
+    icon?: IconName;
+    /** Trailing icon, e.g. chevron-down on a menu trigger. */
+    iconEnd?: IconName;
+    /** Inter, sentence case, untracked: for names and document titles used as triggers. Never uppercases user text. */
+    plain?: boolean;
+    'aria-haspopup'?: 'menu' | 'listbox' | 'dialog' | boolean;
+    'aria-pressed'?: boolean;
     onclick?: (e: MouseEvent) => void;
-    children: Snippet;
+    children?: Snippet;
   }
 
   let {
@@ -36,9 +47,16 @@
     label,
     'aria-expanded': ariaExpanded,
     'aria-controls': ariaControls,
+    'aria-haspopup': ariaHaspopup,
+    'aria-pressed': ariaPressed,
+    icon,
+    iconEnd,
+    plain = false,
     onclick,
     children
   }: Props = $props();
+
+  const iconSize = $derived(size === 'lg' ? 20 : 16);
 
   const clipped = $derived(chamfer ?? (variant === 'primary' || variant === 'danger'));
 </script>
@@ -51,13 +69,15 @@
     data-size={size}
     data-chamfer={clipped || undefined}
     data-icon-only={label ? true : undefined}
+    data-plain={plain || undefined}
     aria-label={label}
     aria-disabled={disabled || undefined}
     aria-busy={loading || undefined}
     {onclick}
   >
-    {#if loading}<span class="ring" aria-hidden="true"></span>{/if}
-    {@render children()}
+    {#if loading}<span class="ring" aria-hidden="true"></span>{:else if icon}<Icon name={icon} size={iconSize} />{/if}
+    {@render children?.()}
+    {#if iconEnd}<Icon name={iconEnd} size={iconSize} />{/if}
   </a>
 {:else}
   <button
@@ -67,15 +87,19 @@
     data-size={size}
     data-chamfer={clipped || undefined}
     data-icon-only={label ? true : undefined}
+    data-plain={plain || undefined}
     aria-label={label}
     aria-expanded={ariaExpanded}
     aria-controls={ariaControls}
+    aria-haspopup={ariaHaspopup}
+    aria-pressed={ariaPressed}
     disabled={disabled || loading}
     aria-busy={loading || undefined}
     {onclick}
   >
-    {#if loading}<span class="ring" aria-hidden="true"></span>{/if}
-    {@render children()}
+    {#if loading}<span class="ring" aria-hidden="true"></span>{:else if icon}<Icon name={icon} size={iconSize} />{/if}
+    {@render children?.()}
+    {#if iconEnd}<Icon name={iconEnd} size={iconSize} />{/if}
   </button>
 {/if}
 
@@ -117,19 +141,34 @@
   }
   [data-chamfer] { border-radius: 0; }
 
+  [data-size='xs'] { min-height: var(--wm-control-xs); font-size: var(--wm-fs-xs); padding: 0 var(--wm-space-2); gap: var(--wm-space-1); }
   [data-size='sm'] { min-height: var(--wm-control-sm); font-size: var(--wm-fs-sm); padding: 0 var(--wm-space-3); }
   [data-size='md'] { min-height: var(--wm-control-md); font-size: var(--wm-fs-base); padding: 0 var(--wm-space-4); }
   [data-size='lg'] { min-height: var(--wm-control-lg); font-size: var(--wm-fs-lg); padding: 0 var(--wm-space-6); }
+  [data-icon-only][data-size='xs'] { width: var(--wm-control-xs); padding: 0; }
   [data-icon-only][data-size='sm'] { width: var(--wm-control-sm); padding: 0; }
   [data-icon-only][data-size='md'] { width: var(--wm-control-md); padding: 0; }
   [data-icon-only][data-size='lg'] { width: var(--wm-control-lg); padding: 0; }
 
+  [data-plain] {
+    font-family: var(--wm-font-sans);
+    font-weight: var(--wm-font-weight-semibold);
+    text-transform: none;
+    letter-spacing: 0;
+  }
   [data-variant='primary'] { --fill: var(--wm-action); color: var(--wm-action-ink); font-weight: var(--wm-display-weight-bold); }
   [data-variant='primary']:hover { --fill: var(--wm-action-hover); }
   [data-variant='secondary'] { color: var(--wm-text); border-color: var(--wm-border-strong); }
   [data-variant='secondary']:hover { --fill: var(--wm-surface-2); color: var(--wm-text-strong); }
   [data-variant='ghost'] { color: var(--wm-text-muted); }
   [data-variant='ghost']:hover { --fill: var(--wm-surface-2); color: var(--wm-text); }
+  [data-variant='dashed'] {
+    width: 100%;
+    color: var(--wm-accent);
+    border: 1px dashed var(--wm-border-strong);
+  }
+  [data-variant='dashed']:hover { --fill: var(--wm-surface-1); border-color: var(--wm-accent); }
+  [aria-pressed='true'] { --fill: var(--wm-selected); color: var(--wm-text-strong); }
   [data-variant='danger'] { --fill: var(--wm-error); color: var(--wm-action-ink); font-weight: var(--wm-display-weight-bold); }
   [data-variant='danger']:hover { --fill: color-mix(in oklab, var(--wm-error), var(--wm-mix-target) 12%); }
 

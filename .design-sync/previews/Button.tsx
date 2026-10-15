@@ -31,10 +31,26 @@ export const States = () => (
 
 export const IconOnly = () => (
   <Stack direction="row" gap={3} align="center" wrap>
-    <Button variant="ghost" label="Close reader">×</Button>
-    <Button variant="secondary" label="Expand reader">⤢</Button>
-    <Button variant="primary" label="Submit search">→</Button>
+    <Button variant="ghost" label="Close reader" icon="close" />
+    <Button variant="secondary" label="Expand reader" icon="zoom-fit" />
+    <Button variant="primary" label="Submit search" icon="chevron-right" />
+    <Button variant="ghost" size="xs" label="Hide section" icon="eye" />
   </Stack>
+);
+
+export const WithIcons = () => (
+  <Stack direction="row" gap={3} align="center" wrap>
+    <Button icon="download">Download PDF</Button>
+    <Button variant="secondary" icon="share">Share</Button>
+    <Button variant="secondary" size="sm" icon="heading">Use the standard heading</Button>
+    <Button variant="ghost" size="sm" iconEnd="chevron-down">Sveinbjörn Geirsson</Button>
+  </Stack>
+);
+
+export const Dashed = () => (
+  <div style={{ maxWidth: 320 }}>
+    <Button variant="dashed" icon="plus">Add section</Button>
+  </div>
 );
 
 export const AsLink = () => <Button href="#library" variant="secondary">Back to results</Button>;

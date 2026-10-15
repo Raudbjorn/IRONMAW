@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../atoms/Icon.svelte';
   import type { Snippet } from 'svelte';
 
   // Compact branded shell: Mark at left, destinations with a rust active
@@ -30,7 +31,7 @@
 <nav aria-label={navLabel} data-wm="navbar">
   <div class="brand">{#if brand}{@render brand()}{/if}</div>
   <button type="button" class="toggle" aria-label={open ? closeLabel : menuLabel} aria-expanded={open} aria-controls={linksId} onclick={() => (open = !open)}>
-    <span aria-hidden="true">{open ? '×' : '≡'}</span>
+    <Icon name={open ? 'close' : 'menu'} />
     <span class="toggle-text" aria-hidden="true">{menuLabel}</span>
   </button>
   <div id={linksId} class="links" data-open={open}>

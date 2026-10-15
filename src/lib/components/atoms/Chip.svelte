@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from './Icon.svelte';
   // Filter chip. Colour reflects STATE (selected = teal fill), never a
   // category hierarchy. The remove control is its own 28px button named
   // "Remove <label>" so screen readers hear what goes away.
@@ -30,7 +31,7 @@
   {/if}
   {#if onremove}
     <button type="button" class="remove" aria-label={`${removeLabel} ${label}`} onclick={onremove}>
-      <span aria-hidden="true">×</span>
+      <Icon name="close" size={12} />
     </button>
   {/if}
 </span>
