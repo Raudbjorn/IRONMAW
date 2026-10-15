@@ -12,13 +12,13 @@
       action: { table: { disable: true } },
       ondismiss: { table: { disable: true } }
     },
-    parameters: { docs: { description: { component: 'Page-level and inline notices. Warning and error are amber and red, never rust: a notice must not look like a routine action. The action slot holds the recovery control; the copy says what happened and what is kept.' } } }
+    parameters: { docs: { description: { component: 'Page-level and inline notices. Warning and error are amber and red, never rust: a notice must not look like a routine action. The action slot holds the recovery control; the copy says what happened and what is kept. Dismiss is opt-in: informational notices can offer it, but warnings and errors don’t, because they stay until the problem is resolved.' } } }
   });
 </script>
 
 <Story name="Info">
   {#snippet template({ children: _, ...args })}
-    <Notice {...args}>Icelandic shows documents tagged Icelandic only. Documents that mix both languages are under Mixed.</Notice>
+    <Notice {...args} dismissLabel="Dismiss" ondismiss={() => {}}>Icelandic shows documents tagged Icelandic only. Documents that mix both languages are under Mixed.</Notice>
   {/snippet}
 </Story>
 
@@ -41,7 +41,7 @@
 
 <Story name="Clipboard" asChild>
   <Stack gap={3}>
-    <Notice tone="success">Copied the passage with its source and the known-issues caution.</Notice>
+    <Notice tone="success" dismissLabel="Dismiss" ondismiss={() => {}}>Copied the passage with its source and the known-issues caution.</Notice>
     <Notice tone="error">Could not copy. Select the text and copy it manually.</Notice>
   </Stack>
 </Story>

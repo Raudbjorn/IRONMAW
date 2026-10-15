@@ -18,4 +18,10 @@ describe('PageAnnotation', () => {
     expect(el).toHaveAttribute('data-tone', 'error');
     expect(el).toHaveAttribute('data-active');
   });
+  it('marks inline use so the marker leads the text instead of the margin', () => {
+    const { container } = render(PageAnnotation, { props: { index: 'a', label: 'x', as: 'span', children } });
+    expect(container.querySelector('[data-wm="page-annotation"]')).toHaveAttribute('data-inline');
+    const div = render(PageAnnotation, { props: { index: 'b', label: 'y', children } });
+    expect(div.container.querySelector('[data-wm="page-annotation"]')).not.toHaveAttribute('data-inline');
+  });
 });

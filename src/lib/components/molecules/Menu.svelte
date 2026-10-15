@@ -110,7 +110,16 @@
     const top = wantTop ? r.top - TRIGGER_GAP_PX - height : r.bottom + TRIGGER_GAP_PX;
     let left = placement.endsWith('end') ? r.right - w : r.left;
     left = Math.max(VIEWPORT_MARGIN_PX, Math.min(left, vw - w - VIEWPORT_MARGIN_PX));
-    pos = { left, top, maxHeight: Math.min(MAX_HEIGHT_PX, room) };
+    // A transformed ancestor becomes the containing block of a fixed popup;
+    // measure its origin at 0,0 and subtract so the popup lands on the trigger.
+    popup.style.left = '0px';
+    popup.style.top = '0px';
+    const origin = popup.getBoundingClientRect();
+    left -= origin.left;
+    const fixedTop = top - origin.top;
+    popup.style.left = `${left}px`;
+    popup.style.top = `${fixedTop}px`;
+    pos = { left, top: fixedTop, maxHeight: Math.min(MAX_HEIGHT_PX, room) };
   }
 
   $effect(() => {
@@ -119,6 +128,8 @@
       return;
     }
     place();
+    // Initially-open menus mount before layout settles; place again next frame.
+    const frame = requestAnimationFrame(place);
     const target = focusTarget;
     focusTarget = 'popup';
     const list = enabledItems();
@@ -128,6 +139,7 @@
     window.addEventListener('scroll', again, true);
     window.addEventListener('resize', again);
     return () => {
+      cancelAnimationFrame(frame);
       window.removeEventListener('scroll', again, true);
       window.removeEventListener('resize', again);
     };

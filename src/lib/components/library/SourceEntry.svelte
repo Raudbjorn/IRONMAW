@@ -57,13 +57,14 @@
       {#if summary}<span class="summary">{summary}</span>{/if}
     </div>
     <div class="actions">
-      {#if oncopy}
-        <Button variant="ghost" size="sm" chamfer={false} onclick={() => oncopy(path)}>{copyLabel}</Button>
-      {/if}
+      <!-- Details first, Copy path last: Copy path keeps one column across rows with and without details. -->
       {#if fields.length}
         <Button variant="secondary" size="sm" onclick={() => (expanded = !expanded)} aria-expanded={expanded} aria-controls={detailsId}>
           {expanded ? hideDetailsLabel : detailsLabel}
         </Button>
+      {/if}
+      {#if oncopy}
+        <Button variant="ghost" size="sm" chamfer={false} onclick={() => oncopy(path)}>{copyLabel}</Button>
       {/if}
     </div>
   </div>

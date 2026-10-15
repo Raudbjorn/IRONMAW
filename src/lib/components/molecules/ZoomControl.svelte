@@ -83,6 +83,6 @@
     text-align: center;
   }
   .rule { align-self: stretch; width: 1px; margin: var(--wm-space-1) var(--wm-space-1); background: var(--wm-border); }
-  .pages { padding-inline: var(--wm-space-2); font-family: var(--wm-font-sans); font-size: var(--wm-fs-xs); color: var(--wm-text-muted); white-space: nowrap; }
+  .pages { padding-inline: var(--wm-space-2); font-family: var(--wm-font-mono); font-size: var(--wm-fs-xs); font-variant-numeric: tabular-nums; color: var(--wm-text-muted); white-space: nowrap; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 </style>

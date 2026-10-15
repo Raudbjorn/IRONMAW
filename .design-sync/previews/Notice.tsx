@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Button, Link, Notice, Stack } from '@svnbjrn/ironmaw';
 
-export const Info = () => <Notice tone="info">Icelandic shows documents tagged Icelandic only. Documents that mix both languages are under Mixed.</Notice>;
+export const Info = () => <Notice tone="info" dismissLabel="Dismiss" ondismiss={() => {}}>Icelandic shows documents tagged Icelandic only. Documents that mix both languages are under Mixed.</Notice>;
 
 export const ServiceUnavailable = () => (
   <Notice tone="error" title="Can’t reach the library service." action={<Button variant="secondary" size="sm">Retry</Button>}>
@@ -22,7 +22,7 @@ export const IndexRefreshed = () => (
 
 export const Clipboard = () => (
   <Stack gap={3}>
-    <Notice tone="success">Copied the passage with its source and the known-issues caution.</Notice>
+    <Notice tone="success" dismissLabel="Dismiss" ondismiss={() => {}}>Copied the passage with its source and the known-issues caution.</Notice>
     <Notice tone="error">Could not copy. Select the text and copy it manually.</Notice>
   </Stack>
 );

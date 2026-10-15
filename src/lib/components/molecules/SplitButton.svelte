@@ -44,7 +44,7 @@
     {variant}
     {size}
     {items}
-    {disabled}
+    disabled={disabled || loading}
     placement="bottom-end"
     chamfer={variant === 'primary'}
     {onselect}

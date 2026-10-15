@@ -19,7 +19,13 @@
 </section>
 
 <style>
-  [data-wm='doc-section'] { display: block; margin-top: var(--wm-space-6); }
+  [data-wm='doc-section'] { display: block; }
+  /* Only space a section that follows something. */
+  /* Space a section only when something precedes it. A section that opens
+     its own wrapper (a layout box, a framework slot) counts as preceded when
+     the wrapper itself follows something. */
+  [data-wm='doc-section']:not(:first-child),
+  :global(:not(:first-child)) > [data-wm='doc-section']:first-child { margin-top: var(--wm-space-6); }
   h2 {
     margin: 0 0 var(--wm-space-3);
     font-family: var(--wm-font-display);

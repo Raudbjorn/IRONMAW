@@ -50,10 +50,15 @@
           <span class="title">{title}</span>
           {#if meta}<span class="meta">{meta}</span>{/if}
         </span>
-        <Icon name={open ? 'chevron-up' : 'chevron-down'} size={16} />
+        {#if !actions}<Icon name={open ? 'chevron-up' : 'chevron-down'} size={16} />{/if}
       </button>
     </svelte:element>
-    {#if actions}<div class="actions">{@render actions()}</div>{/if}
+    {#if actions}
+      <div class="actions">{@render actions()}</div>
+      <!-- Decorative chevron at the far right; clicking it toggles, the real toggle stays the heading button. -->
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <span class="chevron" aria-hidden="true" onclick={toggle}><Icon name={open ? 'chevron-up' : 'chevron-down'} size={16} /></span>
+    {/if}
   </div>
   <div id={regionId} class="body" role="region" aria-labelledby={buttonId} hidden={!open}>
     {@render children()}
@@ -67,6 +72,8 @@
   .head { display: flex; align-items: center; gap: var(--wm-space-2); }
   [data-variant='card'] .head { padding-inline: var(--wm-space-3); }
   .leading, .actions { flex: none; display: inline-flex; align-items: center; gap: var(--wm-space-1); }
+  .chevron { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: var(--wm-control-xs); min-height: var(--wm-control-md); color: var(--wm-text-muted); cursor: pointer; }
+  .chevron:hover { color: var(--wm-text); }
   .heading { flex: 1; min-width: 0; margin: 0; font: inherit; }
   button {
     display: flex;

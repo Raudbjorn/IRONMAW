@@ -1,6 +1,6 @@
 // Mirrors src/stories/layout/PageCanvas.stories.svelte
 import * as React from 'react';
-import { Button, Heading, PageCanvas, PageSheet, Tabs, Text } from '@svnbjrn/ironmaw';
+import { Heading, PageCanvas, PageSheet, SegmentedControl, Text, ZoomControl } from '@svnbjrn/ironmaw';
 
 const sheets = (
   <>
@@ -15,17 +15,18 @@ const sheets = (
 );
 
 const views = (
-  <Tabs
+  <SegmentedControl
     aria-label="Preview view"
+    size="sm"
     value="person"
-    tabs={[
-      { id: 'person', label: 'What a person sees', tabId: 'pc-t1', panelId: 'pc-p1' },
-      { id: 'parser', label: 'What a parser reads', tabId: 'pc-t2', panelId: 'pc-p2' },
+    options={[
+      { id: 'person', label: 'What a person sees', icon: 'file' },
+      { id: 'parser', label: 'What a parser reads', icon: 'code' },
     ]}
   />
 );
 
-const bar = <Button variant="secondary" size="xs" icon="zoom-fit" label="Fit page" />;
+const bar = <ZoomControl value="fit" pageCount={2} />;
 
 export const Fit = () => (
   <div style={{ height: 480 }}>

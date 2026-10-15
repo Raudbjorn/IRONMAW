@@ -157,10 +157,7 @@
           <Icon name="grip" size={16} />
         </button>
         <span class="words">
-          <span class="label">
-            {#if item.hidden}<Icon name="eye-off" size={12} />{/if}
-            {item.label}
-          </span>
+          <span class="label">{item.label}</span>
           {#if item.meta}<span class="meta">{item.meta}</span>{/if}
         </span>
         {#if item.count !== undefined}<span class="count">{item.count}</span>{/if}

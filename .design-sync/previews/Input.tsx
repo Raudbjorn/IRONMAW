@@ -16,7 +16,7 @@ export const States = () => (
 export const Affixes = () => (
   <Stack gap={4}>
     <Input label="Font size" type="number" value="11" unit="pt" />
-    <Input label="Line height" type="number" value="1.5" unit="×" />
+    <Input label="Line height" type="number" value="1.5" />
     <Input label="Website" type="url" placeholder="https://" icon="link" />
     <Input
       label="Primary colour"

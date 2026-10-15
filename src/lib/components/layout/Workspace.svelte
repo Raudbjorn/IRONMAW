@@ -4,8 +4,9 @@
   // The editor's frame: an optional header across the top, a fixed-width
   // sidebar that scrolls on its own, and a main canvas. With fill (default) it
   // takes the full viewport height and each pane scrolls internally; without
-  // it the workspace grows with its content. Below 1024px it becomes a single
-  // column, sidebar first, at natural height.
+  // it the workspace grows with its content. Below 720px of its own width it
+  // becomes a single column, sidebar first, at natural height
+  // (the whole frame scrolls when it fills).
   interface Props {
     header?: Snippet;
     sidebar: Snippet;
@@ -19,13 +20,18 @@
   let { header, sidebar, children, sidebarLabel, sidebarWidth = 'var(--wm-sidebar)', fill = true }: Props = $props();
 </script>
 
+<div data-part="frame" data-fill={fill || undefined}>
 <div data-wm="workspace" data-fill={fill || undefined} style:--sidebar-w={sidebarWidth}>
   {#if header}<div data-part="header">{@render header()}</div>{/if}
   <aside data-part="sidebar" aria-label={sidebarLabel}>{@render sidebar()}</aside>
   <main data-part="main">{@render children()}</main>
 </div>
+</div>
 
 <style>
+  /* The frame is the container; a container cannot query itself. */
+  [data-part='frame'] { container-type: inline-size; container-name: workspace; }
+  [data-part='frame'][data-fill] { height: 100dvh; max-height: 100%; }
   [data-wm='workspace'] {
     display: grid;
     grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
@@ -33,7 +39,7 @@
     background: var(--wm-bg);
     color: var(--wm-text);
   }
-  [data-fill] { height: 100dvh; }
+  [data-wm='workspace'][data-fill] { height: 100%; }
   [data-part='header'] { grid-column: 1 / -1; }
   [data-part='sidebar'] {
     grid-column: 1;
@@ -55,12 +61,12 @@
     overflow: auto;
     background: var(--wm-bg);
   }
-  @media (max-width: 1023px) {
+  @container workspace (max-width: 719px) {
     [data-wm='workspace'] {
       grid-template-columns: minmax(0, 1fr);
       grid-template-rows: none;
     }
-    [data-fill] { height: auto; }
+    [data-wm='workspace'][data-fill] { overflow: auto; }
     [data-part='sidebar'], [data-part='main'] { grid-column: 1; grid-row: auto; overflow: visible; }
     [data-part='sidebar'] { border-right: 0; border-bottom: 1px solid var(--wm-border); }
   }

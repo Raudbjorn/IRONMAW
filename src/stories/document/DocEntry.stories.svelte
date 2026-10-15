@@ -13,21 +13,31 @@
 
 <Story name="With details">
   {#snippet template({ children: _, ...args })}
-    <DocEntry {...args}>
-      <ul>
-        <li>Hönnun og þróun vefkerfa</li>
-        <li>Umsjón með gagnagrunnum</li>
-      </ul>
-    </DocEntry>
+    <div data-theme="bone" style="background: var(--wm-bg); color: var(--wm-text); padding: 32px">
+      <DocEntry {...args}>
+        <ul>
+          <li>Hönnun og þróun vefkerfa</li>
+          <li>Umsjón með gagnagrunnum</li>
+        </ul>
+      </DocEntry>
+    </div>
   {/snippet}
 </Story>
 
-<Story name="Title only" args={{ title: 'Íslenska', subtitle: undefined, date: undefined, location: undefined }} />
+<Story name="Title only" args={{ title: 'Íslenska', subtitle: undefined, date: undefined, location: undefined }}>
+  {#snippet template({ children: _, ...args })}
+    <div data-theme="bone" style="background: var(--wm-bg); color: var(--wm-text); padding: 32px">
+      <DocEntry {...args} />
+    </div>
+  {/snippet}
+</Story>
 
 <Story name="With paragraph">
   {#snippet template({ children: _, ...args })}
-    <DocEntry {...args} title="Forritari" date="2015 – 2019" location="Kópavogur">
-      <p>Þróun innri kerfa og samþætting við þriðja aðila.</p>
-    </DocEntry>
+    <div data-theme="bone" style="background: var(--wm-bg); color: var(--wm-text); padding: 32px">
+      <DocEntry {...args} title="Forritari" date="2015 – 2019" location="Kópavogur">
+        <p>Þróun innri kerfa og samþætting við þriðja aðila.</p>
+      </DocEntry>
+    </div>
   {/snippet}
 </Story>

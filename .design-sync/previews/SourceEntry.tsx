@@ -15,9 +15,9 @@ export const Compact = () => <SourceEntry index={1} path={path} summary="Applica
 
 export const Expanded = () => <SourceEntry index={1} path={path} summary="Applications · Landsnet" fields={fields} expanded copied oncopy={() => {}} />;
 
-export const IdenticalContentSixLocations = () => (
+export const IdenticalContentThreeLocations = () => (
   <Stack gap={0}>
-    <Text size="sm" tone="muted">6 locations, identical content. 48,690 bytes each. The document title comes from location 1.</Text>
+    <Text size="sm" tone="muted">3 locations, identical content. 48,690 bytes each. The document title comes from location 1.</Text>
     <SourceEntry index={1} path={path} summary="Applications · Landsnet" oncopy={() => {}} fields={[{ label: 'Purpose', value: 'Preserved PDF for comparison.' }]} />
     <SourceEntry index={2} path="library/01-cv/pdf-snapshots/icelandic-cv-2026-09-17/output/cv-sveinbjorn-geirsson.is.pdf" summary="CVs · snapshot" oncopy={() => {}} fields={[{ label: 'Purpose' }, { label: 'Archive', value: 'sources/archives/2026-10-13-additions/drive-download-20261013T011346Z-1-001.zip', mono: true }]} />
     <SourceEntry index={3} path="library/01-cv/drive-imports/drive-011346/cv-sveinbjorn-geirsson.is.pdf" summary="CVs · drive import" oncopy={() => {}} />

@@ -32,6 +32,14 @@
 
 <Story name="Icon trigger" />
 
-<Story name="Open" args={{ open: true }} />
+<Story name="Open" asChild>
+  <div style="min-height: 240px">
+    <Menu label="Document actions" items={documentItems} open />
+  </div>
+</Story>
 
-<Story name="Text trigger, two columns" args={{ label: 'Add section', text: 'Add section', icon: 'plus', variant: 'secondary', items: sectionItems, columns: 2, title: 'Sections', open: true }} />
+<Story name="Text trigger, two columns" asChild>
+  <div style="min-height: 340px">
+    <Menu label="Add section" text="Add section" icon="plus" variant="secondary" items={sectionItems} columns={2} title="Sections" open />
+  </div>
+</Story>

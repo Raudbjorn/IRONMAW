@@ -210,12 +210,12 @@ export interface SpinnerProps {
 export declare const Spinner: React.FC<SpinnerProps>;
 
 /**
- * The identity. bear = the full supplied vector; emblem = the compact mark;
- * wordmark = IRONMAW in the display face; small lockups use the emblem.
+ * The identity. bear = the full supplied vector (used at every size);
+ * wordmark = IRONMAW in the display face; lockup = both.
  * plate seats the bear on its charcoal plate (brand-board treatment).
  */
 export interface MarkProps {
-  variant?: 'bear' | 'emblem' | 'wordmark' | 'lockup';
+  variant?: 'bear' | 'wordmark' | 'lockup';
   /** The name on paper. Default "IRONMAW". */
   name?: string;
   /** Second line, e.g. "Wormian Bones" or the product name. */
@@ -409,9 +409,6 @@ export declare const editions: { oxide: Record<string, string>; bone: Record<str
 export declare const bearMark: string;
 export declare const BEAR_MARK_WIDTH: number;
 export declare const BEAR_MARK_HEIGHT: number;
-export declare const bearEmblem: string;
-export declare const BEAR_EMBLEM_WIDTH: number;
-export declare const BEAR_EMBLEM_HEIGHT: number;
 
 /** A contact line item in a document header. email/phone get mailto:/tel: links when href is absent. */
 export type DocContact = {

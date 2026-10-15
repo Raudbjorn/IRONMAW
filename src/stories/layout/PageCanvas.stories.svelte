@@ -1,6 +1,6 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf';
-  import { Button, Heading, PageCanvas, PageSheet, Tabs, Text } from '../../lib/index';
+  import { Heading, PageCanvas, PageSheet, SegmentedControl, Text, ZoomControl } from '../../lib/index';
 
   const { Story } = defineMeta({
     title: 'Layout/PageCanvas',
@@ -26,14 +26,14 @@
 {/snippet}
 
 {#snippet views()}
-  <Tabs aria-label="Preview view" value="person" tabs={[
-    { id: 'person', label: 'What a person sees', tabId: 'pc-t1', panelId: 'pc-p1' },
-    { id: 'parser', label: 'What a parser reads', tabId: 'pc-t2', panelId: 'pc-p2' }
+  <SegmentedControl aria-label="Preview view" size="sm" value="person" options={[
+    { id: 'person', label: 'What a person sees', icon: 'file' },
+    { id: 'parser', label: 'What a parser reads', icon: 'code' }
   ]} />
 {/snippet}
 
 {#snippet bar()}
-  <Button variant="secondary" size="xs" icon="zoom-fit" label="Fit page" />
+  <ZoomControl value="fit" pageCount={2} />
 {/snippet}
 
 <Story name="Fit" asChild>

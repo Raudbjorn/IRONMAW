@@ -17,9 +17,21 @@
   });
 </script>
 
-<Story name="Header" />
+<Story name="Header">
+  {#snippet template(args)}
+    <div data-theme="bone" style="background: var(--wm-bg); color: var(--wm-text); padding: 32px">
+      <DocHeader {...args} />
+    </div>
+  {/snippet}
+</Story>
 
-<Story name="Name only" args={{ headline: undefined, contacts: [] }} />
+<Story name="Name only" args={{ headline: undefined, contacts: [] }}>
+  {#snippet template(args)}
+    <div data-theme="bone" style="background: var(--wm-bg); color: var(--wm-text); padding: 32px">
+      <DocHeader {...args} />
+    </div>
+  {/snippet}
+</Story>
 
 <Story name="Full page" asChild>
   <PageSheet label="Page 1 · A4">

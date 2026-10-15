@@ -65,7 +65,7 @@ brand headers and empty states; the suture marks actual joins in dense UI.
 
 | Reference | System use |
 |---|---|
-| Full bear SVG and compact favicon SVG | `Mark` uses the full vector at medium/large sizes and the emblem in small lockups; the artwork colours remain intact. |
+| Full bear SVG and compact favicon SVG | `Mark` uses the full vector at every size, small lockups included; the favicon SVG is the browser icon only and never appears in UI; the artwork colours remain intact. |
 | Topographic banner and cover-letter headers | `Panel terrain` draws quiet contour and mountain lines on brand headers, away from document text and controls. |
 | Interface board | `NavBar` uses a rust active underline; primary buttons retain the single chamfer, and selected chips remain teal. |
 | Identity board | The four anchor colours remain exact in the DTCG tokens. |
@@ -125,7 +125,7 @@ Tokens are DTCG JSON in `src/lib/tokens/*.tokens.json`; `pnpm run tokens`
 regenerates `colors.css`, `scale.css`, `palette.ts` and `resolved/*.json`.
 Never hand-edit the generated files. Fonts (Inter, Iosevka Nerd, Rajdhani — all
 OFL, full Icelandic coverage) are subset from `assets/fonts-src/` by
-`pnpm run fonts`. The full bear and compact emblem are owner-supplied vectors
+`pnpm run fonts`. The full bear and the favicon are owner-supplied vectors
 in `assets/brand/`, inlined by `pnpm run assets`.
 
 ## Sync to claude.ai/design

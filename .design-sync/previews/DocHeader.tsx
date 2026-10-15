@@ -10,10 +10,16 @@ const contacts = [
 ];
 
 export const Header = () => (
-  <DocHeader name="Sveinbjörn Geirsson" headline="Hugbúnaðarsérfræðingur" contacts={contacts} />
+  <div data-theme="bone" style={{ background: 'var(--wm-bg)', color: 'var(--wm-text)', padding: 32 }}>
+    <DocHeader name="Sveinbjörn Geirsson" headline="Hugbúnaðarsérfræðingur" contacts={contacts} />
+  </div>
 );
 
-export const NameOnly = () => <DocHeader name="Sveinbjörn Geirsson" />;
+export const NameOnly = () => (
+  <div data-theme="bone" style={{ background: 'var(--wm-bg)', color: 'var(--wm-text)', padding: 32 }}>
+    <DocHeader name="Sveinbjörn Geirsson" />
+  </div>
+);
 
 export const FullPage = () => (
   <PageSheet label="Page 1 · A4">

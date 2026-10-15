@@ -23,6 +23,11 @@ describe('Menu', () => {
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
     expect(screen.queryByRole('menu')).toBeNull();
   });
+  it('places a menu that starts open', async () => {
+    setup({ open: true });
+    const menu = await screen.findByRole('menu');
+    await vi.waitFor(() => expect(menu).toHaveAttribute('data-placed'));
+  });
   it('opens on click with menuitems and a separator', async () => {
     const { trigger } = setup();
     await fireEvent.click(trigger);

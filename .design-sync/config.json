@@ -34,6 +34,46 @@
     },
     "SearchField": {
       "cardMode": "column"
+    },
+    "Panel": {
+      "cardMode": "column",
+      "primaryStory": "ReaderHeader"
+    },
+    "Icon": {
+      "cardMode": "column",
+      "primaryStory": "AllIcons"
+    },
+    "DocHeader": {
+      "cardMode": "column",
+      "primaryStory": "FullPage"
+    },
+    "PageSheet": {
+      "cardMode": "column",
+      "primaryStory": "A4Page"
+    },
+    "PageAnnotation": {
+      "cardMode": "column",
+      "primaryStory": "OnPage"
+    },
+    "PageCanvas": {
+      "cardMode": "column",
+      "primaryStory": "WithToolbarAndOverlay"
+    },
+    "Workspace": {
+      "cardMode": "column",
+      "primaryStory": "EditorFrame"
+    },
+    "AppHeader": {
+      "cardMode": "column",
+      "primaryStory": "FullEditorBar"
+    },
+    "Menu": {
+      "cardMode": "single",
+      "primaryStory": "TextTriggerTwoColumns"
+    },
+    "Button": {
+      "cardMode": "column",
+      "primaryStory": "Primary"
     }
   },
   "titleMap": {

@@ -77,7 +77,7 @@
     <DocumentEntry title="Sveinbjorn-Geirsson-CV.pdf" context="01-cv/drive-imports/drive-011459" language="English" format="PDF" statuses={['snapshot']} onopen={() => {}} />
     <DocumentEntry title="Sveinbjorn-Geirsson-CV.pdf" context="01-cv/pdf-snapshots/icelandic-cv-2026-09-17/input" language="English" format="PDF" statuses={['snapshot']} onopen={() => {}} />
     <DocumentEntry
-      title="[MOCK] Ferilskrá-Sveinbjörn-Geirsson-hugbúnaðarsérfræðingur-endurskoðuð-útgáfa-með-athugasemdum-eftir-yfirlestur-lokaútgáfa-3.pdf"
+      title="Ferilskrá-Sveinbjörn-Geirsson-hugbúnaðarsérfræðingur-endurskoðuð-útgáfa-með-athugasemdum-eftir-yfirlestur-lokaútgáfa-3.pdf"
       context="01-cv/mock/langt-heiti/demi-um-linubrot"
       language="Icelandic"
       format="PDF"

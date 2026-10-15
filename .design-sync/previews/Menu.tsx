@@ -29,7 +29,7 @@ export const Open = () => (
 );
 
 export const TextTriggerTwoColumns = () => (
-  <div style={{ minHeight: 320 }}>
+  <div style={{ minHeight: 340 }}>
     <Menu
       label="Add section"
       text="Add section"

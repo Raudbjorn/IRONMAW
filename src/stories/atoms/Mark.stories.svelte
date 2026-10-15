@@ -7,10 +7,10 @@
     component: Mark,
     args: { variant: 'lockup', name: 'IRONMAW', tagline: 'Wormian Bones', size: 'md', plate: false },
     argTypes: {
-      variant: { control: 'inline-radio', options: ['bear', 'emblem', 'wordmark', 'lockup'] },
+      variant: { control: 'inline-radio', options: ['bear', 'wordmark', 'lockup'] },
       size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] }
     },
-    parameters: { docs: { description: { component: 'The identity. The full bear is the supplied vector master; the supplied emblem holds at small sizes. Small lockups use the emblem. `plate` seats either mark on charcoal.' } } }
+    parameters: { docs: { description: { component: 'The identity. The full bear is the supplied vector master and is used at every size, including small lockups in the navigation bar. `plate` seats the bear on charcoal.' } } }
   });
 </script>
 
@@ -28,11 +28,10 @@
   <Mark variant="bear" size="lg" plate />
 </Story>
 
-<Story name="Emblem" asChild>
-  <Stack direction="row" gap={4} align="center" wrap>
-    <Mark variant="emblem" size="sm" />
-    <Mark variant="emblem" size="md" />
+<Story name="Lockup sizes" asChild>
+  <Stack gap={6}>
     <Mark variant="lockup" size="sm" name="IRONMAW" tagline="Application Assistant" />
+    <Mark variant="lockup" size="md" name="IRONMAW" tagline="Application Assistant" />
   </Stack>
 </Story>
 

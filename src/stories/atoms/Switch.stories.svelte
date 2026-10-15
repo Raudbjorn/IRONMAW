@@ -17,7 +17,7 @@
 
 <Story name="Settings group" asChild>
   <Stack gap={3}>
-    <Switch label="Sýna blaðsíðutal" checked />
+    <Switch label="Show page numbers" checked />
     <Switch label="Show profile photo" description="Optional in Iceland; leave off if unsure." />
     <Switch label="Compact spacing" disabled />
   </Stack>

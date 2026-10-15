@@ -25,7 +25,7 @@
 <Story name="Affixes" asChild>
   <Stack gap={4}>
     <Input label="Font size" type="number" value="11" unit="pt" />
-    <Input label="Line height" type="number" value="1.5" unit="×" />
+    <Input label="Line height" type="number" value="1.5" />
     <Input label="Website" type="url" placeholder="https://" icon="link" />
     <Input label="Primary colour" mono value="#1A6E6E">
       {#snippet leading()}<span style="display:block;width:16px;height:16px;border-radius:2px;background:#1A6E6E"></span>{/snippet}

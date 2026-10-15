@@ -114,6 +114,7 @@
 <style>
   [data-wm='segmented-control'] {
     display: inline-flex;
+    width: fit-content;
     max-width: 100%;
     box-sizing: border-box;
     border: 1px solid var(--wm-border-strong);

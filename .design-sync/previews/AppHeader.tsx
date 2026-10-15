@@ -1,15 +1,16 @@
 // Mirrors src/stories/molecules/AppHeader.stories.svelte
 import * as React from 'react';
-import { AppHeader, Button, Tabs, Text } from '@svnbjrn/ironmaw';
+import { AppHeader, Button, SaveStatus, SegmentedControl, SplitButton } from '@svnbjrn/ironmaw';
 
 const modes = (
-  <Tabs
+  <SegmentedControl
     aria-label="Editor mode"
+    size="sm"
     value="write"
-    tabs={[
-      { id: 'write', label: 'Write', tabId: 'ah-t1', panelId: 'ah-p1' },
-      { id: 'design', label: 'Design', tabId: 'ah-t2', panelId: 'ah-p2' },
-      { id: 'check', label: 'Check', count: 4, tabId: 'ah-t3', panelId: 'ah-p3' },
+    options={[
+      { id: 'write', label: 'Write' },
+      { id: 'design', label: 'Design' },
+      { id: 'check', label: 'Check', count: 4, countTone: 'warning', countLabel: '4 checks to review' },
     ]}
   />
 );
@@ -17,27 +18,35 @@ const modes = (
 const actions = (
   <>
     <Button variant="ghost" size="sm" icon="history" label="Version history" />
+    <Button variant="ghost" size="sm" icon="assist" label="Writing assistant" />
     <Button variant="secondary" size="sm" icon="share">Share</Button>
-    <Button size="sm" icon="download">Download PDF</Button>
+    <SplitButton
+      label="Download PDF"
+      icon="download"
+      menuLabel="More download options"
+      items={[
+        { id: 'pdf', label: 'PDF for people', icon: 'file' },
+        { id: 'text', label: 'Plain text for parsers', icon: 'code' },
+      ]}
+    />
   </>
 );
 
-const saved = <Text size="xs" tone="faint">Saved</Text>;
-
-export const TitleOnly = () => (
-  <AppHeader back={{ label: 'Back to library', href: '#' }} title="Ferilskrá 2026" />
-);
+const saved = <SaveStatus state="saved" />;
 
 export const FullEditorBar = () => (
   <AppHeader back={{ label: 'Back to library', href: '#' }} title="Ferilskrá 2026" status={saved} center={modes} end={actions} />
 );
 
 export const LongTitle = () => (
-  <div style={{ width: 420 }}>
-    <AppHeader
-      back={{ label: 'Back to library' }}
-      title="Umsókn um starf hugbúnaðarsérfræðings hjá Dæmafyrirtæki ehf. í Kópavogi"
-      end={actions}
-    />
-  </div>
+  <AppHeader
+    back={{ label: 'Back to library' }}
+    title="Umsókn um starf hugbúnaðarsérfræðings hjá Dæmafyrirtæki ehf. í Kópavogi"
+    status={saved}
+    end={actions}
+  />
+);
+
+export const TitleOnly = () => (
+  <AppHeader back={{ label: 'Back to library', href: '#' }} title="Ferilskrá 2026" />
 );

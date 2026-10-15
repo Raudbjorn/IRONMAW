@@ -1,14 +1,14 @@
 <script lang="ts">
   import { BEAR_MARK_HEIGHT, BEAR_MARK_WIDTH, bearMark } from '../../assets/bear-mark.ts';
-  import { BEAR_EMBLEM_HEIGHT, BEAR_EMBLEM_WIDTH, bearEmblem } from '../../assets/bear-emblem.ts';
 
   // The identity. "bear" is the owner's traced vector master (reference B1,
   // transparent ground, true cut-outs). "wordmark" is the typographic form
   // for compact chrome (IRONMAW set in the display face with the rust tick).
-  // "lockup" puts both together and uses the supplied emblem at small size.
+  // "lockup" puts both together. The full bear is used at every size; the
+  // compact favicon artwork never appears in UI.
   // `plate` seats the mark on charcoal, including in the Bone edition.
   interface Props {
-    variant?: 'bear' | 'emblem' | 'wordmark' | 'lockup';
+    variant?: 'bear' | 'wordmark' | 'lockup';
     /** The name on paper. */
     name?: string;
     /** Second line under the name in a lockup, e.g. "Wormian Bones" or the product name. */
@@ -30,11 +30,10 @@
     href
   }: Props = $props();
 
-  const compact = $derived(variant === 'emblem' || (variant === 'lockup' && size === 'sm'));
 </script>
 
 {#snippet bear()}
-  <span class="bear" data-plate={plate || undefined}><img src={compact ? bearEmblem : bearMark} width={compact ? BEAR_EMBLEM_WIDTH : BEAR_MARK_WIDTH} height={compact ? BEAR_EMBLEM_HEIGHT : BEAR_MARK_HEIGHT} alt={alt ?? (variant === 'bear' ? 'Sveinbjörn bear mark with mountains, trees and water' : variant === 'emblem' ? 'Geometric bear emblem' : '')} decoding="async" /></span>
+  <span class="bear" data-plate={plate || undefined}><img src={bearMark} width={BEAR_MARK_WIDTH} height={BEAR_MARK_HEIGHT} alt={alt ?? (variant === 'bear' ? 'Sveinbjörn bear mark with mountains, trees and water' : '')} decoding="async" /></span>
 {/snippet}
 
 {#snippet word()}
@@ -45,13 +44,13 @@
 {/snippet}
 
 {#snippet body()}
-  {#if variant === 'bear' || variant === 'emblem'}{@render bear()}{:else if variant === 'wordmark'}{@render word()}{:else}{@render bear()}{@render word()}{/if}
+  {#if variant === 'bear'}{@render bear()}{:else if variant === 'wordmark'}{@render word()}{:else}{@render bear()}{@render word()}{/if}
 {/snippet}
 
 {#if href}
-  <a {href} data-wm="mark" data-variant={variant} data-size={size} data-compact={compact || undefined}>{@render body()}</a>
+  <a {href} data-wm="mark" data-variant={variant} data-size={size}>{@render body()}</a>
 {:else}
-  <span data-wm="mark" data-variant={variant} data-size={size} data-compact={compact || undefined}>{@render body()}</span>
+  <span data-wm="mark" data-variant={variant} data-size={size}>{@render body()}</span>
 {/if}
 
 <style>
@@ -72,7 +71,7 @@
   }
   .bear img { display: block; width: auto; }
   [data-size='sm'] .bear img { height: 56px; }
-  [data-compact][data-size='sm'] .bear img { height: 40px; }
+  [data-variant='lockup'][data-size='sm'] .bear img { height: 40px; }
   [data-size='md'] .bear img { height: 88px; }
   [data-size='lg'] .bear img { height: 168px; }
   .word { display: inline-flex; flex-direction: column; gap: var(--wm-space-1); }

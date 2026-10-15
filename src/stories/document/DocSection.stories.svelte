@@ -13,20 +13,24 @@
 
 <Story name="One column">
   {#snippet template({ children: _, ...args })}
-    <DocSection {...args}>
-      <DocEntry title="BSc í tölvunarfræði" subtitle="Dæmaháskóli" date="2012 – 2015" />
-      <DocEntry title="Stúdentspróf" subtitle="Dæmaskóli" date="2008 – 2012" />
-    </DocSection>
+    <div data-theme="bone" style="background: var(--wm-bg); color: var(--wm-text); padding: 32px">
+      <DocSection {...args}>
+        <DocEntry title="BSc í tölvunarfræði" subtitle="Dæmaháskóli" date="2012 – 2015" />
+        <DocEntry title="Stúdentspróf" subtitle="Dæmaskóli" date="2008 – 2012" />
+      </DocSection>
+    </div>
   {/snippet}
 </Story>
 
 <Story name="Two columns" args={{ title: 'Forritunarmál o.fl.', columns: 2 }}>
   {#snippet template({ children: _, ...args })}
-    <DocSection {...args}>
-      <DocEntry title="Forritunarmál"><p>Java, C#, Python, C++</p></DocEntry>
-      <DocEntry title="Gagnagrunnar"><p>MySQL, SQL Server, PostgreSQL</p></DocEntry>
-      <DocEntry title="Vefforritun"><p>JavaScript, HTML/CSS</p></DocEntry>
-      <DocEntry title="Annað"><p>Siteimprove</p></DocEntry>
-    </DocSection>
+    <div data-theme="bone" style="background: var(--wm-bg); color: var(--wm-text); padding: 32px">
+      <DocSection {...args}>
+        <DocEntry title="Forritunarmál"><p>Java, C#, Python, C++</p></DocEntry>
+        <DocEntry title="Gagnagrunnar"><p>MySQL, SQL Server, PostgreSQL</p></DocEntry>
+        <DocEntry title="Vefforritun"><p>JavaScript, HTML/CSS</p></DocEntry>
+        <DocEntry title="Annað"><p>Siteimprove</p></DocEntry>
+      </DocSection>
+    </div>
   {/snippet}
 </Story>

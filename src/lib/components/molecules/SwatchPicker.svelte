@@ -28,7 +28,7 @@
   // A grid of colours to choose from (e.g. an accent for the document). One
   // choice, radiogroup semantics, roving tabindex, 2-D arrow navigation. The
   // tick contrasts with the swatch when its luminance is knowable; otherwise
-  // it sits on a small dark dot.
+  // it is white with a subtle dark stroke.
   interface Props {
     colors: Swatch[];
     value?: string;
@@ -134,11 +134,6 @@
   /* Fixed ink, not theme tokens: the swatch colour does not change with the edition. */
   .tick[data-kind='light'] { color: white; }
   .tick[data-kind='dark'] { color: black; }
-  .tick[data-kind='dot'] {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: black;
-    color: white;
-  }
+  /* Unknown colour: white tick with a subtle dark stroke, no disc. */
+  .tick[data-kind='dot'] { color: white; filter: drop-shadow(0 0 1px black) drop-shadow(0 0 1px black); }
 </style>

@@ -496,7 +496,7 @@
         <Select label="Font family" value="inter" options={[{ value: 'inter', label: 'Inter' }]} disabled />
         <div class="pair">
           <Input label="Size" type="number" step="0.5" min="8" max="14" bind:value={bodySize} unit="pt" />
-          <Input label="Line height" type="number" step="0.05" min="1.1" max="2" bind:value={lineHeight} unit="×" />
+          <Input label="Line height" type="number" step="0.05" min="1.1" max="2" bind:value={lineHeight} />
         </div>
         <Suture label="Headings" />
         <Select

@@ -1,14 +1,13 @@
 import { render, screen } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
-import { bearEmblem } from '../../assets/bear-emblem.ts';
 import { bearMark } from '../../assets/bear-mark.ts';
 import Mark from './Mark.svelte';
 
 describe('Mark', () => {
-  it('uses the compact supplied emblem in small lockups without repeating the name', () => {
+  it('uses the full bear in small lockups, never the favicon emblem, without repeating the name', () => {
     render(Mark, { props: { variant: 'lockup', size: 'sm', name: 'IRONMAW' } });
     const image = screen.getByRole('presentation');
-    expect(image).toHaveAttribute('src', bearEmblem);
+    expect(image).toHaveAttribute('src', bearMark);
     expect(image).toHaveAttribute('alt', '');
     expect(screen.getByText('IRONMAW')).toBeInTheDocument();
   });

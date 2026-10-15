@@ -56,7 +56,7 @@ Gotchas that matter:
 - **Event callbacks use Svelte's lowercase names**: `onclick`, `onsubmit`, `onremove`, `onopen`, `oncopy`, `ondismiss` (camelCase aliases are accepted).
 - `children`, Panel's `header`/`footer`, NavBar's `brand`, Notice's `action`, DocumentEntry's `excerpt`/`extra` take normal React nodes.
 - `StatusLabel` takes the **stored** status value (`"known-errors"`), not display copy; `REVIEW_STATUS` / `reviewStatusCopy` expose the mapping.
-- `Mark variant="bear"` is the owner's full vector master; `variant="emblem"` is the supplied small-format bear. Small lockups use the emblem automatically. Add `plate` to seat either on charcoal.
+- `Mark variant="bear"` is the owner's full vector master and is used at every size, including small lockups (`variant="lockup" size="sm"`) in a NavBar brand slot. There is no emblem variant; never use the favicon as a UI mark. Add `plate` to seat the bear on charcoal.
 
 ## Where the truth lives
 

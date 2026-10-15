@@ -72,7 +72,7 @@
     <Button icon="download">Download PDF</Button>
     <Button variant="secondary" icon="share">Share</Button>
     <Button variant="secondary" size="sm" icon="heading">Use the standard heading</Button>
-    <Button variant="ghost" size="sm" iconEnd="chevron-down">Sveinbjörn Geirsson</Button>
+    <Button variant="ghost" size="sm" iconEnd="chevron-down" plain>Sveinbjörn Geirsson</Button>
   </Stack>
 </Story>
 

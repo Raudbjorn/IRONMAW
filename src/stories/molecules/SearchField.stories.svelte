@@ -19,7 +19,7 @@
 
 <Story name="Rejected" asChild>
   <Stack gap={6}>
-    <SearchField value="ferilskrá umsókn kynningarbréf" error="Search is limited to 512 characters. This one has 526; remove 14." />
+    <SearchField value="f" error="Search needs at least 2 characters. Add a letter or two and search again." />
     <SearchField value="ferilskrá" error="The library service rejected this search: “unknown query parameter”. Change the search or clear the filters." />
   </Stack>
 </Story>

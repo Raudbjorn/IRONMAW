@@ -33,4 +33,11 @@ describe('Disclosure', () => {
     expect(screen.getByRole('button', { name: 'Reset' }).closest('h2')).toBeNull();
     expect(screen.getByText('Kópavogur')).toBeInTheDocument();
   });
+  it('puts the chevron after the actions, outside the toggle, when actions exist', () => {
+    const { container } = render(Disclosure, { props: { title: 'Profile', actions, children } });
+    const head = container.querySelector('.head')!;
+    const kids = Array.from(head.children).map((c) => c.classList[0]);
+    expect(kids.indexOf('chevron')).toBeGreaterThan(kids.indexOf('actions'));
+    expect(screen.getByRole('button', { name: 'Profile' }).querySelector('svg')).toBeNull();
+  });
 });

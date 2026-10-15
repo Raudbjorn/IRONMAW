@@ -21,8 +21,8 @@
   onSubmit, onRemove, onOpen, onCopy, onDismiss, onClear, readOnly.
 - **Non-component exports pass through unwrapped**: `REVIEW_STATUS`,
   `reviewStatusCopy`, `sortReviewStatuses`, `contrastRatio`, `brand`, `oxide`,
-  `bone`, `editions`, `bearMark`, `BEAR_MARK_WIDTH/HEIGHT`, `bearEmblem`,
-  `BEAR_EMBLEM_WIDTH/HEIGHT`. Re-exported from
+  `bone`, `editions`, `bearMark`, `BEAR_MARK_WIDTH/HEIGHT`, `ICONS`,
+  `ICON_NAMES`, `iconStroke`. Re-exported from
   dist in `index.js`, hand-typed in `index.d.ts`.
 - **The adapter build is `cfg.buildCmd`'s second half** — `pnpm run build`
   (tokens, fonts, assets, svelte-package) then
@@ -75,10 +75,11 @@
   `ServiceUnavailable`, "Known issues" → `KnownIssues`, "Index refreshed" →
   `IndexRefreshed`, "Wordmark only" → `WordmarkOnly`, "Search, selected" →
   `SearchSelected`, "Same title, long name" → `SameTitleLongName`,
-  "Metadata only" → `MetadataOnly`, "Identical content, six locations" →
-  `IdenticalContentSixLocations`, "Partial record" → `PartialRecord`,
+  "Metadata only" → `MetadataOnly`, "Identical content, three locations" →
+  `IdenticalContentThreeLocations`, "Partial record" → `PartialRecord`,
   "All states" → `AllStates`, "Three tones" → `ThreeTones`.
-- The `Mark` full bear and compact emblem are base64 SVG data URLs baked into the bundle —
+- The `Mark` full bear is a base64 SVG data URL baked into the bundle (the
+  favicon emblem was removed from the library on 2026-10-15) —
   `[ASSETS_BLOCKED]` has nothing to fire on; no story loads a remote image.
 - `.design-sync/tsconfig.json` exists purely for the EDITOR (quarantines
   previews/*.tsx onto the React types via paths); the pipeline compiles

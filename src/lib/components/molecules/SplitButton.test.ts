@@ -21,6 +21,10 @@ describe('SplitButton', () => {
     expect(screen.getByRole('button', { name: 'Download PDF' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'More download options' })).toHaveAttribute('aria-haspopup', 'menu');
   });
+  it('disables the menu half while loading', () => {
+    render(SplitButton, { props: { label: 'Download PDF', menuLabel: 'More download options', items, loading: true } });
+    expect(screen.getByRole('button', { name: 'More download options' })).toBeDisabled();
+  });
   it('fires the main action without opening the menu', async () => {
     const { onclick } = setup();
     await fireEvent.click(screen.getByRole('button', { name: 'Download PDF' }));

@@ -4,7 +4,8 @@
 
   // Ties a finding to its place on the page. It wraps document content without
   // changing its text: a numbered Marker sits in the left page margin beside
-  // the first line, and a wavy underline runs under the block. Number and wave
+  // the first line, and a wavy underline runs under the block. As a span it is inline: the marker
+  // leads the text, since there is no margin beside a run of words. Number and wave
   // carry the meaning, not colour alone. Warning is amber, never rust. Both
   // marks are hidden in print. Active adds a faint tint and a scroll margin so
   // consumers can scrollIntoView the block.
@@ -21,7 +22,7 @@
   let { index, label, tone = 'warning', active = false, as = 'div', children }: Props = $props();
 </script>
 
-<svelte:element this={as} data-wm="page-annotation" data-tone={tone} data-active={active || undefined}>
+<svelte:element this={as} data-wm="page-annotation" data-tone={tone} data-active={active || undefined} data-inline={as === 'span' || undefined}>
   <span data-part="marker"><Marker value={index} {tone} size="sm" label={`Finding ${index}: ${label}`} /></span>{@render children()}
 </svelte:element>
 
@@ -57,6 +58,13 @@
     left: calc(var(--wm-space-4) - var(--wm-page-margin));
     line-height: 1;
     user-select: none;
+  }
+  /* Inline use has no margin to sit in: the marker leads the text instead. */
+  [data-inline] > [data-part='marker'] {
+    position: static;
+    display: inline-block;
+    vertical-align: middle;
+    margin-inline-end: var(--wm-space-1);
   }
   [data-active] {
     background: color-mix(in srgb, var(--tone) 10%, transparent);

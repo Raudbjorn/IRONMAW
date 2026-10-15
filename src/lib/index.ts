@@ -73,4 +73,3 @@ export { contrastRatio } from './internal/contrast.ts';
 export { brand, oxide, bone, editions } from './tokens/palette.ts';
 export type { Palette, TokenName, EditionName } from './tokens/palette.ts';
 export { bearMark, BEAR_MARK_WIDTH, BEAR_MARK_HEIGHT } from './assets/bear-mark.ts';
-export { bearEmblem, BEAR_EMBLEM_WIDTH, BEAR_EMBLEM_HEIGHT } from './assets/bear-emblem.ts';

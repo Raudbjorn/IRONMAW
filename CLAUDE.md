@@ -50,7 +50,6 @@ Cascade layers: `wm.base < wm.theme < wm.user`; unlayered consumer CSS wins.
 - `components/{atoms,layout,molecules,library}` — `data-wm="<name>"` attribute contract; colocated `*.test.ts`. `index.ts` is the public barrel.
 - `review-status.ts` — stored status → display copy + tone (act/care/context). Unknown values render raw.
 - `assets/bear-mark.ts` — generated data URL of the owner's SVG master.
-- `assets/bear-emblem.ts` — generated data URL of the supplied compact mark.
 - `fonts/` — generated woff2 subsets (Inter, Iosevka Nerd PUA, Rajdhani Latin+Ext-A).
 
 **Stories** in `src/stories/*` cover both editions (addon-themes, `data-theme` on `html`). Foundations stories are showcase-only (excluded from the sync via `titleMap`).
@@ -66,5 +65,5 @@ list), `index.d.ts` (Props), and the owned preview. Camelcase aliases in
 - Svelte 5 patterns, lowercase callback props (`onclick`, `onsubmit`), `$props.id()` for SSR-stable ids. `Stack` for layout.
 - Errors as values; no throws in library code.
 - Copy: sentence case, plain verbs, name what the user controls. Never "Verified", never a fabricated count.
-- Brand terrain is reserved for headers and empty states; `Panel terrain` uses contour and mountain lines. Small `Mark` lockups use the supplied emblem. Active NavBar items use a rust underline.
+- Brand terrain is reserved for headers and empty states; `Panel terrain` uses contour and mountain lines. `Mark` uses the full bear at every size; the compact favicon (`assets/brand/bear-emblem.svg`) never appears in UI. Active NavBar items use a rust underline.
 - Brand references live in `.do-no-commit/` (gitignored) — read them, never copy them into the repo except via `assets/brand/`.
