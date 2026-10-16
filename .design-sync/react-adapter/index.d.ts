@@ -653,3 +653,74 @@ export interface ReorderListProps {
   moveHint?: string;
 }
 export declare const ReorderList: React.FC<ReorderListProps>;
+
+/** Modal dialog (native <dialog>, showModal). Focus moves in and returns on close; Escape and backdrop close unless dismissible=false. 24px padding, display-face title. */
+export interface DialogProps {
+  open?: boolean;
+  title: string;
+  description?: string;
+  icon?: IconName;
+  children?: React.ReactNode;
+  /** Right-aligned action row; a Close button is rendered when omitted. */
+  footer?: React.ReactNode;
+  onclose?: () => void;
+  closeLabel?: string;
+  size?: 'sm' | 'md';
+  dismissible?: boolean;
+}
+export declare const Dialog: React.FC<DialogProps>;
+/** Multi-line field: Input's sibling. 10×12px padding, line-height 1.65. With maxlength shows "n of max characters" (amber from 90%). readonly is visibly read-only. */
+export interface TextareaProps {
+  value?: string;
+  id?: string;
+  name?: string;
+  label?: string;
+  hint?: string;
+  error?: string | boolean;
+  rows?: number;
+  maxlength?: number;
+  readonly?: boolean;
+  readonlyHint?: string;
+  disabled?: boolean;
+  placeholder?: string;
+  oninput?: (e: Event) => void;
+}
+export declare const Textarea: React.FC<TextareaProps>;
+/** Checkbox with a visible label (and optional description). Teal when checked; indeterminate shows a minus. */
+export interface CheckboxProps {
+  checked?: boolean;
+  indeterminate?: boolean;
+  label: string;
+  description?: string;
+  disabled?: boolean;
+  onchange?: (checked: boolean) => void;
+  id?: string;
+  name?: string;
+}
+export declare const Checkbox: React.FC<CheckboxProps>;
+/** Marks a passage on the page that differs from the saved document: edit = teal wash + solid outline, suggestion = amber wash + dashed outline; flag in the right margin, or a tick on the page edge when narrow. Announced via hidden text; hidden in print. Place inside a PageSheet at the content edge. */
+export interface ChangeMarkProps {
+  kind: 'edit' | 'suggestion';
+  label?: string;
+  flag?: 'margin' | 'edge' | 'none';
+  as?: 'div' | 'span';
+  children?: React.ReactNode;
+}
+export declare const ChangeMark: React.FC<ChangeMarkProps>;
+/** The app's bottom bar: small display label, a live status message, optional end content. */
+export interface StatusBarProps {
+  label?: string;
+  status: string;
+  tone?: 'neutral' | 'warning' | 'error';
+  end?: React.ReactNode;
+}
+export declare const StatusBar: React.FC<StatusBarProps>;
+/** Centred empty-area block: optional icon, title, explanation (≤46ch), actions; optional quiet terrain behind. */
+export interface EmptyStateProps {
+  title: string;
+  icon?: IconName;
+  terrain?: boolean;
+  actions?: React.ReactNode;
+  children?: React.ReactNode;
+}
+export declare const EmptyState: React.FC<EmptyStateProps>;

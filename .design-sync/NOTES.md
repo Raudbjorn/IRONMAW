@@ -16,7 +16,10 @@
 - **Snippet-prop lists per component** (must mirror the Svelte Props):
   `children` — Text, Heading, Kicker, Button, Link, Stack, Panel, Notice,
   NavBar; `header`/`footer` — Panel; `brand` — NavBar; `action` — Notice;
-  `excerpt`/`extra` — DocumentEntry. Everything else is scalar/callback.
+  `excerpt`/`extra` — DocumentEntry; `children`/`footer` — Dialog;
+  `children`/`actions` — EmptyState; `children` — ChangeMark; `end` —
+  StatusBar. Everything else is scalar/callback. (Round-1 editor parts list
+  theirs in `react-adapter/index.js`.)
 - **camelCase aliases** in `wrap.js`: onClick, onChange, onInput, onClose,
   onSubmit, onRemove, onOpen, onCopy, onDismiss, onClear, readOnly.
 - **Non-component exports pass through unwrapped**: `REVIEW_STATUS`,
@@ -136,6 +139,12 @@
   it); PageCanvas needs a definite-height parent (its previews wrap it);
   Workspace `fill` uses 100dvh (column card); ReorderList `detail` is a
   render-function snippet.
+- **2026-10-15 workspace parts (not yet synced).** Dialog, Textarea,
+  Checkbox, ChangeMark, StatusBar, EmptyState: owned previews + adapter
+  entries, ungraded. Dialog stories open a native `<dialog>` via showModal on
+  mount, so the top layer escapes the card — likely `cardMode: "single"`.
+  ChangeMark's margin flag sits outside the PageSheet content box (needs the
+  sheet in the preview). wrap.js maps Textarea `onChange` to `oninput`.
 - `Examples/CV editor` is a showcase composition (`src/examples/`, not
   packaged) — excluded via `titleMap: {"CV editor": null}`.
 

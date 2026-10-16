@@ -35,7 +35,7 @@ export const REVIEW_STATUS: Record<ReviewStatus, ReviewStatusCopy> = {
   'known-errors': { label: 'Known issues', tone: 'act' },
   'review-required': { label: 'Review before reuse', tone: 'care' },
   'historical-reference': { label: 'Historical reference', tone: 'context' },
-  'historical-research': { label: 'Historical reference', tone: 'context' },
+  'historical-research': { label: 'Historical research', tone: 'context' },
   'historical-variant': { label: 'Historical version', tone: 'context' },
   snapshot: { label: 'Preserved snapshot', tone: 'context' },
   'plan-only': { label: 'Plan only', tone: 'context' },

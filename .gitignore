@@ -44,3 +44,6 @@ agents/.out/
 # impeccable — transient review captures and detector cache
 .impeccable/review/
 .impeccable/hook.cache.json
+
+# native egui crate build output
+native/*/target/

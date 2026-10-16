@@ -6,6 +6,12 @@ import {
   AppHeader as SvAppHeader,
   Avatar as SvAvatar,
   Badge as SvBadge,
+  Textarea as SvTextarea,
+  StatusBar as SvStatusBar,
+  EmptyState as SvEmptyState,
+  Dialog as SvDialog,
+  ChangeMark as SvChangeMark,
+  Checkbox as SvCheckbox,
   Button as SvButton,
   Chip as SvChip,
   Disclosure as SvDisclosure,
@@ -75,6 +81,12 @@ export const ScoreRing = wrap('ScoreRing', SvScoreRing, []);
 export const SaveStatus = wrap('SaveStatus', SvSaveStatus, []);
 export const SegmentedControl = wrap('SegmentedControl', SvSegmentedControl, []);
 export const SwatchPicker = wrap('SwatchPicker', SvSwatchPicker, []);
+export const Textarea = wrap('Textarea', SvTextarea, []);
+export const Checkbox = wrap('Checkbox', SvCheckbox, []);
+export const Dialog = wrap('Dialog', SvDialog, ['children', 'footer']);
+export const EmptyState = wrap('EmptyState', SvEmptyState, ['children', 'actions']);
+export const ChangeMark = wrap('ChangeMark', SvChangeMark, ['children']);
+export const StatusBar = wrap('StatusBar', SvStatusBar, ['end']);
 export const Menu = wrap('Menu', SvMenu, []);
 export const SplitButton = wrap('SplitButton', SvSplitButton, []);
 export const ZoomControl = wrap('ZoomControl', SvZoomControl, []);

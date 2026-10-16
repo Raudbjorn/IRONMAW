@@ -29,7 +29,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "pnpm run tokens && pnpm run fonts && pnpm run assets && svelte-package && publint",
-    "tokens": "node scripts/build-tokens.mjs",
+    "tokens": "node scripts/build-tokens.mjs && node scripts/build-egui.mjs",
     "fonts": "node scripts/build-fonts.mjs",
     "assets": "node scripts/build-assets.mjs",
     "check": "svelte-check --tsconfig ./tsconfig.json",

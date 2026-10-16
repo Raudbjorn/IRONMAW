@@ -22,6 +22,8 @@ export { default as Avatar } from './components/atoms/Avatar.svelte';
 export { default as Kbd } from './components/atoms/Kbd.svelte';
 export { default as ScoreRing } from './components/atoms/ScoreRing.svelte';
 export { default as SaveStatus } from './components/atoms/SaveStatus.svelte';
+export { default as Textarea } from './components/atoms/Textarea.svelte';
+export { default as Checkbox } from './components/atoms/Checkbox.svelte';
 
 // Layout
 export { default as Stack } from './components/layout/Stack.svelte';
@@ -31,6 +33,8 @@ export { default as Workspace } from './components/layout/Workspace.svelte';
 export { default as PageCanvas } from './components/layout/PageCanvas.svelte';
 export { default as PageSheet } from './components/layout/PageSheet.svelte';
 export { default as PageAnnotation } from './components/layout/PageAnnotation.svelte';
+export { default as ChangeMark } from './components/layout/ChangeMark.svelte';
+export { default as StatusBar } from './components/layout/StatusBar.svelte';
 
 // Molecules
 export { default as SearchField } from './components/molecules/SearchField.svelte';
@@ -50,6 +54,8 @@ export { default as ReorderList } from './components/molecules/ReorderList.svelt
 export type { ReorderItem } from './components/molecules/ReorderList.svelte';
 export { default as IssueCard } from './components/molecules/IssueCard.svelte';
 export { default as AppHeader } from './components/molecules/AppHeader.svelte';
+export { default as Dialog } from './components/molecules/Dialog.svelte';
+export { default as EmptyState } from './components/molecules/EmptyState.svelte';
 
 // Library workflow
 export { default as DocumentEntry } from './components/library/DocumentEntry.svelte';

@@ -26,8 +26,10 @@
 <article data-wm="issue-card" data-tone={tone} data-active={active || undefined} aria-labelledby={titleId}>
   <div data-part="marker"><Marker value={index} {tone} size="md" /></div>
   <div data-part="body">
-    {#if category}<Kicker>{category}</Kicker>{/if}
-    <h3 id={titleId} data-part="title">{title}</h3>
+    <div data-part="head">
+      <h3 id={titleId} data-part="title">{title}</h3>
+      {#if category}<Kicker>{category}</Kicker>{/if}
+    </div>
     <div data-part="text">{@render children()}</div>
     {#if actions}<div data-part="actions">{@render actions()}</div>{/if}
   </div>
@@ -48,6 +50,14 @@
   [data-active] { border-color: var(--wm-accent); background: var(--wm-selected); }
   [data-part='marker'] { padding-top: 2px; }
   [data-part='body'] { display: flex; flex-direction: column; gap: var(--wm-space-1); min-width: 0; }
+  /* The category sits beside the title, never above it; it wraps under a long title. */
+  [data-part='head'] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--wm-space-1) var(--wm-space-2);
+  }
+  [data-part='head'] > :global(*) { margin: 0; }
   [data-part='title'] {
     margin: 0;
     font-family: var(--wm-font-sans);

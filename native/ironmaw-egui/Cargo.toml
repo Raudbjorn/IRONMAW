@@ -1,0 +1,13 @@
+[package]
+name = "ironmaw-egui"
+version = "0.1.0"
+edition = "2021"
+description = "IRONMAW (Wormian Bones) theme for egui: palette, type scale with line heights, spacing and fonts generated from the design tokens."
+license = "UNLICENSED"
+publish = false
+
+[dependencies]
+egui = { version = "0.36", default-features = false, features = ["default_fonts"] }
+
+[dev-dependencies]
+eframe = { version = "0.36", default-features = false, features = ["default_fonts", "glow", "x11", "wayland"] }

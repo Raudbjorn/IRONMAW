@@ -319,6 +319,8 @@ Controls gain a fourth, extra-small height (28px) for row tools, icon buttons in
 
 **Workspace.** Editing surfaces use a three-part shell: a 56px-minimum app header (a three-column grid of start, centre and end; below 768px the centre drops to its own row), a 320px sidebar on surface 1 with a hairline right edge and its own thin scroll, and a main canvas on the charcoal ground. Below 1024px the sidebar stacks above the canvas and the shell returns to natural height.
 
+**Breathing room.** Text never sits tight. Multi-line text runs at line-height 1.5 or more (prose 1.65), paragraphs sit 12px apart, a field label sits 8px above its control and the next field starts 16px below, and text keeps at least 10px from a box edge vertically and 12px horizontally (`--wm-field-label-gap`, `--wm-field-gap`, `--wm-paragraph-gap`, `--wm-field-pad-y`, `--wm-control-pad-x`). Dialogs pad 24px. The same numbers drive the native theme.
+
 **Page canvas.** Sheets stack in a centred column with 24px gaps inside 24/32px padding. Zoom applies to the whole stack; "fit" scales to the available width and is capped at 125%. A view switch may sit sticky at the top centre and a zoom bar floats at the bottom centre.
 
 **Page sheet.** Exact paper sizes: A4 at 794 × 1123px and Letter at 816 × 1056px (minimum height; content may run on), with 56px margins. The margin is working space: finding markers sit in it, 16px from the paper edge, aligned with the first line of the passage they annotate. Document sections are spaced 24px apart with 12px between entries; two-column sections use a 32px column gap and collapse to one column below 480px.
@@ -387,6 +389,12 @@ A single choice among two to five modes or views. A 1px slate frame on surface 1
 - **Focus:** border turns teal with a soft 2px teal halo.
 - **Error / Disabled:** error border and halo with an error message beneath; disabled at 50% opacity.
 
+### Textarea
+Input's multi-line sibling: the same outline and focus halo, 10 × 12px padding, Inter at the base size on a 1.65 line height, vertical resize, height from `rows`. With a limit it shows "983 of 1000 characters" in Iosevka beneath, turning amber at 90%. Read-only is visibly different (surface 2 fill, muted text) and can say why in its hint.
+
+### Checkbox
+An 18px box with a slate border and 2px corners; checked and indeterminate fill teal with a charcoal check or minus. The whole label row is clickable, with 8px between box and label and an optional faint description below.
+
 ### Switch
 An on/off setting with its label beside it. A 36 × 20px track (see The Pill Track Exception): off is surface 2 with a slate border and a muted 12px knob; on is a teal track with a charcoal knob that slides 16px. The label is Inter at 0.8125rem and toggles the switch; an optional description sits below in faint 0.75rem text. The hit area extends past the drawn track.
 
@@ -420,7 +428,7 @@ An ordered list of sections, each row at least 36px: grip handle in faint text, 
 A floating toolbar on surface 2 with the medium shadow: zoom out, the value in Iosevka ("Fit" or "125%"), zoom in, then an optional page count after a hairline. 25% steps between 25% and 400%.
 
 ### Issue card (signature)
-One finding in the sidebar. A surface 1 card with a hairline border, 4px corners and 12/14px padding; the finding's marker in a left column (its number matches the marker on the page), an optional small category label, the title in Inter semibold strong, the explanation in muted 0.8125rem text and an action row below. The active card takes a teal border and the selected fill.
+One finding in the sidebar. A surface 1 card with a hairline border, 4px corners and 12/14px padding; the finding's marker in a left column (its number matches the marker on the page), the title in Inter semibold strong with an optional small category label beside it on the same line (wrapping under a long title, never above it), the explanation in muted 0.8125rem text and an action row below. The active card takes a teal border and the selected fill.
 
 ### App header
 The editing shell's top bar on the charcoal ground with a hairline bottom edge: back and document title (Inter semibold, strong, ellipsised, with save status under it) at the start, a segmented mode switch in the centre, icon buttons and actions at the end.
@@ -449,6 +457,21 @@ A 48px-minimum row with a hairline bottom border: title in Inter medium (teal on
 
 ### Notice
 Tinted surface (10% of the tone over surface 1) with a 1px tone border and a 20px line icon from the set; tones are accent, success, warning, error and neutral slate. Warnings and errors carry an icon and text, never colour alone.
+
+### Dialog
+A native modal on surface 2 with a strong 1px border, 4px corners and the medium shadow, over a 55% black backdrop. 24px padding; the title in Rajdhani uppercase with an optional accent icon, a muted description, 16px between parts, actions right-aligned (a Close button when none are given). Focus moves in on open and returns on close; Escape and the backdrop close it unless it is marked non-dismissible. Choice lists inside group under Suture labels.
+
+### Change mark (signature)
+Marks a passage on the page that differs from the saved document. Your edit: teal wash with a solid 1.5px outline. A suggestion: amber wash with a dashed outline, so the two differ in more than colour. A small flag in the right margin names the state ("Your edit · not saved", "Suggested · unreviewed"); in narrow windows a 3px bar on the page edge replaces it. The state is announced in hidden text, the passage text is never altered, and marks are hidden in print.
+
+### Status bar
+The app's bottom bar on the charcoal ground with a hairline top border, at least 40px tall: a faint Rajdhani label ("Local workspace"), a live status message in Inter (amber for warnings, red for errors) and optional extras at the end.
+
+### Empty state
+A centred block for an empty area: optional faint 24px icon, an Inter heading, an explanation held to 46ch at 1.65 line height, then the actions (12 / 8 / 16px between them). It may sit on quiet terrain, one of the places the brand allows it. A screen's empty state carries its one rust action ("Adapt main CV").
+
+### Native theme (egui)
+Desktop apps get IRONMAW as an egui 0.36 theme, `native/ironmaw-egui`, not as web components. Its tokens are generated from the same DTCG sources (`pnpm run tokens`), it bundles Inter, Rajdhani and Iosevka subsets with Icelandic coverage, and it replaces egui's tight defaults with the breathing-room numbers above: 16pt UI text, 12 × 8pt field padding, 8/16pt field rhythm, 36pt controls, 16 × 12pt panel margins, 24pt dialog padding. The rust primary button is square-cornered there, since egui frames cannot clip a chamfer.
 
 ## Do's and Don'ts
 

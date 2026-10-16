@@ -31,7 +31,8 @@ In the Application Assistant, the Library helps the owner find CVs, letters, emp
 - Public examples use neutral prose and identify mock data; private source bodies and correspondence are not demo content.
 - Typography and font subsets must render Icelandic correctly (Latin Extended-A).
 - The egui theme has no CSS: colours, spacing, type sizes and fonts must be expressible from the exported tokens alone, with licensed fonts packaged in the app with Icelandic coverage.
-- Open: how tokens are exported for egui (generated Rust module, JSON, or another format); product approval of the Bone edition.
+- Decided 2026-10-15: tokens reach egui as a generated Rust module in the `native/ironmaw-egui` crate (`scripts/build-egui.mjs`, run by `pnpm run tokens`), with the fonts packaged in the crate.
+- Open: product approval of the Bone edition.
 
 ## Brand Commitments
 

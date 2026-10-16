@@ -35,6 +35,11 @@
     --wm-control-xs: 28px;
     --wm-row: 48px;
     --wm-measure: 68ch;
+    --wm-field-label-gap: 8px;
+    --wm-field-gap: 16px;
+    --wm-paragraph-gap: 12px;
+    --wm-control-pad-x: 12px;
+    --wm-field-pad-y: 10px;
     --wm-icon-sm: 16px;
     --wm-icon-md: 20px;
     --wm-icon-lg: 24px;
