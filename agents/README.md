@@ -4,7 +4,7 @@ Atomic Agents for the IRONMAW repo, running on MiniMax's OpenAI-compatible API.
 
 ```bash
 uv sync
-uv run pytest                      # 111 tests, no network
+uv run pytest                      # 132 tests, no network
 export OPENAI_API_KEY="$(minimax-api-key)"   # optional: unset falls back to the helper on PATH
 uv run python -m ironmaw_agents explorer "where are the tokens?" --path src/lib/review-status.ts
 ```
@@ -14,6 +14,21 @@ improvement specialists `a11y-auditor`, `copy-editor`, `token-steward`, `gap-sco
 prompts from `../.claude/agents/ironmaw-*.md`, so the Claude Code, Codex and MiniMax agents share
 one definition. These agents cannot read or run anything: they reason over `--path` files (max 8,
 repo-relative, never `.do-no-commit`, `.git` or secrets) plus `CLAUDE.md`, and return typed reports.
+
+## Providers
+
+`--provider minimax` (default) or `--provider mercury` (Inception Labs, `ironmaw_agents/mercury.py`),
+plus `--model` to override the provider default (`MiniMax-M3.1-Flash-Preview` / `mercury-2`; also
+`mercury-2.5`). Mercury key: `INCEPTION_LABS_API_KEY`, else the `inceptionlabs-api-key` helper.
+
+Mercury adaptations, from live testing: temperature must be in [0.5, 1] (the API silently resets other
+values, so they are rejected here; roles are floored to 0.5); role efforts are capped at `medium`
+because at `high` mercury-2 sometimes spends the whole budget reasoning and returns no tool call;
+Instructor makes at most two attempts. It is fast (~5 s per role) but answers empty more often than
+MiniMax; the pipeline flags empty specialist reports as `EmptyReport` failures rather than clean results.
+
+Every agent also gets a path-only repository index (`src/lib`, `src/stories`, `src/examples`,
+design-sync previews and adapter) so "not shown to me" isn't reported as "missing".
 
 ## Improve pipeline
 
