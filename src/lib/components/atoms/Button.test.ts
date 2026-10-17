@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createRawSnippet } from 'svelte';
 import Button from './Button.svelte';
 
@@ -48,5 +48,32 @@ describe('Button', () => {
   it('renders an anchor when href is set', () => {
     render(Button, { props: { href: '#back', children: text('Back to results') } });
     expect(screen.getByRole('link', { name: 'Back to results' })).toHaveAttribute('href', '#back');
+  });
+  it('links carry disclosure and popup state like buttons do', () => {
+    render(Button, {
+      props: { href: '#menu', 'aria-expanded': true, 'aria-controls': 'm1', 'aria-haspopup': 'menu', children: text('More') }
+    });
+    const a = screen.getByRole('link', { name: 'More' });
+    expect(a).toHaveAttribute('aria-expanded', 'true');
+    expect(a).toHaveAttribute('aria-controls', 'm1');
+    expect(a).toHaveAttribute('aria-haspopup', 'menu');
+  });
+  it('links never take aria-pressed, which the link role does not support', () => {
+    render(Button, { props: { href: '#x', 'aria-pressed': true, children: text('Pinned') } });
+    expect(screen.getByRole('link', { name: 'Pinned' })).not.toHaveAttribute('aria-pressed');
+  });
+  it.each([
+    ['disabled', { disabled: true }],
+    ['loading', { loading: true }]
+  ])('a %s link leaves the tab order and cannot be followed', (_, state) => {
+    const onclick = vi.fn();
+    render(Button, { props: { href: '#back', onclick, ...state, children: text('Back to results') } });
+    const a = screen.getByRole('link', { name: 'Back to results' });
+    expect(a).not.toHaveAttribute('href');
+    expect(a).toHaveAttribute('aria-disabled', 'true');
+    a.focus();
+    expect(a).not.toHaveFocus();
+    a.click();
+    expect(onclick).not.toHaveBeenCalled();
   });
 });
