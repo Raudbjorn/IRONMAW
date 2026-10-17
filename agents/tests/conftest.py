@@ -3,6 +3,7 @@ import json
 import httpx
 import pytest
 
+import ironmaw_agents.mercury as mercury
 import ironmaw_agents.minimax as mm
 
 SECRET = "sk-test-secret-value"
@@ -46,11 +47,12 @@ def http(monkeypatch):
         return real(http_client=httpx.Client(transport=httpx.MockTransport(rec)), **kwargs)
 
     monkeypatch.setattr(mm, "OpenAI", factory)
+    monkeypatch.setattr(mercury, "OpenAI", factory)
     rec.constructed = constructed
     return rec
 
 
 @pytest.fixture(autouse=True)
 def clean_env(monkeypatch):
-    for name in ("OPENAI_API_KEY", "OPENAI_BASE_URL"):
+    for name in ("OPENAI_API_KEY", "OPENAI_BASE_URL", "INCEPTION_LABS_API_KEY"):
         monkeypatch.delenv(name, raising=False)

@@ -8,7 +8,7 @@ from pathlib import Path
 from atomic_agents.context import BaseDynamicContextProvider
 
 from .minimax import MiniMaxConfigError
-from .tools.minimax_tools import REPO_ROOT, _resolve_inside
+from .tools.minimax_tools import DENIED_PARTS, REPO_ROOT, _resolve_inside
 
 MAX_FILES = 8
 MAX_FILE_CHARS = 40_000
@@ -66,6 +66,29 @@ class ProposalsProvider(BaseDynamicContextProvider):
         blocks = [f"=== {name} ===\n{body}" for name, body in proposals.items()]
         text = "\n\n".join(blocks) or "No proposals were produced."
         self._text = text if len(text) <= MAX_PROPOSAL_CHARS else text[:MAX_PROPOSAL_CHARS] + "\n[truncated]"
+
+    def get_info(self) -> str:
+        return self._text
+
+
+INDEX_DIRS = ("src/lib", "src/stories", "src/examples", ".design-sync/previews", ".design-sync/react-adapter")
+MAX_INDEX_PATHS = 600
+
+
+class RepoIndexProvider(BaseDynamicContextProvider):
+    """Paths only, no contents: lets an agent tell "not shown to me" from "does not exist"."""
+
+    def __init__(self, root: Path = REPO_ROOT, dirs: Sequence[str] = INDEX_DIRS) -> None:
+        super().__init__(title="Repository index (paths only; contents not shown)")
+        paths = sorted(
+            str(p.relative_to(root))
+            for d in dirs if (root / d).is_dir()
+            for p in (root / d).rglob("*")
+            if p.is_file() and not DENIED_PARTS.intersection(p.relative_to(root).parts)
+        )
+        clipped = paths[:MAX_INDEX_PATHS]
+        note = [] if len(paths) == len(clipped) else [f"[{len(paths) - len(clipped)} more paths not listed]"]
+        self._text = "\n".join([*clipped, *note]) or "No indexed files."
 
     def get_info(self) -> str:
         return self._text

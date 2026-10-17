@@ -76,19 +76,24 @@ def resolve_api_key(
     *,
     which: Callable[[str], str | None] | None = None,
     run: Callable[..., Any] | None = None,
+    env_name: str = API_KEY_ENV,
+    helper_name: str = HELPER_NAME,
 ) -> str:
-    """Return the API key, preferring an explicit ``OPENAI_API_KEY``."""
+    """Return the API key, preferring an explicit ``env_name`` over the ``helper_name`` helper.
+
+    Defaults are MiniMax's; other providers pass their own variable and helper.
+    """
     environ = os.environ if env is None else env
     which = which or shutil.which  # resolved per call so tests and callers can substitute
     run = run or subprocess.run
-    explicit = (environ.get(API_KEY_ENV) or "").strip()
+    explicit = (environ.get(env_name) or "").strip()
     if explicit:
         return _checked_key(explicit)
 
-    helper = which(HELPER_NAME)
+    helper = which(helper_name)
     if not helper:
         raise MiniMaxCredentialError(
-            f"{API_KEY_ENV} is not set and `{HELPER_NAME}` was not found on PATH"
+            f"{env_name} is not set and `{helper_name}` was not found on PATH"
         )
     try:
         result = run(
@@ -101,19 +106,19 @@ def resolve_api_key(
         )
     except subprocess.TimeoutExpired:
         raise MiniMaxCredentialError(
-            f"`{HELPER_NAME}` timed out after {HELPER_TIMEOUT_S:g}s (output withheld)"
+            f"`{helper_name}` timed out after {HELPER_TIMEOUT_S:g}s (output withheld)"
         ) from None
     except OSError as exc:
         raise MiniMaxCredentialError(
-            f"`{HELPER_NAME}` could not be run ({type(exc).__name__})"
+            f"`{helper_name}` could not be run ({type(exc).__name__})"
         ) from None
     if result.returncode != 0:
         raise MiniMaxCredentialError(
-            f"`{HELPER_NAME}` exited with status {result.returncode} (output withheld)"
+            f"`{helper_name}` exited with status {result.returncode} (output withheld)"
         )
     key = (result.stdout or "").strip()
     if not key:
-        raise MiniMaxCredentialError(f"`{HELPER_NAME}` returned an empty key")
+        raise MiniMaxCredentialError(f"`{helper_name}` returned an empty key")
     return _checked_key(key)
 
 
