@@ -11,7 +11,7 @@
   interface Props {
     variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'dashed';
     size?: 'xs' | 'sm' | 'md' | 'lg';
-    /** When set, renders an anchor. */
+    /** When set, renders an anchor. A disabled or loading anchor drops its href, so it leaves the tab order. */
     href?: string;
     type?: 'button' | 'submit';
     disabled?: boolean;
@@ -31,6 +31,7 @@
     /** Inter, sentence case, untracked: for names and document titles used as triggers. Never uppercases user text. */
     plain?: boolean;
     'aria-haspopup'?: 'menu' | 'listbox' | 'dialog' | boolean;
+    /** Toggle state. Buttons only: the link role has no pressed state, so an anchor never takes it. */
     'aria-pressed'?: boolean;
     onclick?: (e: MouseEvent) => void;
     children?: Snippet;
@@ -59,11 +60,14 @@
   const iconSize = $derived(size === 'lg' ? 20 : 16);
 
   const clipped = $derived(chamfer ?? (variant === 'primary' || variant === 'danger'));
+  // An anchor can't be `disabled`; without href it is not focusable and can't be followed.
+  const inert = $derived(disabled || loading);
 </script>
 
 {#if href}
   <a
-    {href}
+    href={inert ? undefined : href}
+    role={inert ? 'link' : undefined}
     data-wm="button"
     data-variant={variant}
     data-size={size}
@@ -71,9 +75,12 @@
     data-icon-only={label ? true : undefined}
     data-plain={plain || undefined}
     aria-label={label}
-    aria-disabled={disabled || undefined}
+    aria-expanded={ariaExpanded}
+    aria-controls={ariaControls}
+    aria-haspopup={ariaHaspopup}
+    aria-disabled={inert || undefined}
     aria-busy={loading || undefined}
-    {onclick}
+    onclick={inert ? undefined : onclick}
   >
     {#if loading}<span class="ring" aria-hidden="true"></span>{:else if icon}<Icon name={icon} size={iconSize} />{/if}
     {@render children?.()}
