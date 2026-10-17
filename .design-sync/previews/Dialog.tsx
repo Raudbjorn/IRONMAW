@@ -27,8 +27,14 @@ const choiceStyle: React.CSSProperties = {
   cursor: 'pointer'
 };
 
+// Pseudo-class rules from the story's <style> block; inline styles can't carry them.
+const choiceCss = `
+  .dialog-preview-choice:hover { background: var(--wm-surface-3) !important; }
+  .dialog-preview-choice:focus-visible { outline: 2px solid var(--wm-accent); outline-offset: 2px; }
+`;
+
 const Choice = ({ name, meta }: { name: string; meta: string }) => (
-  <button type="button" style={choiceStyle}>
+  <button type="button" className="dialog-preview-choice" style={choiceStyle}>
     <span style={{ fontSize: 'var(--wm-fs-base)', lineHeight: 'var(--wm-lh-normal)', color: 'var(--wm-text-strong)' }}>{name}</span>
     <span style={{ fontSize: 'var(--wm-fs-xs)', lineHeight: 'var(--wm-lh-normal)', color: 'var(--wm-text-muted)' }}>{meta}</span>
   </button>
@@ -36,6 +42,7 @@ const Choice = ({ name, meta }: { name: string; meta: string }) => (
 
 export const OpenACV = () => (
   <div style={{ minHeight: 720 }}>
+    <style>{choiceCss}</style>
     <Dialog open title="Open a CV" description="Choose a main CV or an application to work on.">
       <Stack gap={4}>
         <Stack gap={2}>
