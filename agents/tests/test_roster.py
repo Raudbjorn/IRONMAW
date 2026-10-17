@@ -34,7 +34,9 @@ def test_agents_use_the_minimax_adaption_per_role(http):
 
 
 @pytest.mark.parametrize("key,effort", [("explorer", "low"), ("implementer", "medium"), ("tester", "medium"),
-                                        ("reviewer", "high"), ("sync-keeper", "low"), ("design-critic", "high")])
+                                        ("reviewer", "high"), ("sync-keeper", "low"), ("design-critic", "high"),
+                                        ("a11y-auditor", "high"), ("copy-editor", "low"),
+                                        ("token-steward", "high"), ("gap-scout", "medium")])
 def test_effort_per_role_reaches_the_request(http, key, effort):
     http.arguments = {"summary": "s"} if key == "explorer" else {}
     agent = roster.build_agent(key, env=ENV)
@@ -75,3 +77,26 @@ def test_run_role_returns_the_typed_report(http):
     out = roster.run_role("explorer", "where are the tokens?", env=ENV)
     assert type(out).__name__ == "ExplorationReport" and out.summary.startswith("Tokens live")
     assert json.loads(http.requests[0].read())["model"] == "MiniMax-M3.1-Flash-Preview"
+
+
+def test_every_agent_gets_a_path_only_repo_index(http):
+    prompt = roster.build_agent("gap-scout", env=ENV).system_prompt_generator.generate_prompt()
+    assert "Repository index (paths only" in prompt
+    assert "src/lib/components/atoms/Button.test.ts" in prompt and "check the repository index" in prompt
+    assert "export let" not in prompt.split("Repository index")[1][:20000]       # paths, not contents
+
+
+def test_index_skips_protected_folders_and_caps_its_length(tmp_path):
+    from ironmaw_agents.context import RepoIndexProvider
+    (tmp_path / "src" / ".do-no-commit").mkdir(parents=True)
+    (tmp_path / "src" / ".do-no-commit" / "secret.md").write_text("x")
+    for i in range(5):
+        (tmp_path / "src" / f"f{i}.ts").write_text("x")
+    text = RepoIndexProvider(root=tmp_path, dirs=("src",)).get_info()
+    assert "secret" not in text and "src/f0.ts" in text
+    import ironmaw_agents.context as ctx
+    old, ctx.MAX_INDEX_PATHS = ctx.MAX_INDEX_PATHS, 2
+    try:
+        assert "[3 more paths not listed]" in RepoIndexProvider(root=tmp_path, dirs=("src",)).get_info()
+    finally:
+        ctx.MAX_INDEX_PATHS = old

@@ -115,3 +115,108 @@ class DesignCritique(BaseIOSchema):
 
     issues: list[DesignIssue] = Field(default_factory=list, description="Ranked, most severe first.")
     could_not_judge: list[str] = Field(default_factory=list, description="What the material did not show.")
+
+
+class A11yIssue(BaseIOSchema):
+    """One accessibility defect."""
+
+    path: str = Field(..., description="Repo-relative file path.")
+    line: int | None = Field(None, ge=1, description="1-based line when known.")
+    wcag: str = Field(..., description="WCAG 2.2 success criterion, e.g. '2.4.7'.")
+    severity: Literal["blocker", "major", "minor"] = Field(..., description="Impact.")
+    problem: str = Field(..., description="What fails and for whom.")
+    fix: str = Field(..., description="The smallest fix.")
+
+
+class A11yAudit(BaseIOSchema):
+    """An accessibility audit of IRONMAW components."""
+
+    issues: list[A11yIssue] = Field(default_factory=list, description="Ranked, most severe first.")
+    needs_browser: list[str] = Field(
+        default_factory=list, description="What needs a real browser or assistive technology to confirm."
+    )
+
+
+class CopyIssue(BaseIOSchema):
+    """One string that breaks the voice rules."""
+
+    path: str = Field(..., description="Repo-relative file path.")
+    line: int | None = Field(None, ge=1, description="1-based line when known.")
+    rule: str = Field(..., description="The voice rule it breaks.")
+    current: str = Field(..., description="The string as it is.")
+    proposed: str = Field(..., description="The exact replacement.")
+
+
+class CopyReview(BaseIOSchema):
+    """A copy edit of IRONMAW interface text."""
+
+    issues: list[CopyIssue] = Field(default_factory=list, description="Every string to change.")
+    could_not_judge: list[str] = Field(default_factory=list, description="Strings whose meaning needs the running product.")
+
+
+class TokenChange(BaseIOSchema):
+    """One proposed change to a DTCG token source."""
+
+    edition: str = Field(..., description="'oxide', 'bone', a new edition name, or 'all' for scale/primitive tokens.")
+    token: str = Field(..., description="Token name without the --wm- prefix, e.g. 'text-faint'.")
+    current: str | None = Field(None, description="Current value; null for a new token.")
+    proposed: str = Field(..., description="Proposed value; colours as 6-digit hex.")
+    file: str = Field(..., description="The DTCG source file to edit, never a generated output.")
+    reason: str = Field(..., description="Why, in one sentence.")
+
+
+class TokenProposal(BaseIOSchema):
+    """Proposed token changes. Contrast is recomputed by the pipeline, not by the agent."""
+
+    changes: list[TokenChange] = Field(default_factory=list, description="Each change to a token source.")
+    visual_checks: list[str] = Field(default_factory=list, description="What needs eyes in both editions.")
+
+
+class GapProposal(BaseIOSchema):
+    """One missing piece of the library."""
+
+    name: str = Field(..., description="Component, prop or variant name, e.g. 'Toast' or 'Button.loading'.")
+    kind: Literal["component", "prop", "variant", "snippet", "token"] = Field(..., description="What sort of addition.")
+    value: Literal["high", "medium", "low"] = Field(..., description="How much it unblocks.")
+    evidence: str = Field(..., description="What in the provided material shows the need.")
+    api_sketch: str = Field(..., description="Props/snippets in the house style.")
+    cross_surface: list[str] = Field(default_factory=list, description="Barrel, stories, test, adapter, preview work.")
+
+
+class GapReport(BaseIOSchema):
+    """What IRONMAW is missing for a screen or workflow."""
+
+    proposals: list[GapProposal] = Field(default_factory=list, description="Ranked by value.")
+    unconfirmed: list[str] = Field(default_factory=list, description="Suspected needs the material did not confirm.")
+
+
+class GateResult(BaseIOSchema):
+    """One palette gate, recomputed after applying proposed colour changes."""
+
+    edition: str = Field(..., description="Edition the gate ran against.")
+    rule: str = Field(..., description="The gate, e.g. 'text-faint on surface-1 >= 4.5'.")
+    before: float | None = Field(None, description="Contrast ratio today, when the pair exists.")
+    after: float | None = Field(None, description="Contrast ratio with the proposal applied.")
+    passes: bool | None = Field(..., description="Null when the gate could not be computed.")
+
+
+class StageFailure(BaseIOSchema):
+    """A pipeline stage that did not produce a result."""
+
+    stage: str = Field(..., description="Role key of the stage.")
+    error: str = Field(..., description="Error type and message.")
+
+
+class ImprovementReport(BaseIOSchema):
+    """Result of the improve pipeline: exploration, specialist proposals and a review of them."""
+
+    task: str = Field(..., description="The improvement task as given.")
+    files: list[str] = Field(default_factory=list, description="Files the specialists were shown.")
+    exploration: ExplorationReport | None = None
+    a11y: A11yAudit | None = None
+    copy_review: CopyReview | None = None
+    tokens: TokenProposal | None = None
+    token_gates: list[GateResult] = Field(default_factory=list, description="Gates touched by colour changes.")
+    gaps: GapReport | None = None
+    review: ReviewReport | None = None
+    failures: list[StageFailure] = Field(default_factory=list, description="Stages that failed; the rest still ran.")

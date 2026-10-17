@@ -127,38 +127,27 @@
 
 ## Re-sync risks
 
-- **2026-10-15 editor parts (not yet synced).** 24 new components (Icon, Badge,
-  Marker, Switch, Avatar, Kbd, ScoreRing, SaveStatus, SegmentedControl,
-  SwatchPicker, Menu, SplitButton, ZoomControl, Disclosure, ReorderList,
-  IssueCard, AppHeader, Workspace, PageCanvas, PageSheet, PageAnnotation,
-  DocHeader, DocSection, DocEntry) plus Button/Input extensions and drawn icons
-  replacing unicode glyphs in Notice/StatusLabel/Chip/SearchField/NavBar. All
-  have owned previews and adapter entries; none are graded yet. Expect every
-  touched component to re-grade. Watch: Menu popup is `position: fixed`
-  (overlay → likely `cardMode: "single"` for Menu/SplitButton stories that open
-  it); PageCanvas needs a definite-height parent (its previews wrap it);
+- **All 51 components synced and graded** (editor parts by 2026-10-16;
+  workspace parts Dialog/Textarea/Checkbox/ChangeMark/StatusBar/EmptyState on
+  2026-10-17). Owned previews mirror the stories by hand: any story edit
+  needs the matching `.design-sync/previews/<Name>.tsx` edit
+  (`[STORY_CHANGED]` flags it).
+- **Story-local pseudo-class CSS doesn't survive inline styles.** Dialog's
+  `OpenACV` story styles its choice buttons in a `<style>` block
+  (`:hover`, `:focus-visible` teal outline); the owned preview carries them
+  as a scoped `<style>` + `dialog-preview-choice` class. Without it the
+  auto-focused first option showed Chromium's white focus ring. Check any
+  new owned preview whose story has a `<style>` block with pseudo-classes.
+- **Dialog** is `cardMode: "single"` (`primaryStory: OpenACV`): stories open
+  a native `<dialog>` via showModal, top layer escapes the grid
+  (`[GRID_OVERFLOW] escape`). **ChangeMark** is `cardMode: "column"`: the
+  margin flags sit outside the PageSheet (`[GRID_OVERFLOW] wide`).
+- ChangeMark sheets: storybook captures the whole A4 page (taller shot), the
+  preview crops at 700px — framing only, graded match.
+- Menu popup is `position: fixed` (Menu is `cardMode: "single"`);
+  PageCanvas needs a definite-height parent (its previews wrap it);
   Workspace `fill` uses 100dvh (column card); ReorderList `detail` is a
-  render-function snippet.
-- **2026-10-15 workspace parts (not yet synced).** Dialog, Textarea,
-  Checkbox, ChangeMark, StatusBar, EmptyState: owned previews + adapter
-  entries, ungraded. Dialog stories open a native `<dialog>` via showModal on
-  mount, so the top layer escapes the card — likely `cardMode: "single"`.
-  ChangeMark's margin flag sits outside the PageSheet content box (needs the
-  sheet in the preview). wrap.js maps Textarea `onChange` to `oninput`.
-- `Examples/CV editor` is a showcase composition (`src/examples/`, not
-  packaged) — excluded via `titleMap: {"CV editor": null}`.
-
-- **Adapter drift**: a new component added to `src/lib/index.ts` must ALSO be
-  added to `.design-sync/react-adapter/index.js` (wrap call + snippet-prop
-  list) and `index.d.ts` (Props interface), plus an owned preview authored —
-  nothing regenerates these. Same for non-component exports. Diff
-  `src/lib/index.ts` against the adapter's export list on every re-sync.
-- **Snippet-prop drift**: a new Snippet prop on an existing component must be
-  added to the wrap() snippetProps list and typed as React.ReactNode —
-  otherwise the raw React node is passed to Svelte as a scalar and renders nothing.
-- **Owned previews go stale silently when a story is rewritten.** Diff each
-  owned preview against its story whenever the story file changes.
-- **Token changes** flow through `pnpm run build` (colors.css/scale.css are
-  regenerated and copied by `tokensGlob`); the compare oracle catches drift.
-- `dist/` and `react-dist/` are gitignored — `buildCmd` must run before the
-  converter on every fresh clone.
+  render-function snippet; wrap.js maps Textarea `onChange` to `oninput`.
+- `[TITLE_UNMAPPED] … CVeditor` in the build log is expected: the
+  `Examples/CV editor` showcase (`src/examples/`, not packaged) is dropped
+  either way; `titleMap: {"CV editor": null}` documents the intent.
