@@ -74,6 +74,13 @@
     "Button": {
       "cardMode": "column",
       "primaryStory": "Primary"
+    },
+    "ChangeMark": {
+      "cardMode": "column"
+    },
+    "Dialog": {
+      "cardMode": "single",
+      "primaryStory": "OpenACV"
     }
   },
   "titleMap": {
