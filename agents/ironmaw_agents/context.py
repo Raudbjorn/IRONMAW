@@ -53,3 +53,19 @@ class RepoFilesProvider(BaseDynamicContextProvider):
 
     def get_info(self) -> str:
         return "\n\n".join(self._blocks) or "No files were provided."
+
+
+MAX_PROPOSAL_CHARS = 60_000
+
+
+class ProposalsProvider(BaseDynamicContextProvider):
+    """Specialist outputs handed to the reviewer, as JSON, bounded."""
+
+    def __init__(self, proposals: dict[str, str]) -> None:
+        super().__init__(title="Proposals under review (JSON, one block per specialist)")
+        blocks = [f"=== {name} ===\n{body}" for name, body in proposals.items()]
+        text = "\n\n".join(blocks) or "No proposals were produced."
+        self._text = text if len(text) <= MAX_PROPOSAL_CHARS else text[:MAX_PROPOSAL_CHARS] + "\n[truncated]"
+
+    def get_info(self) -> str:
+        return self._text

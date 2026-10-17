@@ -19,8 +19,8 @@ from atomic_agents.context import SystemPromptGenerator
 from .context import RepoFilesProvider, RulesProvider
 from .minimax import DEFAULT_MODEL, MiniMaxConfigError, minimax_agent
 from .schemas import (
-    DesignCritique, ExplorationReport, ImplementationPlan, ReviewReport,
-    SyncReport, TaskInput, TestPlan,
+    A11yAudit, CopyReview, DesignCritique, ExplorationReport, GapReport, ImplementationPlan,
+    ReviewReport, SyncReport, TaskInput, TestPlan, TokenProposal,
 )
 from .tools.minimax_tools import REPO_ROOT
 
@@ -46,6 +46,10 @@ ROLES: dict[str, Role] = {
     "reviewer": Role("ironmaw-reviewer", ReviewReport, "high"),
     "sync-keeper": Role("ironmaw-sync-keeper", SyncReport, "low"),
     "design-critic": Role("ironmaw-design-critic", DesignCritique, "high"),
+    "a11y-auditor": Role("ironmaw-a11y-auditor", A11yAudit, "high"),
+    "copy-editor": Role("ironmaw-copy-editor", CopyReview, "low"),
+    "token-steward": Role("ironmaw-token-steward", TokenProposal, "high"),
+    "gap-scout": Role("ironmaw-gap-scout", GapReport, "medium"),
 }
 
 

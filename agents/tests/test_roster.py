@@ -34,7 +34,9 @@ def test_agents_use_the_minimax_adaption_per_role(http):
 
 
 @pytest.mark.parametrize("key,effort", [("explorer", "low"), ("implementer", "medium"), ("tester", "medium"),
-                                        ("reviewer", "high"), ("sync-keeper", "low"), ("design-critic", "high")])
+                                        ("reviewer", "high"), ("sync-keeper", "low"), ("design-critic", "high"),
+                                        ("a11y-auditor", "high"), ("copy-editor", "low"),
+                                        ("token-steward", "high"), ("gap-scout", "medium")])
 def test_effort_per_role_reaches_the_request(http, key, effort):
     http.arguments = {"summary": "s"} if key == "explorer" else {}
     agent = roster.build_agent(key, env=ENV)
