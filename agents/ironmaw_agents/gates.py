@@ -97,9 +97,39 @@ def _primitive_name(change: TokenChange) -> str | None:
     return None
 
 
+SHARED_SOURCES = frozenset({PRIMITIVES_FILE.name, "scale.tokens.json"})
+BRAND_ASSERT = re.compile(r"expect\(brand\)\.toEqual\(\{([^}]*)\}\)")
+BRAND_ENTRY = re.compile(r"(\w+):\s*'(#[0-9A-Fa-f]{6})'")
+
+
+def load_brand(path: Path = GATE_FILE) -> dict[str, str]:
+    """The immutable brand anchors asserted verbatim in palette.test.ts."""
+    match = BRAND_ASSERT.search(path.read_text(encoding="utf-8"))
+    if not match:
+        raise MiniMaxConfigError(f"no brand anchor assertion found in {path.name}")
+    return dict(BRAND_ENTRY.findall(match.group(1)))
+
+
+def _brand_name(change: TokenChange) -> str | None:
+    for prefix in ("brand-", "brand."):
+        if change.token.startswith(prefix):
+            return change.token[len(prefix):]
+    return None
+
+
+def _source_edition(change: TokenChange) -> str | None:
+    """The edition a source file belongs to: ``bone.tokens.json`` -> ``bone``; shared sources -> None."""
+    name = Path(change.file).name
+    if name.endswith(".tokens.json") and name not in SHARED_SOURCES:
+        return name.removesuffix(".tokens.json")
+    return None
+
+
 def _is_colour(change: TokenChange, palettes: Mapping[str, Mapping[str, str]]) -> bool:
-    # An edition source holds semantic colours only, so its file decides even when the value is malformed.
-    return (Path(change.file).name in {f"{e}.tokens.json" for e in palettes}
+    # Edition sources and the primitive pool hold colours only, so the file decides even
+    # when the value is malformed; the value check then reports it.
+    return (_source_edition(change) is not None
+            or _primitive_name(change) is not None
             or any(change.token in p for p in palettes.values())
             or bool(HEX.match(change.proposed) or ALIAS.match(change.proposed)))
 
@@ -111,26 +141,39 @@ def verify_colour_changes(
     gates: Sequence[Gate] | None = None,
     primitives: Mapping[str, str] | None = None,
     aliases: Mapping[str, Mapping[str, str]] | None = None,
+    brand: Mapping[str, str] | None = None,
 ) -> list[GateResult]:
     """Apply proposed colours per edition and rerun every gate that touches a changed token.
 
     Primitive edits are resolved into every semantic token that aliases them, and
     alias values (``{primitive.color.x}``) are resolved to hex, so the gates see
-    what ``pnpm run tokens`` would generate. An edit no gate covers is reported
-    as unchecked (``passes=None``), never left out.
+    what ``pnpm run tokens`` would generate. Primitives are shared, so their edits
+    are gated in every edition. An edition source file decides which edition an
+    edit lands in. Brand anchors must stay verbatim. An edit no gate covers is
+    reported as unchecked (``passes=None``), never left out.
     """
     palettes = palettes if palettes is not None else load_palettes()
     gates = gates if gates is not None else load_gates()
     primitives = dict(primitives if primitives is not None else load_primitives())
     aliases = aliases if aliases is not None else load_aliases(palettes)
+    brand = brand if brand is not None else load_brand()
     results: list[GateResult] = []
     per_edition: dict[str, dict[str, str]] = {}
     changes = list(changes)
 
+    for change in changes:
+        if (name := _brand_name(change)) is None:
+            continue
+        anchor = brand.get(name)
+        rule = (f"brand-{name} stays {anchor} (identity board, verbatim)" if anchor else
+                f"brand-{name}: the brand anchors are exactly {sorted(brand)}; none may be added")
+        results.append(GateResult(
+            edition="all", rule=rule, passes=bool(anchor) and change.proposed.upper() == anchor.upper()))
+    changes = [c for c in changes if _brand_name(c) is None]
+
     # Primitives first, so alias values in the same proposal resolve to the new hex.
     for change in changes:
-        name = _primitive_name(change)
-        if name is None or not _is_colour(change, palettes):
+        if (name := _primitive_name(change)) is None:
             continue
         if not HEX.match(change.proposed):
             results.append(GateResult(
@@ -138,10 +181,9 @@ def verify_colour_changes(
                 passes=False))
             continue
         primitives[name] = change.proposed
-        targets = list(palettes) if change.edition == "all" else [change.edition]
-        for edition in targets:
+        for edition in palettes:                                       # the pool is shared by every edition
             users = sorted(t for t, p in aliases.get(edition, {}).items() if p == name)
-            if not users and edition in palettes:
+            if not users:
                 results.append(GateResult(
                     edition=edition, rule=f"primitive {name}: no semantic colour aliases it; no gate applies",
                     passes=None))
@@ -153,7 +195,15 @@ def verify_colour_changes(
             continue                                                   # scale tokens have no gate
         alias = ALIAS.match(change.proposed)
         value = primitives.get(alias.group(1)) if alias else change.proposed
-        targets = list(palettes) if change.edition == "all" else [change.edition]
+        if (source := _source_edition(change)) is not None:
+            targets = [source]                                         # the file decides, not the label
+            if change.edition != source:
+                results.append(GateResult(
+                    edition=source, passes=False,
+                    rule=f"{change.token}: labelled edition {change.edition!r} but edits {Path(change.file).name}; "
+                         f"gated as {source}"))
+        else:
+            targets = list(palettes) if change.edition == "all" else [change.edition]
         for edition in targets:
             if edition not in palettes:
                 results.append(GateResult(

@@ -182,3 +182,11 @@ def test_gates_come_first_and_no_block_crowds_out_the_others():
     assert text.index("=== token-gates") < text.index("=== a11y-auditor")
     assert "=== gap-scout ===\nproposal" in text and "[a11y-auditor truncated]" in text
     assert len(text) <= MAX_PROPOSAL_CHARS + 200
+
+
+def test_cli_exits_1_when_a_stage_failed_but_still_prints_the_report(replies, monkeypatch, capsys):
+    monkeypatch.setenv("OPENAI_API_KEY", SECRET)
+    replies.fail_tools = {"CopyReview"}
+    assert main(["improve", "Fix copy", "--with", "copy-editor,a11y-auditor"]) == 1
+    out = json.loads(capsys.readouterr().out)
+    assert out["failures"][0]["stage"] == "copy-editor" and out["a11y"] is not None
