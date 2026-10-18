@@ -3,7 +3,8 @@
 Mercury speaks the OpenAI Chat Completions format at a fixed endpoint. Same
 contract as ``minimax.py`` (and its error types), with Mercury's own limits:
 
-* credentials: an explicit ``INCEPTION_LABS_API_KEY`` wins; otherwise the
+* credentials: ``INCEPTION_API_KEY`` (Inception's documented variable) or
+  ``INCEPTION_LABS_API_KEY`` wins; otherwise the
   ``inceptionlabs-api-key`` helper is found on ``PATH`` and run (output never
   exposed).
 * ``temperature`` must be in [0.5, 1]. The API silently resets anything else
@@ -31,7 +32,8 @@ from openai import OpenAI
 from .minimax import MiniMaxConfigError, resolve_api_key, validate_mode
 
 MERCURY_BASE_URL = "https://api.inceptionlabs.ai/v1"
-API_KEY_ENV = "INCEPTION_LABS_API_KEY"
+API_KEY_ENV = "INCEPTION_API_KEY"          # what Inception's own SDK examples read
+API_KEY_ENVS = (API_KEY_ENV, "INCEPTION_LABS_API_KEY")
 HELPER_NAME = "inceptionlabs-api-key"
 
 DEFAULT_MODEL = "mercury-2"
@@ -51,7 +53,7 @@ SUPPORTED_MODE = Mode.TOOLS
 
 
 def resolve_mercury_key(env: Mapping[str, str] | None = None, **kwargs: Any) -> str:
-    return resolve_api_key(env, env_name=API_KEY_ENV, helper_name=HELPER_NAME, **kwargs)
+    return resolve_api_key(env, env_name=API_KEY_ENVS, helper_name=HELPER_NAME, **kwargs)
 
 
 def validate_model(model: str) -> str:

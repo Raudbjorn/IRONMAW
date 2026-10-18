@@ -18,7 +18,7 @@ from atomic_agents.context import SystemPromptGenerator
 
 from . import mercury
 from .context import RepoFilesProvider, RepoIndexProvider, RulesProvider
-from .minimax import DEFAULT_MODEL, MiniMaxConfigError, minimax_agent, resolve_api_key
+from .minimax import API_KEY_ENV, DEFAULT_MODEL, MiniMaxConfigError, minimax_agent, resolve_api_key
 from .schemas import (
     A11yAudit, CopyReview, DesignCritique, ExplorationReport, GapReport, ImplementationPlan,
     ReviewReport, SyncReport, TaskInput, TestPlan, TokenProposal,
@@ -47,14 +47,15 @@ class Provider:
     factory: Callable[..., AtomicAgent]
     default_model: str
     resolve_key: Callable[..., str]
+    key_env: str                      # where a resolved key goes so later clients skip the helper
     effort: Callable[[str], str | None] = lambda effort: effort
     temperature: Callable[[float], float] = lambda temperature: temperature
 
 
 PROVIDERS: dict[str, Provider] = {
-    "minimax": Provider(minimax_agent, DEFAULT_MODEL, resolve_api_key),
+    "minimax": Provider(minimax_agent, DEFAULT_MODEL, resolve_api_key, API_KEY_ENV),
     "mercury": Provider(
-        mercury.mercury_agent, mercury.DEFAULT_MODEL, mercury.resolve_mercury_key,
+        mercury.mercury_agent, mercury.DEFAULT_MODEL, mercury.resolve_mercury_key, mercury.API_KEY_ENV,
         effort=mercury.safe_effort,
         temperature=lambda t: min(max(t, mercury.TEMPERATURE_RANGE[0]), mercury.TEMPERATURE_RANGE[1]),
     ),

@@ -122,3 +122,63 @@ def test_cli_rejects_an_unknown_specialist(http, monkeypatch, capsys):
     monkeypatch.setenv("OPENAI_API_KEY", SECRET)
     assert main(["improve", "Fix copy", "--with", "copy-editor,poet"]) == 2
     assert "poet" in capsys.readouterr().err and http.constructed == []
+
+
+def test_the_key_helper_runs_once_per_pipeline(replies, monkeypatch):
+    calls = []
+
+    def helper(cmd, **kw):
+        calls.append(cmd)
+        return __import__("subprocess").CompletedProcess(cmd, 0, stdout=SECRET, stderr="")
+
+    monkeypatch.setattr(mm.shutil, "which", lambda name: "/usr/bin/minimax-api-key")
+    monkeypatch.setattr(mm.subprocess, "run", helper)
+    report = improve("Improve the Button", paths=[BUTTON], env={})
+    assert len(calls) == 1 and report.review is not None and len(replies.constructed) == 6
+
+
+def test_token_steward_sees_the_sources_it_edits(replies):
+    improve("Tune text-faint", specialists=["token-steward"], env=ENV)
+    prompt = system_prompt(next(b for b in sent(replies) if tool_of(b) == "TokenProposal"))
+    for f in ("primitives.tokens.json", "oxide.tokens.json", "bone.tokens.json", "scale.tokens.json", "themes.ts"):
+        assert f"=== src/lib/tokens/{f} ===" in prompt
+
+
+def test_a11y_auditor_gets_the_component_test_and_stories(replies):
+    replies.by_tool = {**REPLIES, "ExplorationReport": {"summary": "s", "findings": []}}
+    improve("Audit Button", paths=[BUTTON], specialists=["a11y-auditor"], env=ENV)
+    prompt = system_prompt(next(b for b in sent(replies) if tool_of(b) == "A11yAudit"))
+    assert "=== src/lib/components/atoms/Button.test.ts ===" in prompt
+    assert "=== src/stories/atoms/Button.stories.svelte ===" in prompt
+
+
+def test_reviewer_sees_what_the_specialists_saw(replies):
+    improve("Find gaps", specialists=["gap-scout"], env=ENV)
+    assert "=== src/lib/index.ts ===" in system_prompt(sent(replies)[-1])
+
+
+def test_a_config_error_after_requests_start_is_recorded_not_raised(replies, monkeypatch):
+    import ironmaw_agents.pipeline as pipeline
+
+    def broken(changes):
+        raise MiniMaxConfigError("no contrast gates found in palette.test.ts")
+
+    monkeypatch.setattr(pipeline, "verify_colour_changes", broken)
+    report = improve("Tune text-faint", env=ENV)
+    assert [f.stage for f in report.failures] == ["token-gates"]
+    assert "no contrast gates" in report.failures[0].error and report.review.verdict == "fix-first"
+
+
+def test_a_bad_model_still_fails_before_any_client(http):
+    with pytest.raises(MiniMaxConfigError):
+        improve("Improve the Button", env=ENV, model="gpt-nope")
+    assert http.constructed == []
+
+
+def test_gates_come_first_and_no_block_crowds_out_the_others():
+    from ironmaw_agents.context import MAX_PROPOSAL_CHARS, ProposalsProvider
+    text = ProposalsProvider({"token-gates": "G" * 10, "a11y-auditor": "A" * (MAX_PROPOSAL_CHARS * 2),
+                              "gap-scout": "proposal"}).get_info()
+    assert text.index("=== token-gates") < text.index("=== a11y-auditor")
+    assert "=== gap-scout ===\nproposal" in text and "[a11y-auditor truncated]" in text
+    assert len(text) <= MAX_PROPOSAL_CHARS + 200

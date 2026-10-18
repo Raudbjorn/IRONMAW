@@ -6,7 +6,7 @@ import ironmaw_agents.minimax as mm
 import ironmaw_agents.roster as roster
 from ironmaw_agents.__main__ import main
 from ironmaw_agents.mercury import (
-    API_KEY_ENV, HELPER_NAME, MERCURY_BASE_URL, mercury_agent, resolve_mercury_key, safe_effort,
+    API_KEY_ENV, API_KEY_ENVS, HELPER_NAME, MERCURY_BASE_URL, mercury_agent, resolve_mercury_key, safe_effort,
 )
 from ironmaw_agents.minimax import MiniMaxConfigError, MiniMaxCredentialError
 from ironmaw_agents.pipeline import improve
@@ -23,9 +23,19 @@ def bodies(http):
 def test_mercury_key_uses_its_own_variable_and_helper():
     assert resolve_mercury_key(ENV, which=lambda n: pytest.fail("helper must not run")) == SECRET
     seen = []
-    with pytest.raises(MiniMaxCredentialError, match=f"{API_KEY_ENV} is not set and `{HELPER_NAME}`"):
+    with pytest.raises(MiniMaxCredentialError, match=f"{' / '.join(API_KEY_ENVS)} is not set and `{HELPER_NAME}`"):
         resolve_mercury_key({"OPENAI_API_KEY": SECRET}, which=lambda n: seen.append(n))   # MiniMax key ignored
     assert seen == [HELPER_NAME]
+
+
+@pytest.mark.parametrize("env,expected", [
+    ({"INCEPTION_API_KEY": "sk-official"}, "sk-official"),                 # Inception's documented variable
+    ({"INCEPTION_LABS_API_KEY": "sk-alias"}, "sk-alias"),
+    ({"INCEPTION_API_KEY": "sk-official", "INCEPTION_LABS_API_KEY": "sk-alias"}, "sk-official"),
+    ({"INCEPTION_API_KEY": "  ", "INCEPTION_LABS_API_KEY": "sk-alias"}, "sk-alias"),   # blank falls through
+])
+def test_both_inception_variables_are_accepted(env, expected):
+    assert resolve_mercury_key(env, which=lambda n: pytest.fail("helper must not run")) == expected
 
 
 @pytest.mark.parametrize("kwargs", [

@@ -65,3 +65,47 @@ def test_pass_fail_uses_the_unrounded_ratio():
     out = verify_colour_changes([change("fg", fg)], palettes={"oxide": {"fg": "#FFFFFF", "bg": bg}},
                                 gates=[("fg", "bg", 4.5)])
     assert out[0].after == 4.5 and out[0].passes is False
+
+
+def palette_fixture():
+    palettes = {"oxide": {"fg": "#FFFFFF", "bg": "#000000", "spare": "#123456"}}
+    aliases = {"oxide": {"fg": "white", "bg": "black", "spare": "teal"}}
+    primitives = {"white": "#FFFFFF", "black": "#000000", "teal": "#123456", "grey": "#777777"}
+    return dict(palettes=palettes, aliases=aliases, primitives=primitives, gates=[("fg", "bg", 4.5)])
+
+
+def test_primitive_edits_reach_every_semantic_token_that_aliases_them():
+    out = verify_colour_changes(
+        [change("white", "#111111", edition="all", file="src/lib/tokens/primitives.tokens.json")], **palette_fixture())
+    rule = next(r for r in out if r.rule == "fg on bg >= 4.5")
+    assert rule.passes is False and rule.before == 21.0
+
+
+def test_the_real_primitive_behind_text_faint_is_gated():
+    from ironmaw_agents.gates import load_aliases
+    name = load_aliases(load_palettes())["oxide"]["text-faint"]
+    out = verify_colour_changes([change(name, "#2A3940", edition="oxide", file="src/lib/tokens/primitives.tokens.json")])
+    assert any(r.rule == "text-faint on surface-1 >= 4.5" and r.passes is False for r in out)
+
+
+def test_an_unreferenced_primitive_is_reported_unchecked():
+    out = verify_colour_changes(
+        [change("grey", "#888888", edition="all", file="src/lib/tokens/primitives.tokens.json")], **palette_fixture())
+    assert len(out) == 1 and out[0].passes is None and "no semantic colour aliases it" in out[0].rule
+
+
+def test_alias_values_resolve_to_hex_and_unknown_aliases_fail():
+    out = verify_colour_changes([change("fg", "{primitive.color.grey}")], **palette_fixture())
+    assert next(r for r in out if r.rule == "fg on bg >= 4.5").after == round(contrast_ratio("#777777", "#000000"), 2)
+    bad = verify_colour_changes([change("fg", "{primitive.color.nope}")], **palette_fixture())
+    assert bad[0].passes is False and "no existing primitive" in bad[0].rule
+
+
+def test_a_malformed_new_token_in_an_edition_file_is_caught():
+    out = verify_colour_changes([change("brand-new", "tealish")], **palette_fixture())
+    assert out[0].passes is False and "6-digit hex" in out[0].rule
+
+
+def test_an_edit_no_gate_covers_is_reported_unchecked_not_dropped():
+    out = verify_colour_changes([change("spare", "#654321")], **palette_fixture())
+    assert len(out) == 1 and out[0].passes is None and "no palette gate covers" in out[0].rule

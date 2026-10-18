@@ -63,9 +63,13 @@ class ProposalsProvider(BaseDynamicContextProvider):
 
     def __init__(self, proposals: dict[str, str]) -> None:
         super().__init__(title="Proposals under review (JSON, one block per specialist)")
-        blocks = [f"=== {name} ===\n{body}" for name, body in proposals.items()]
-        text = "\n\n".join(blocks) or "No proposals were produced."
-        self._text = text if len(text) <= MAX_PROPOSAL_CHARS else text[:MAX_PROPOSAL_CHARS] + "\n[truncated]"
+        # Each block gets an equal share, so one long report can't push the others out.
+        share = MAX_PROPOSAL_CHARS // max(len(proposals), 1)
+        blocks = [
+            f"=== {name} ===\n" + (body if len(body) <= share else body[:share] + f"\n[{name} truncated]")
+            for name, body in proposals.items()
+        ]
+        self._text = "\n\n".join(blocks) or "No proposals were produced."
 
     def get_info(self) -> str:
         return self._text
