@@ -68,8 +68,40 @@ def load_palettes(resolved: Path = RESOLVED_DIR) -> dict[str, dict[str, str]]:
     return palettes
 
 
+PRIMITIVES_FILE = TOKENS_DIR / "primitives.tokens.json"
+ALIAS = re.compile(r"^\{primitive\.color\.([a-z0-9-]+)\}$")
+
+
+def load_primitives(path: Path = PRIMITIVES_FILE) -> dict[str, str]:
+    """Raw primitive colours: name -> hex."""
+    colours = json.loads(path.read_text(encoding="utf-8"))["primitive"]["color"]
+    return {k: v["$value"] for k, v in colours.items() if not k.startswith("$")}
+
+
+def load_aliases(editions: Iterable[str], tokens_dir: Path = TOKENS_DIR) -> dict[str, dict[str, str]]:
+    """Per edition, semantic token -> the primitive it aliases (from the DTCG edition source)."""
+    aliases: dict[str, dict[str, str]] = {}
+    for edition in editions:
+        source = tokens_dir / f"{edition}.tokens.json"
+        colours = json.loads(source.read_text(encoding="utf-8")).get("color", {}) if source.is_file() else {}
+        aliases[edition] = {
+            token: m.group(1) for token, spec in colours.items()
+            if isinstance(spec, dict) and (m := ALIAS.match(str(spec.get("$value", ""))))
+        }
+    return aliases
+
+
+def _primitive_name(change: TokenChange) -> str | None:
+    if Path(change.file).name == PRIMITIVES_FILE.name or change.token.startswith("primitive.color."):
+        return change.token.rsplit(".", 1)[-1]
+    return None
+
+
 def _is_colour(change: TokenChange, palettes: Mapping[str, Mapping[str, str]]) -> bool:
-    return any(change.token in p for p in palettes.values()) or bool(HEX.match(change.proposed))
+    # An edition source holds semantic colours only, so its file decides even when the value is malformed.
+    return (Path(change.file).name in {f"{e}.tokens.json" for e in palettes}
+            or any(change.token in p for p in palettes.values())
+            or bool(HEX.match(change.proposed) or ALIAS.match(change.proposed)))
 
 
 def verify_colour_changes(
@@ -77,16 +109,50 @@ def verify_colour_changes(
     *,
     palettes: Mapping[str, Mapping[str, str]] | None = None,
     gates: Sequence[Gate] | None = None,
+    primitives: Mapping[str, str] | None = None,
+    aliases: Mapping[str, Mapping[str, str]] | None = None,
 ) -> list[GateResult]:
-    """Apply proposed colours per edition and rerun every gate that touches a changed token."""
+    """Apply proposed colours per edition and rerun every gate that touches a changed token.
+
+    Primitive edits are resolved into every semantic token that aliases them, and
+    alias values (``{primitive.color.x}``) are resolved to hex, so the gates see
+    what ``pnpm run tokens`` would generate. An edit no gate covers is reported
+    as unchecked (``passes=None``), never left out.
+    """
     palettes = palettes if palettes is not None else load_palettes()
     gates = gates if gates is not None else load_gates()
+    primitives = dict(primitives if primitives is not None else load_primitives())
+    aliases = aliases if aliases is not None else load_aliases(palettes)
     results: list[GateResult] = []
     per_edition: dict[str, dict[str, str]] = {}
+    changes = list(changes)
+
+    # Primitives first, so alias values in the same proposal resolve to the new hex.
+    for change in changes:
+        name = _primitive_name(change)
+        if name is None or not _is_colour(change, palettes):
+            continue
+        if not HEX.match(change.proposed):
+            results.append(GateResult(
+                edition="all", rule=f"primitive {name}: proposed value {change.proposed!r} is not 6-digit hex",
+                passes=False))
+            continue
+        primitives[name] = change.proposed
+        targets = list(palettes) if change.edition == "all" else [change.edition]
+        for edition in targets:
+            users = sorted(t for t, p in aliases.get(edition, {}).items() if p == name)
+            if not users and edition in palettes:
+                results.append(GateResult(
+                    edition=edition, rule=f"primitive {name}: no semantic colour aliases it; no gate applies",
+                    passes=None))
+            for token in users:
+                per_edition.setdefault(edition, {})[token] = change.proposed
 
     for change in changes:
-        if not _is_colour(change, palettes):
-            continue                                                   # scale/primitive tokens have no gate
+        if _primitive_name(change) is not None or not _is_colour(change, palettes):
+            continue                                                   # scale tokens have no gate
+        alias = ALIAS.match(change.proposed)
+        value = primitives.get(alias.group(1)) if alias else change.proposed
         targets = list(palettes) if change.edition == "all" else [change.edition]
         for edition in targets:
             if edition not in palettes:
@@ -94,15 +160,25 @@ def verify_colour_changes(
                     edition=edition, rule=f"{change.token}: edition not built yet; add it, then run pnpm test",
                     passes=None))
                 continue
-            if not HEX.match(change.proposed):
+            if alias and value is None:
+                results.append(GateResult(
+                    edition=edition, rule=f"{change.token}: {change.proposed} names no existing primitive",
+                    passes=False))
+                continue
+            if not HEX.match(value or ""):
                 results.append(GateResult(
                     edition=edition, rule=f"{change.token}: proposed value {change.proposed!r} is not 6-digit hex",
                     passes=False))
                 continue
-            per_edition.setdefault(edition, {})[change.token] = change.proposed
+            per_edition.setdefault(edition, {})[change.token] = value
 
+    gated = {t for fg, bg, _ in gates for t in (fg, bg)} | {"warning", "action"}
     for edition, edits in per_edition.items():
         before, after = palettes[edition], {**palettes[edition], **edits}
+        for token in sorted(edits.keys() - gated):
+            results.append(GateResult(
+                edition=edition, rule=f"{token}: no palette gate covers this token; check it in both editions",
+                passes=None))
         for fg, bg, minimum in gates:
             if fg not in edits and bg not in edits:
                 continue

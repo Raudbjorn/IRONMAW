@@ -19,7 +19,7 @@ import math
 import os
 import shutil
 import subprocess
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any, Callable
 
 import instructor
@@ -76,24 +76,26 @@ def resolve_api_key(
     *,
     which: Callable[[str], str | None] | None = None,
     run: Callable[..., Any] | None = None,
-    env_name: str = API_KEY_ENV,
+    env_name: str | Sequence[str] = API_KEY_ENV,
     helper_name: str = HELPER_NAME,
 ) -> str:
-    """Return the API key, preferring an explicit ``env_name`` over the ``helper_name`` helper.
+    """Return the API key, preferring an explicit variable over the ``helper_name`` helper.
 
-    Defaults are MiniMax's; other providers pass their own variable and helper.
+    ``env_name`` may list several variables, checked in order. Defaults are MiniMax's;
+    other providers pass their own variables and helper.
     """
     environ = os.environ if env is None else env
+    names = (env_name,) if isinstance(env_name, str) else tuple(env_name)
     which = which or shutil.which  # resolved per call so tests and callers can substitute
     run = run or subprocess.run
-    explicit = (environ.get(env_name) or "").strip()
+    explicit = next((v.strip() for n in names if (v := environ.get(n) or "").strip()), "")
     if explicit:
         return _checked_key(explicit)
 
     helper = which(helper_name)
     if not helper:
         raise MiniMaxCredentialError(
-            f"{env_name} is not set and `{helper_name}` was not found on PATH"
+            f"{' / '.join(names)} is not set and `{helper_name}` was not found on PATH"
         )
     try:
         result = run(
