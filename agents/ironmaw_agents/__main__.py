@@ -31,7 +31,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     print(result.model_dump_json(indent=2))
-    return 0
+    # 1 = the report is incomplete (a stage failed or came back empty); 2 = caller error, nothing ran.
+    return 1 if getattr(result, "failures", None) else 0
 
 
 if __name__ == "__main__":

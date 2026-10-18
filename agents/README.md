@@ -4,7 +4,7 @@ Atomic Agents for the IRONMAW repo, running on MiniMax's OpenAI-compatible API.
 
 ```bash
 uv sync
-uv run pytest                      # 132 tests, no network
+uv run pytest                      # 158 tests, no network
 export OPENAI_API_KEY="$(minimax-api-key)"   # optional: unset falls back to the helper on PATH
 uv run python -m ironmaw_agents explorer "where are the tokens?" --path src/lib/review-status.ts
 ```
@@ -44,7 +44,9 @@ always sees `src/lib/index.ts`. Proposed colours are applied to `resolved/*.toke
 gate parsed from `palette.test.ts` is recomputed locally (`gates.py`) — the agent's own arithmetic is
 never trusted. The reviewer critiques all proposals plus the computed gates. Bad input (unknown
 specialist, unsafe path, missing key) raises before any request; a stage that fails mid-run lands in
-`failures` and the rest still run. Nothing is applied: proposals are for a human or the
+`failures` and the rest still run. Exit status: 0 complete, 1 report printed but a stage failed or came back
+empty, 2 caller error (nothing ran). Gates also hold the four brand anchors verbatim, gate primitive edits in
+every edition, and take an edit's edition from its source file. Nothing is applied: proposals are for a human or the
 `ironmaw-implementer` to act on.
 
 `minimax_client()` / `minimax_agent()` (`ironmaw_agents/minimax.py`): fixed endpoint, key from
