@@ -46,11 +46,9 @@
     color: var(--wm-text-muted);
   }
   [data-part='sheet'] {
-    --page-w: var(--wm-page-a4-width);
-    --page-h: var(--wm-page-a4-height);
     box-sizing: border-box;
-    width: var(--page-w);
-    min-height: var(--page-h);
+    width: var(--wm-page-a4-width);
+    min-height: var(--wm-page-a4-height);
     padding: var(--wm-page-margin);
     background: var(--wm-bg);
     color: var(--wm-text);
@@ -59,8 +57,8 @@
     border-radius: 0;
   }
   [data-size='letter'] [data-part='sheet'] {
-    --page-w: var(--wm-page-letter-width);
-    --page-h: var(--wm-page-letter-height);
+    width: var(--wm-page-letter-width);
+    min-height: var(--wm-page-letter-height);
   }
   @media print {
     [data-wm='page-sheet'] { gap: 0; }

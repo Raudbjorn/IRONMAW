@@ -42,9 +42,9 @@
 - `[GENERAL]` **--node-modules must be `.ds-sync/node_modules`**, not the repo's:
   this Svelte repo has no react; react@18.3.1 + react-dom@18.3.1 are installed
   into `.ds-sync/` for `_vendor/` UMD vendoring. Fresh clone:
-  `(cd .ds-sync && npm i && npx playwright install chromium)`
-  (`.ds-sync/package.json` is committed: @types/react, esbuild, playwright,
-  react, react-dom, ts-morph).
+  `.ds-sync/` is gitignored (nothing in it is committed), so a fresh clone
+  recreates it: stage the scripts (skill §2.4 `cp -r` line), then
+  `(cd .ds-sync && echo '{"name":"ds-sync-deps","private":true}' > package.json && npm i esbuild ts-morph @types/react playwright react@18.3.1 react-dom@18.3.1 && npx playwright install chromium)`.
 - `[GENERAL]` **Self symlink** `.ds-sync/node_modules/@svnbjrn/ironmaw → ../../..`
   (repo root) makes `tokensPkg`/`tokensGlob` copy `dist/tokens/*.css`.
   `.design-sync/node_modules → ../.ds-sync/node_modules` gives
@@ -61,6 +61,9 @@
 - `[GENERAL]` Foundations stories (Colors, Typography, Geometry) are
   showcase-only, not package exports — excluded via `titleMap` nulls.
   Overview is docs-only MDX and never enters title mapping.
+- `[GENERAL]` `[TITLE_UNMAPPED] … dropped: CVeditor` is expected: the
+  "CV editor" showcase story is excluded on purpose (`titleMap` null), and
+  the converter reports the squashed title before applying the map.
 - **Storybook static** (`.design-sync/sb-reference`, gitignored) is built by
   `pnpm exec storybook build -o .design-sync/sb-reference` **from the repo
   root** — the output path is cwd-relative, and a build started from a
@@ -89,6 +92,26 @@
   previews with esbuild and never reads it.
 
 ## Fixes log
+
+- **2026-10-29 (later) re-adopted the original project.** After
+  `/design-login`, `ba980cbf-…` resolves again and `1dff7fc2-…` 404s — the
+  two projects live under **different claude.ai accounts**, and which one a
+  sync sees depends on the session's login. On the owner's call, re-pinned
+  `ba980cbf` (it holds owner content outside the sync folders: `uploads/`,
+  `scraps/`, `github.md`, `_adherence.oxlintrc.json` — never in the plan's
+  deletes). Its Oct 13 anchor covered 21 components: 12 verified-by-upload,
+  9 changed + 30 new captured and graded **39/39 match** (4-agent fan-out, no
+  fixes, no learnings). Atomic upload 273 files + anchor; nothing deleted.
+  `1dff7fc2` is now an orphan under the other account — delete it there.
+  **If a get_project 404s on the pinned id, check the login account before
+  creating a new project.**
+
+- **2026-10-29 re-sync** (bundle + styling only: Button `--_fill` rename,
+  lh/z token kind tags). 51/51 unchanged, full render check clean, atomic
+  upload of 273 files, anchor refreshed. The old project `ba980cbf-…` still
+  returns 404 under this login; 1dff7fc2 stays pinned. Conventions header
+  validates against the build; open suggestion: spell the type scale as
+  `--wm-fs-xs/sm/base/lg/xl/2xl/3xl/display` (there is no `fs-md`).
 
 - **2026-10-15 re-sync into a NEW project**: the pinned project
   `ba980cbf-…` returned 404 under the current login (deleted, or the first
