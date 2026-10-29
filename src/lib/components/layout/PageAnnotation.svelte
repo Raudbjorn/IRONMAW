@@ -29,7 +29,7 @@
 <style>
   [data-wm='page-annotation'] {
     --tone: var(--wm-warning);
-    --wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4'%3E%3Cpath d='M0 3 Q2 0 4 2 T8 2' fill='none' stroke='black' stroke-width='1.2'/%3E%3C/svg%3E");
+    --wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4'%3E%3Cpath d='M0 3 Q2 0 4 2 T8 2' fill='none' stroke='black' stroke-width='1.2'/%3E%3C/svg%3E"); /* @kind other */
     position: relative;
     scroll-margin: var(--wm-space-8);
     padding-bottom: 4px;
