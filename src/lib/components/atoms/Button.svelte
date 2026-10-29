@@ -139,7 +139,7 @@
     inset: -1px;
     z-index: -1;
     border-radius: inherit;
-    background: var(--fill, transparent);
+    background: var(--_fill, transparent);
     transition: background-color 0.12s ease;
   }
   [data-chamfer]::before {
@@ -163,21 +163,21 @@
     text-transform: none;
     letter-spacing: 0;
   }
-  [data-variant='primary'] { --fill: var(--wm-action); color: var(--wm-action-ink); font-weight: var(--wm-display-weight-bold); }
-  [data-variant='primary']:hover { --fill: var(--wm-action-hover); }
+  [data-variant='primary'] { --_fill: var(--wm-action); color: var(--wm-action-ink); font-weight: var(--wm-display-weight-bold); }
+  [data-variant='primary']:hover { --_fill: var(--wm-action-hover); }
   [data-variant='secondary'] { color: var(--wm-text); border-color: var(--wm-border-strong); }
-  [data-variant='secondary']:hover { --fill: var(--wm-surface-2); color: var(--wm-text-strong); }
+  [data-variant='secondary']:hover { --_fill: var(--wm-surface-2); color: var(--wm-text-strong); }
   [data-variant='ghost'] { color: var(--wm-text-muted); }
-  [data-variant='ghost']:hover { --fill: var(--wm-surface-2); color: var(--wm-text); }
+  [data-variant='ghost']:hover { --_fill: var(--wm-surface-2); color: var(--wm-text); }
   [data-variant='dashed'] {
     width: 100%;
     color: var(--wm-accent);
     border: 1px dashed var(--wm-border-strong);
   }
-  [data-variant='dashed']:hover { --fill: var(--wm-surface-1); border-color: var(--wm-accent); }
-  [aria-pressed='true'] { --fill: var(--wm-selected); color: var(--wm-text-strong); }
-  [data-variant='danger'] { --fill: var(--wm-error); color: var(--wm-action-ink); font-weight: var(--wm-display-weight-bold); }
-  [data-variant='danger']:hover { --fill: color-mix(in oklab, var(--wm-error), var(--wm-mix-target) 12%); }
+  [data-variant='dashed']:hover { --_fill: var(--wm-surface-1); border-color: var(--wm-accent); }
+  [aria-pressed='true'] { --_fill: var(--wm-selected); color: var(--wm-text-strong); }
+  [data-variant='danger'] { --_fill: var(--wm-error); color: var(--wm-action-ink); font-weight: var(--wm-display-weight-bold); }
+  [data-variant='danger']:hover { --_fill: color-mix(in oklab, var(--wm-error), var(--wm-mix-target) 12%); }
 
   [data-wm='button']:focus-visible {
     outline: 2px solid var(--wm-accent);
