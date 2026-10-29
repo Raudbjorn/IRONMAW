@@ -57,14 +57,14 @@
     --wm-fs-2xl: 1.375rem;
     --wm-fs-3xl: 1.75rem;
     --wm-fs-display: 2.25rem;
-    --wm-lh-tight: 1.15;
-    --wm-lh-normal: 1.5;
-    --wm-lh-relaxed: 1.65;
-    --wm-z-base: 0;
-    --wm-z-elevated: 10;
-    --wm-z-sticky: 100;
-    --wm-z-dropdown: 1000;
-    --wm-z-overlay: 2000;
+    --wm-lh-tight: 1.15; /* @kind font */
+    --wm-lh-normal: 1.5; /* @kind font */
+    --wm-lh-relaxed: 1.65; /* @kind font */
+    --wm-z-base: 0; /* @kind other */
+    --wm-z-elevated: 10; /* @kind other */
+    --wm-z-sticky: 100; /* @kind other */
+    --wm-z-dropdown: 1000; /* @kind other */
+    --wm-z-overlay: 2000; /* @kind other */
     --wm-bp-sm: 640px;
     --wm-bp-md: 768px;
     --wm-bp-lg: 1024px;
