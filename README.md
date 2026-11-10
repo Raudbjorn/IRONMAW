@@ -30,7 +30,7 @@ role per edition, gated by WCAG contrast tests (`src/lib/tokens/palette.test.ts`
 
 ## Use
 
-For the browser, [IRONMAW Oxide for Google Chrome](chrome-theme/README.md)
+For the browser, [IRONMAW Oxide for Google Chrome](https://github.com/Raudbjorn/IRONMAW/blob/main/chrome-theme/README.md)
 is a ready-to-load theme with the same palette, bear artwork, and quiet terrain.
 Run `pnpm run chrome-theme:pack` to build its distribution ZIP.
 

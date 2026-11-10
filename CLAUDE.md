@@ -14,7 +14,7 @@ short uppercase labels only.
 
 ## Commands
 
-Node `>=22`, pinned `pnpm@11.3.0`. `pnpm install` (esbuild build scripts are
+Node `^22.18.0 || >=24.0.0`, pinned `pnpm@11.3.0`. `pnpm install` (esbuild build scripts are
 allowed via `pnpm-workspace.yaml`).
 
 ```bash
@@ -67,3 +67,7 @@ list), `index.d.ts` (Props), and the owned preview. Camelcase aliases in
 - Copy: sentence case, plain verbs, name what the user controls. Never "Verified", never a fabricated count.
 - Brand terrain is reserved for headers and empty states; `Panel terrain` uses contour and mountain lines. `Mark` uses the full bear at every size; the compact favicon (`assets/brand/bear-emblem.svg`) never appears in UI. Active NavBar items use a rust underline.
 - Brand references live in `.do-no-commit/` (gitignored) — read them, never copy them into the repo except via `assets/brand/`.
+
+Chrome theme exception (owner-approved 2026-11-10): the new-tab page uses quiet
+terrain and the full bear. Package icons also use the full bear, per the
+subsequent review. This does not change the component-library terrain rules.

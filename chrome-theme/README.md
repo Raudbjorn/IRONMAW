@@ -22,8 +22,8 @@ theme's image. Browser policy may prevent loading unpacked themes.
 
 ## Regenerate and package
 
-Use the repository's Node and pnpm versions. Asset generation also requires
-`rsvg-convert` (Arch: `librsvg`); ZIP packaging requires `zip`. No new npm
+Use Node `^22.18.0 || >=24.0.0` and the pinned pnpm version. Asset generation
+also requires `rsvg-convert` (Arch: `librsvg`); ZIP packaging requires `zip`. No new npm
 dependencies are needed.
 
 From the repository root:
@@ -31,22 +31,34 @@ From the repository root:
 ```bash
 pnpm install --frozen-lockfile
 pnpm run chrome-theme
-pnpm exec vitest run scripts/chrome-theme.test.mjs src/lib/tokens/palette.test.ts
+pnpm exec vitest run scripts/chrome-theme*.test.mjs src/lib/tokens/palette.test.ts
 pnpm run chrome-theme:pack
-unzip -l dist/ironmaw-oxide-chrome.zip
+unzip -l chrome-theme-dist/ironmaw-oxide-chrome.zip
 ```
 
 The ZIP has `manifest.json` at its root and only referenced PNG images. Extract
 it before using **Load unpacked**. The ZIP is also suitable as the theme upload
 payload; Chrome Web Store publication is a separate step.
 
-Edit `scripts/build-chrome-theme.mjs` for theme mappings or composition, and
-the DTCG source tokens for palette changes. The build refreshes resolved tokens,
-then generates the committed manifest and PNGs. It reads the full bear master,
-the favicon emblem for package icons only, and the terrain SVG from `Panel`;
-the original vector paths and bear colors are preserved. Commit regenerated
-outputs alongside source changes. Bump the manifest version in the generator
+Edit `scripts/theme-colors.mjs` for mappings, `scripts/build-chrome-theme.mjs`
+for composition, and the DTCG source tokens for palette changes. The build runs
+the complete token pipeline, including egui, and refreshes the generated brand
+modules. It reuses the cleaned full bear for both artwork and package icons.
+`assets/brand/terrain.svg` is the shared source for Panel and the theme; paths
+and bear colors are preserved. Commit regenerated outputs alongside source
+changes. Bump the manifest version in the generator
 for a released update.
+
+All colors and terrain markers are validated before rendering. Assets and the
+manifest are staged under `chrome-theme/.build-lock/` before publication; a
+concurrent theme build fails instead of interleaving writes. Packaging reads
+only the staged manifest references, so stale or extra PNGs never enter the ZIP.
+Each published file is replaced by rename, with the manifest last. This is not
+a power-loss-atomic transaction across the entire file set. If a build is killed
+and leaves `.build-lock/`, confirm no theme build is running before removing
+that directory and rebuilding. Renderer and ZIP failures clean it automatically.
+The commands avoid shell globs and Unix directory commands; Windows still needs
+`rsvg-convert` and Info-ZIP `zip` on PATH and has not been exercised here.
 
 The background is 1920 x 1080, centered horizontally, bottom-aligned, and never
 tiled. Its charcoal edges blend into the new-tab background on larger windows;
@@ -70,7 +82,8 @@ installation have not been tested. Xvfb did not establish native window-manager
 inactive-frame behavior. No personal browser profile was modified.
 
 Never commit `.pem` signing keys or `.crx` files. This build uses an unsigned ZIP
-and does not generate keys. Build archives stay in ignored `dist/`.
+and does not generate keys. Build archives stay in ignored
+`chrome-theme-dist/`, separate from the npm package's `dist/` directory.
 
 ## References
 

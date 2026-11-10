@@ -9,6 +9,8 @@ chrome-theme/*.pem
 chrome-theme.crx
 chrome-theme.pem
 chrome-theme/Cached Theme.pak
+chrome-theme/.build-lock/
+chrome-theme-dist/
 .svelte-kit/
 storybook-static/
 *storybook.log
