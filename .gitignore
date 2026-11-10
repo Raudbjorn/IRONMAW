@@ -4,6 +4,10 @@ node_modules/
 .claude/*
 !.claude/agents/
 dist/
+chrome-theme/*.crx
+chrome-theme/*.pem
+chrome-theme.crx
+chrome-theme.pem
 .svelte-kit/
 storybook-static/
 *storybook.log
