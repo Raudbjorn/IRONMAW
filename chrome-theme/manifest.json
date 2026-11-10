@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "IRONMAW Oxide",
-  "version": "1.0.0",
-  "description": "Charcoal, teal, rust and slate. The IRONMAW bear and quiet terrain for your browser.",
+  "version": "1.1.0",
+  "description": "Charcoal browser surfaces, misted slate ridges and a teal horizon. The original IRONMAW bear, quietly grounded.",
   "icons": {
     "16": "images/icon-16.png",
     "48": "images/icon-48.png",
@@ -51,9 +51,9 @@
         39
       ],
       "toolbar": [
-        20,
-        27,
-        30
+        25,
+        35,
+        39
       ],
       "toolbar_text": [
         217,
@@ -96,9 +96,9 @@
         186
       ],
       "omnibox_background": [
-        15,
         20,
-        22
+        27,
+        30
       ],
       "omnibox_text": [
         217,
@@ -127,7 +127,8 @@
       ]
     },
     "images": {
-      "theme_ntp_background": "images/new-tab.png"
+      "theme_ntp_background": "images/new-tab.png",
+      "theme_ntp_attribution": "images/attribution.png"
     },
     "properties": {
       "ntp_background_alignment": "bottom",
