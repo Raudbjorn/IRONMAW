@@ -1,0 +1,138 @@
+{
+  "manifest_version": 3,
+  "name": "IRONMAW Oxide",
+  "version": "1.0.0",
+  "description": "Charcoal, teal, rust and slate. The IRONMAW bear and quiet terrain for your browser.",
+  "icons": {
+    "16": "images/icon-16.png",
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
+  "theme": {
+    "colors": {
+      "frame": [
+        15,
+        20,
+        22
+      ],
+      "frame_inactive": [
+        25,
+        35,
+        39
+      ],
+      "frame_incognito": [
+        15,
+        20,
+        22
+      ],
+      "frame_incognito_inactive": [
+        25,
+        35,
+        39
+      ],
+      "background_tab": [
+        15,
+        20,
+        22
+      ],
+      "background_tab_inactive": [
+        25,
+        35,
+        39
+      ],
+      "background_tab_incognito": [
+        15,
+        20,
+        22
+      ],
+      "background_tab_incognito_inactive": [
+        25,
+        35,
+        39
+      ],
+      "toolbar": [
+        20,
+        27,
+        30
+      ],
+      "toolbar_text": [
+        217,
+        225,
+        228
+      ],
+      "toolbar_button_icon": [
+        217,
+        225,
+        228
+      ],
+      "tab_text": [
+        217,
+        225,
+        228
+      ],
+      "bookmark_text": [
+        217,
+        225,
+        228
+      ],
+      "tab_background_text": [
+        158,
+        177,
+        186
+      ],
+      "tab_background_text_inactive": [
+        158,
+        177,
+        186
+      ],
+      "tab_background_text_incognito": [
+        158,
+        177,
+        186
+      ],
+      "tab_background_text_incognito_inactive": [
+        158,
+        177,
+        186
+      ],
+      "omnibox_background": [
+        15,
+        20,
+        22
+      ],
+      "omnibox_text": [
+        217,
+        225,
+        228
+      ],
+      "ntp_background": [
+        15,
+        20,
+        22
+      ],
+      "ntp_text": [
+        217,
+        225,
+        228
+      ],
+      "ntp_link": [
+        60,
+        160,
+        160
+      ],
+      "ntp_header": [
+        95,
+        126,
+        143
+      ]
+    },
+    "images": {
+      "theme_ntp_background": "images/new-tab.png"
+    },
+    "properties": {
+      "ntp_background_alignment": "bottom",
+      "ntp_background_repeat": "no-repeat",
+      "ntp_logo_alternate": 1
+    }
+  }
+}

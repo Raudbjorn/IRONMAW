@@ -32,6 +32,8 @@
     "tokens": "node scripts/build-tokens.mjs && node scripts/build-egui.mjs",
     "fonts": "node scripts/build-fonts.mjs",
     "assets": "node scripts/build-assets.mjs",
+    "chrome-theme": "node scripts/build-tokens.mjs && node scripts/build-chrome-theme.mjs",
+    "chrome-theme:pack": "pnpm run chrome-theme && mkdir -p dist && cd chrome-theme && zip -X -FS ../dist/ironmaw-oxide-chrome.zip manifest.json images/*.png",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
