@@ -8,6 +8,7 @@ chrome-theme/*.crx
 chrome-theme/*.pem
 chrome-theme.crx
 chrome-theme.pem
+chrome-theme/Cached Theme.pak
 .svelte-kit/
 storybook-static/
 *storybook.log
