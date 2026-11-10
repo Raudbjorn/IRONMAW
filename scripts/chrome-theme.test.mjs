@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { chromeRoles } from './theme-colors.mjs';
 import { contrastRatio } from '../src/lib/internal/contrast.ts';
 
 const root = resolve('chrome-theme');
@@ -41,15 +42,15 @@ describe('Chrome theme distribution', () => {
 
   it('keeps the agreed semantic mapping and readable text in both frame states', () => {
     const colors = manifest.theme.colors;
-    for (const [key, role] of Object.entries({ frame: 'bg', frame_inactive: 'surface-2', toolbar: 'surface-1',
-      tab_text: 'text', bookmark_text: 'text', tab_background_text: 'text-muted',
-      ntp_background: 'bg', ntp_text: 'text', ntp_link: 'accent', omnibox_background: 'bg', omnibox_text: 'text' })) {
+    expect(Object.keys(colors).sort()).toEqual(Object.keys(chromeRoles).sort());
+    for (const [key, role] of Object.entries(chromeRoles)) {
       expect(hex(colors[key]).toUpperCase()).toBe(color[role]);
     }
     for (const [foreground, background] of [['tab_text', 'toolbar'], ['bookmark_text', 'toolbar'],
       ['tab_background_text', 'frame'], ['tab_background_text_inactive', 'frame_inactive'],
       ['tab_background_text_incognito', 'frame_incognito'], ['tab_background_text_incognito_inactive', 'frame_incognito_inactive'],
-      ['ntp_text', 'ntp_background'], ['ntp_link', 'ntp_background'], ['omnibox_text', 'omnibox_background']]) {
+      // Headers must meet the same 4.5:1 target as other normal-sized text.
+      ['ntp_header', 'ntp_background'], ['ntp_text', 'ntp_background'], ['ntp_link', 'ntp_background'], ['omnibox_text', 'omnibox_background']]) {
       expect(contrastRatio(hex(colors[foreground]), hex(colors[background]))).toBeGreaterThanOrEqual(4.5);
     }
     expect(contrastRatio(hex(colors.toolbar_button_icon), hex(colors.toolbar))).toBeGreaterThanOrEqual(3);

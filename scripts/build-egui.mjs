@@ -7,6 +7,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { hexToRgb } from './theme-colors.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REM_PX = 16;
@@ -15,13 +16,6 @@ const editions = ['oxide', 'bone'];
 const load = (name) => JSON.parse(readFileSync(join(root, `src/lib/tokens/resolved/${name}.tokens.json`), 'utf8'));
 const constName = (key) => key.toUpperCase().replace(/[^A-Z0-9]+/g, '_');
 const fieldName = (key) => key.replace(/[^a-z0-9]+/g, '_');
-
-function hexToRgb(hex) {
-  const m = /^#([0-9a-f]{6})$/i.exec(hex);
-  if (!m) return null;
-  const n = parseInt(m[1], 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
 
 /** "0.75rem" | "18px" → points (f32); other units → null. */
 function toPoints(value) {
