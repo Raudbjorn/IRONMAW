@@ -11,10 +11,10 @@ export const chromeRoles = {
   frame_incognito: 'bg', frame_incognito_inactive: 'surface-2',
   background_tab: 'bg', background_tab_inactive: 'surface-2',
   background_tab_incognito: 'bg', background_tab_incognito_inactive: 'surface-2',
-  toolbar: 'surface-1', toolbar_text: 'text', toolbar_button_icon: 'text',
+  toolbar: 'surface-2', toolbar_text: 'text', toolbar_button_icon: 'text',
   tab_text: 'text', bookmark_text: 'text',
   tab_background_text: 'text-muted', tab_background_text_inactive: 'text-muted',
   tab_background_text_incognito: 'text-muted', tab_background_text_incognito_inactive: 'text-muted',
-  omnibox_background: 'bg', omnibox_text: 'text',
+  omnibox_background: 'surface-1', omnibox_text: 'text',
   ntp_background: 'bg', ntp_text: 'text', ntp_link: 'accent', ntp_header: 'structure-text'
 };

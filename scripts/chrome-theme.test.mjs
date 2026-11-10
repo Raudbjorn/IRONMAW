@@ -26,8 +26,10 @@ describe('Chrome theme distribution', () => {
   });
 
   it('ships only referenced PNG assets with the intended dimensions', () => {
+    // Keep the bear in native attribution so background crops cannot move it into shortcut rows.
     const dimensions = { ...Object.fromEntries(Object.entries(manifest.icons).map(([size, path]) => [path, [Number(size), Number(size)]])),
-      [manifest.theme.images.theme_ntp_background]: [1920, 1080] };
+      [manifest.theme.images.theme_ntp_background]: [1920, 1080],
+      [manifest.theme.images.theme_ntp_attribution]: [128, 96] };
     expect(readdirSync(`${root}/images`).sort()).toEqual(Object.keys(dimensions).map((path) => path.slice(7)).sort());
     for (const [path, size] of Object.entries(dimensions)) {
       const absolute = resolve(root, path);

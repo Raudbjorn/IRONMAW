@@ -15,7 +15,7 @@ it('shares strict hex parsing between theme and native builds', () => {
 // Executable test doubles avoid requiring librsvg/zip in the unit suite.
 describe.skipIf(process.platform === 'win32')('isolated Chrome theme build', () => {
   let dir;
-  const outputs = ['manifest.json', 'images/new-tab.png', 'images/icon-16.png', 'images/icon-48.png', 'images/icon-128.png'];
+  const outputs = ['manifest.json', 'images/new-tab.png', 'images/attribution.png', 'images/icon-16.png', 'images/icon-48.png', 'images/icon-128.png'];
   const run = (...args) => spawnSync(process.execPath, [join(dir, 'scripts/build-chrome-theme.mjs'), ...args], {
     cwd: dir, encoding: 'utf8', timeout: 10_000,
     env: { ...process.env, PATH: `${join(dir, 'bin')}:${process.env.PATH}` }
