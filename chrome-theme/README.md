@@ -22,6 +22,30 @@ shortcuts and its own controls.
 
 </details>
 
+## Native tabs
+
+The tab treatment takes its light-on-dark hierarchy from
+[chrome-tabs](https://github.com/adamschwartz/chrome-tabs), an HTML/CSS/JavaScript
+tab component. A Chrome theme can supply native tab colors and background
+images, but cannot load that component into the browser's tab strip. Chrome
+retains tab geometry, spacing, fonts, close buttons, hover effects and dragging.
+
+![Selected and unselected native Chrome tabs](preview-tabs.png)
+
+| Surface or text | Theme key | Oxide value |
+| --- | --- | --- |
+| Focused window frame | `frame` | `bg` / `#0F1416` |
+| Selected tab and toolbar | `toolbar` | `surface-3` / `#1F2B30` |
+| Selected tab label | `tab_text` | `text-strong` / `#F3F6F7` |
+| Unselected tabs | `background_tab` | `surface-1` / `#141B1E` |
+| Unselected tab labels | `tab_background_text` | `text-muted` / `#9EB1BA` |
+| Unfocused frame and unselected tabs | `frame_inactive`, `background_tab_inactive` | `surface-2` / `#192327` |
+
+The selected tab shares the toolbar background in
+[Chromium's native color mapping](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/chrome/browser/ui/color/tab_strip_color_mixer.cc).
+The selected/unselected label pairs measure 13.37:1 and 7.84:1 respectively.
+Window-focus and incognito handling remain browser-controlled.
+
 ## Install and remove
 
 1. Download or clone this repository. The committed `chrome-theme/` directory
@@ -79,15 +103,18 @@ The background is 1920 x 1080, centered horizontally, bottom-aligned, and never
 tiled. Its upper 740 pixels and outer edges are plain charcoal; the lower
 landscape fades into that background on larger windows. Smaller windows crop
 the scenery, while the separate 128 x 96 bear attribution stays anchored by
-Chrome. The toolbar uses `surface-2` and the omnibox requests `surface-1` to
+Chrome. The toolbar uses `surface-3` and the omnibox requests `surface-1` to
 separate browser surfaces. Chrome determines its own focus rings, shortcut tiles, and
 some incognito colors; a theme cannot apply the full Svelte design system or
 custom fonts to browser UI.
 
 ## Validation
 
-Version 1.1.0 was loaded from the extracted ZIP in Chromium 156.0.8078.79 on
-Linux/Xvfb. The 1440 x 1000 and 1000 x 720 windows were checked with the
+Version 1.2.0 was loaded from the extracted ZIP in Chromium 156.0.8078.79 on
+Linux/Xvfb with four native tabs open. Switching the selected tab moved the
+lighter surface correctly; screenshot samples matched the selected tab,
+unselected tab and frame colors in the table above.
+The 1440 x 1000 and 1000 x 720 windows were checked with the
 bookmarks bar and ten native shortcuts, after dismissing Chrome's installation
 notice: the bear stays clear of both shortcut rows. At 800 x 600, Chrome scrolls
 the shortcut area and its fixed attribution
@@ -98,7 +125,7 @@ were added only to the disposable test profile and are not installed by the them
 
 The 1.0.0 browser pass also checked incognito, which retained Chromium's
 default gray appearance without the themed background. Incognito was not
-retested for 1.1.0.
+retested for 1.2.0.
 
 The theme and existing palette checks cover RGB values, semantic mappings,
 asset paths and PNG dimensions, and text contrast. A pixel check of the 1.1.0

@@ -51,6 +51,10 @@ describe('Chrome theme distribution', () => {
     for (const [foreground, background] of [['tab_text', 'toolbar'], ['bookmark_text', 'toolbar'],
       ['tab_background_text', 'frame'], ['tab_background_text_inactive', 'frame_inactive'],
       ['tab_background_text_incognito', 'frame_incognito'], ['tab_background_text_incognito_inactive', 'frame_incognito_inactive'],
+      // Unselected tabs now have their own surface, distinct from the window frame.
+      ['tab_background_text', 'background_tab'], ['tab_background_text_inactive', 'background_tab_inactive'],
+      ['tab_background_text_incognito', 'background_tab_incognito'],
+      ['tab_background_text_incognito_inactive', 'background_tab_incognito_inactive'],
       // Headers must meet the same 4.5:1 target as other normal-sized text.
       ['ntp_header', 'ntp_background'], ['ntp_text', 'ntp_background'], ['ntp_link', 'ntp_background'], ['omnibox_text', 'omnibox_background']]) {
       expect(contrastRatio(hex(colors[foreground]), hex(colors[background]))).toBeGreaterThanOrEqual(4.5);
