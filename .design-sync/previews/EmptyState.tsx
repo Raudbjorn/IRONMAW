@@ -1,4 +1,5 @@
 // Mirrors src/stories/molecules/EmptyState.stories.svelte
+// Terrain inks inherit --wm-terrain-structure and --wm-terrain-accent from the host.
 import * as React from 'react';
 import { Button, EmptyState } from '@svnbjrn/ironmaw';
 

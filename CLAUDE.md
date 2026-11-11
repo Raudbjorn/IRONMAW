@@ -16,16 +16,16 @@ short uppercase labels only.
 
 Node `^22.18.0 || >=24.0.0`, pinned `pnpm@11.3.0`. `pnpm install` (esbuild build scripts are
 allowed via `pnpm-workspace.yaml`).
-The package engine range is an intentional support policy, aligned with the
-native TypeScript loading used by the token and asset generators.
+Generator entry points enforce this development range before loading TypeScript.
+The published library supports Node `>=22`; consumers do not run the generators.
 
 ```bash
 pnpm run check            # svelte-check (strict) — the type gate
 pnpm test                 # vitest unit (jsdom) + palette contrast gates
 pnpm run build            # tokens + fonts + assets + svelte-package + publint
-pnpm run tokens           # web/native tokens + Chrome manifest, no renderer needed
+pnpm run tokens           # web/native tokens only, no theme lock or renderer needed
 pnpm run fonts            # subset fonts (needs pyftsubset / FontTools)
-pnpm run assets           # inline the bear SVG master
+pnpm run assets           # generate bear and terrain modules from SVG masters
 pnpm dev                  # standalone Library gallery (src/Dev.svelte)
 pnpm run storybook        # Storybook dev, port 6006
 pnpm run design-sync:build  # build + React adapter dist (what /design-sync runs)
@@ -46,17 +46,20 @@ sources: `src/lib/tokens/{primitives,scale,oxide,bone}.tokens.json` +
 one token file + one registry entry. `palette.test.ts` gates every edition
 (text 4.5:1, boundaries 3:1, warning ≠ action).
 
-`pnpm run tokens` refreshes the Chrome manifest without rendering PNGs. Both it
-and `chrome-theme` use `tokens:core` for web/egui generation; the full theme build
-publishes its manifest with its rendered assets. Palette changes used by artwork
-still require `pnpm run chrome-theme` before distributing the theme.
+`pnpm run tokens` updates web and egui outputs only. `pnpm run chrome-theme`
+runs tokens and assets, then stages the theme and Kagi new-tab companion together. There is no
+manifest-only mode. Palette edits affecting the theme require a full theme build
+before the strict manifest/token checks pass or the theme is distributed.
 
-Cascade layers: `wm.base < wm.theme < wm.user`; unlayered consumer CSS wins.
+Token layers: `wm.base < wm.theme < wm.user`; unlayered declarations override
+layered tokens. Component styles are unlayered. Customize terrain using inherited
+`--wm-terrain-structure` and `--wm-terrain-accent`, which fall back to palette tokens.
 
 `src/lib/`:
 - `components/{atoms,layout,molecules,library}` — `data-wm="<name>"` attribute contract; colocated `*.test.ts`. `index.ts` is the public barrel.
 - `review-status.ts` — stored status → display copy + tone (act/care/context). Unknown values render raw.
 - `assets/bear-mark.ts` — generated data URL of the owner's SVG master.
+- `assets/terrain.ts` and `assets/Terrain.svelte` — generated from `assets/brand/terrain.svg`; the theme uses the string, components use compiled SVG for Trusted Types compatibility.
 - `fonts/` — generated woff2 subsets (Inter, Iosevka Nerd PUA, Rajdhani Latin+Ext-A).
 
 **Stories** in `src/stories/*` cover both editions (addon-themes, `data-theme` on `html`). Foundations stories are showcase-only (excluded from the sync via `titleMap`).
@@ -78,3 +81,10 @@ list), `index.d.ts` (Props), and the owned preview. Camelcase aliases in
 Chrome theme exception (owner-approved 2026-11-10): the new-tab page uses quiet
 terrain and the full bear. Package icons also use the full bear, per the
 subsequent review. This does not change the component-library terrain rules.
+
+The owner requested Kagi on the opening page (2026-11-11). `chrome-new-tab/` is
+a separate, locally loaded HTML/CSS companion with a direct Kagi search form.
+It uses the same generated PNGs/tokens, has no scripts or permissions, and leaves
+the address-bar provider unchanged. Both ZIPs stay in `chrome-theme-dist/`.
+The companion is not a Chrome Web Store submission; its search form would need
+adapting to the store search-API policy before publication.
