@@ -70,7 +70,7 @@ From the repository root:
 ```bash
 pnpm install --frozen-lockfile
 pnpm run chrome-theme
-pnpm exec vitest run scripts/chrome-theme*.test.mjs src/lib/tokens/palette.test.ts
+pnpm exec vitest run scripts/chrome-theme src/lib/tokens/palette.test.ts
 pnpm run chrome-theme:pack
 unzip -l chrome-theme-dist/ironmaw-oxide-chrome.zip
 ```
