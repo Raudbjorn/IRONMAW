@@ -93,6 +93,27 @@
 
 ## Fixes log
 
+- **2026-11-11 project moved to Claude — sync blocked.** `get_project` on
+  `ba980cbf-…` returns `moveState: "moved"`; the server refuses uploads and
+  `/design-sync` can't send updates to Claude yet. The design system now lives
+  at https://claude.ai/code/artifact/2124a907-4841-4fa3-81ea-27016d4f6f43.
+  Don't create a new project or drop the pin to work around it.
+
+- **2026-11-11 pre-sync bridge check (no upload run).** Library changed since
+  the 2026-10-29 anchor only in `Panel` and `EmptyState`: both now render the
+  shared generated `terrainSvg` (`src/lib/assets/terrain.ts`) via `{@html}` and
+  set the terrain colours inside `@layer wm.base`. **No public API change** —
+  props, snippet lists, adapter exports (`index.js`/`index.d.ts`) and the 51
+  owned previews still match, so none were edited. Visual change: EmptyState's
+  terrain art is now Panel's (previously its own path set), so its card will
+  differ from the Oct 29 anchor and must be re-graded on the next sync (Panel
+  too). `pnpm run design-sync:build` passes (publint "All good", react-dist
+  built); all 35 `--wm-*` tokens named in `conventions.md` exist in the build.
+  Note: the build re-subsets `Rajdhani-*.woff2` with identical glyphs but
+  different bytes — revert them (`git checkout -- src/lib/fonts`) rather than
+  committing noise. The Chrome theme (`chrome-theme/`) is not part of this
+  bridge.
+
 - **2026-10-29 (later) re-adopted the original project.** After
   `/design-login`, `ba980cbf-…` resolves again and `1dff7fc2-…` 404s — the
   two projects live under **different claude.ai accounts**, and which one a
