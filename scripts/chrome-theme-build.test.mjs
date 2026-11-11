@@ -35,19 +35,28 @@ describe.skipIf(process.platform === 'win32')('isolated Chrome theme build', () 
   });
   const unchanged = () => {
     for (const file of outputs) expect(readFileSync(join(dir, 'chrome-theme', file), 'utf8')).toBe('previous generation');
+    for (const file of [...outputs.slice(1), 'tokens.css']) {
+      expect(readFileSync(join(dir, 'chrome-new-tab', file), 'utf8')).toBe('previous generation');
+    }
   };
   const stub = (name, body) => writeFileSync(join(dir, 'bin', name), `#!${process.execPath}\n${body}`, { mode: 0o755 });
 
   beforeEach(() => {
     dir = mkdtempSync(join(tmpdir(), 'ironmaw-theme-test-'));
     for (const path of ['scripts/build-chrome-theme.mjs', 'scripts/check-build-node.mjs', 'scripts/theme-colors.mjs', 'src/lib/assets/bear-mark.ts',
-      'src/lib/assets/terrain.ts', 'src/lib/tokens/resolved/oxide.tokens.json']) {
+      'src/lib/assets/terrain.ts', 'src/lib/tokens/resolved/oxide.tokens.json',
+      'src/lib/tokens/scale.css', 'src/lib/tokens/colors.css',
+      'chrome-new-tab/manifest.json', 'chrome-new-tab/index.html', 'chrome-new-tab/styles.css']) {
       mkdirSync(dirname(join(dir, path)), { recursive: true });
       copyFileSync(resolve(path), join(dir, path));
     }
     mkdirSync(join(dir, 'chrome-theme/images'), { recursive: true });
+    mkdirSync(join(dir, 'chrome-new-tab/images'), { recursive: true });
     mkdirSync(join(dir, 'bin'));
     for (const file of outputs) writeFileSync(join(dir, 'chrome-theme', file), 'previous generation');
+    for (const file of [...outputs.slice(1), 'tokens.css']) {
+      writeFileSync(join(dir, 'chrome-new-tab', file), 'previous generation');
+    }
     stub('rsvg-convert', `const fs = require('node:fs');
 const output = process.argv[process.argv.indexOf('--output') + 1];
 fs.writeFileSync(output, fs.readFileSync(process.argv.at(-1)));
@@ -233,6 +242,18 @@ syncBuiltinESMExports();`);
     expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
   });
 
+  it('preserves both distributions when companion ZIP creation fails', () => {
+    mkdirSync(join(dir, 'chrome-theme-dist'));
+    const archives = ['ironmaw-oxide-chrome.zip', 'ironmaw-kagi-new-tab.zip'];
+    for (const file of archives) writeFileSync(join(dir, 'chrome-theme-dist', file), 'previous archive');
+    stub('zip', `if (process.cwd().endsWith('/new-tab')) process.exit(1);
+require('node:fs').writeFileSync('theme.zip', 'new archive');`);
+    expect(run('--pack').status).not.toBe(0);
+    unchanged();
+    for (const file of archives) expect(readFileSync(join(dir, 'chrome-theme-dist', file), 'utf8')).toBe('previous archive');
+    expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
+  });
+
   it('rejects missing colors before creating staging or rendering artwork', () => {
     const path = join(dir, 'src/lib/tokens/resolved/oxide.tokens.json');
     const tokens = JSON.parse(readFileSync(path, 'utf8'));
@@ -258,6 +279,8 @@ syncBuiltinESMExports();`);
     const args = JSON.parse(readFileSync(join(dir, 'chrome-theme-dist/ironmaw-oxide-chrome.zip'), 'utf8'));
     expect(args.slice(0, 2)).toEqual(['-X', 'theme.zip']);
     expect(args.slice(2).sort()).toEqual([...outputs].sort());
+    const companionArgs = JSON.parse(readFileSync(join(dir, 'chrome-theme-dist/ironmaw-kagi-new-tab.zip'), 'utf8'));
+    expect(companionArgs.slice(2).sort()).toEqual([...outputs, 'index.html', 'styles.css', 'tokens.css'].sort());
     expect(existsSync(join(dir, 'dist'))).toBe(false);
     expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
     expect(existsSync(join(dir, 'chrome-theme/images/old#icon.PNG'))).toBe(false);

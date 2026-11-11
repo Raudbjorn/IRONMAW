@@ -32,7 +32,9 @@ role per edition, gated by WCAG contrast tests (`src/lib/tokens/palette.test.ts`
 
 For the browser, [IRONMAW Oxide for Google Chrome](https://github.com/Raudbjorn/IRONMAW/blob/main/chrome-theme/README.md)
 is a ready-to-load theme with the same palette, bear artwork, and quiet terrain.
-Run `pnpm run chrome-theme:pack` to build its distribution ZIP.
+Load the [Kagi new-tab companion](https://github.com/Raudbjorn/IRONMAW/blob/main/chrome-new-tab/README.md)
+alongside it for an IRONMAW opening page with Kagi search. Both folders are ready
+to load; `pnpm run chrome-theme:pack` rebuilds and packages both distributions.
 
 ```bash
 pnpm add @svnbjrn/ironmaw   # once published; today: pnpm link from this repo

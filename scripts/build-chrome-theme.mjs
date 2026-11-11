@@ -1,6 +1,6 @@
-// Oxide tokens + approved vectors -> an unpacked Chrome theme (no runtime code).
+// Oxide tokens + approved vectors -> Chrome theme and Kagi page (no runtime code).
 import { execFile } from 'node:child_process';
-import { mkdirSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -115,27 +115,43 @@ try {
   }
   writeFileSync(new URL('manifest.json', stage), JSON.stringify(manifest, null, 2) + '\n');
   const files = [...Object.values(icons), ...Object.values(manifest.theme.images), 'manifest.json'];
+  const newTabOutput = new URL('chrome-new-tab/', root);
+  const newTabStage = new URL('new-tab/', stage);
+  mkdirSync(new URL('images/', newTabStage), { recursive: true });
+  const newTabSources = ['manifest.json', 'index.html', 'styles.css'];
+  const imageFiles = files.filter((file) => file.startsWith('images/'));
+  for (const file of newTabSources) copyFileSync(new URL(file, newTabOutput), new URL(file, newTabStage));
+  for (const file of imageFiles) copyFileSync(new URL(file, stage), new URL(file, newTabStage));
+  writeFileSync(new URL('tokens.css', newTabStage), read('src/lib/tokens/scale.css') + read('src/lib/tokens/colors.css'));
+  const newTabGenerated = [...imageFiles, 'tokens.css'];
   if (pack) {
     // ZIP reads the complete staged generation, never arbitrary files in images/.
     await runTool('zip', ['-X', 'theme.zip', ...files], { cwd: stage });
+    await runTool('zip', ['-X', 'theme.zip', ...newTabSources, ...newTabGenerated], { cwd: newTabStage });
   }
   if (controller.signal.aborted) {
     console.error('Chrome theme build cancelled.');
   } else {
-    const images = new URL('images/', output);
-    mkdirSync(images, { recursive: true });
-    // shortcut: per-file renames are not power-loss atomic as a set; use versioned assets if that is required.
-    for (const file of files) renameSync(new URL(file, stage), new URL(file, output));
-    for (const entry of readdirSync(images, { withFileTypes: true })) {
-      if (entry.isFile() && /\.png$/i.test(entry.name) && !files.includes(`images/${entry.name}`)) {
-        rmSync(join(fileURLToPath(images), entry.name));
+    const publish = (source, destination, generated) => {
+      const images = new URL('images/', destination);
+      mkdirSync(images, { recursive: true });
+      // shortcut: per-file renames are not power-loss atomic as a set; use versioned assets if required.
+      for (const file of generated) renameSync(new URL(file, source), new URL(file, destination));
+      for (const entry of readdirSync(images, { withFileTypes: true })) {
+        if (entry.isFile() && /\.png$/i.test(entry.name) && !generated.includes(`images/${entry.name}`)) {
+          rmSync(join(fileURLToPath(images), entry.name));
+        }
       }
-    }
+    };
+    publish(stage, output, files);
+    // Authored new-tab HTML/CSS/manifest are staged for packaging, never overwritten by a build.
+    publish(newTabStage, newTabOutput, newTabGenerated);
     if (pack) {
       mkdirSync(new URL('chrome-theme-dist/', root), { recursive: true });
       renameSync(new URL('theme.zip', stage), new URL('chrome-theme-dist/ironmaw-oxide-chrome.zip', root));
+      renameSync(new URL('theme.zip', newTabStage), new URL('chrome-theme-dist/ironmaw-kagi-new-tab.zip', root));
     }
-    console.log('Chrome theme built: chrome-theme/');
+    console.log('Chrome theme built: chrome-theme/; Kagi new-tab companion: chrome-new-tab/');
   }
 } catch (error) {
   if (!controller.signal.aborted || error.name !== 'AbortError') throw error;

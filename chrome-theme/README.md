@@ -6,7 +6,18 @@ corner through Chrome's native theme attribution. The browser keeps
 its normal search and shortcuts. This is a Manifest V3 theme: no scripts,
 permissions, tracking, or network resources.
 
+For a Kagi opening page, also load the included
+[IRONMAW New Tab for Kagi](../chrome-new-tab/README.md) companion. It keeps this
+landscape and replaces the native Google search box with a Kagi form.
+
+![IRONMAW landscape with Kagi search](../chrome-new-tab/preview.png)
+
+<details>
+<summary>Theme alone with Chrome's native search and shortcuts</summary>
+
 ![IRONMAW Oxide in Chromium, with the bookmarks bar visible](preview.png)
+
+</details>
 
 The visual direction takes inspiration from
 [the-glorious-startpage](https://github.com/manilarome/the-glorious-startpage):
@@ -58,7 +69,10 @@ Window-focus and incognito handling remain browser-controlled.
 2. Open `chrome://extensions` in Google Chrome and enable **Developer mode**.
 3. Choose **Load unpacked** and select this `chrome-theme` directory (the one
    containing `manifest.json`). Open a new tab to see the artwork.
-4. To remove it, open Chrome **Settings > Appearance > Theme > Reset to default**.
+4. For the Kagi page, **Load unpacked** again and select `chrome-new-tab/`.
+   To show it on startup too, choose **Open the New Tab page** at
+   `chrome://settings/onStartup`. See the [companion instructions](../chrome-new-tab/README.md).
+5. To remove the theme, open Chrome **Settings > Appearance > Theme > Reset to default**.
 
 Installing replaces the selected browser theme. If you already have a custom
 new-tab background, reset that background in **Customize Chrome** to see this
@@ -82,14 +96,16 @@ From the repository root:
 ```bash
 pnpm install --frozen-lockfile
 pnpm run chrome-theme
-pnpm exec vitest run scripts/chrome-theme src/lib/tokens/palette.test.ts
+pnpm exec vitest run scripts/chrome-theme scripts/chrome-new-tab src/lib/tokens/palette.test.ts
 pnpm run chrome-theme:pack
 unzip -l chrome-theme-dist/ironmaw-oxide-chrome.zip
 ```
 
 The ZIP has `manifest.json` at its root and only referenced PNG images. Extract
 it before using **Load unpacked**. The ZIP is also suitable as the theme upload
-payload; Chrome Web Store publication is a separate step.
+payload; Chrome Web Store publication is a separate step. The same command also
+writes `chrome-theme-dist/ironmaw-kagi-new-tab.zip`, a separate companion for local
+unpacked installation; see its README for the different publication limits.
 
 Edit `scripts/theme-colors.mjs` for mappings, `scripts/build-chrome-theme.mjs`
 for composition, and the DTCG source tokens for palette changes. The build runs
@@ -111,14 +127,17 @@ independently of the npm library: bump `THEME_VERSION` in the generator before
 releasing changed colors or artwork. Rebuilding alone does not bump the version.
 
 All colors and terrain markers are validated before rendering. Assets and the
-manifest are staged under `chrome-theme/.build-lock/` before publication; a
+manifest, plus the companion page and assets, are staged under
+`chrome-theme/.build-lock/` before publication; a
 concurrent theme build fails instead of interleaving writes. Packaging reads
-only the staged manifest references, so stale or extra PNGs never enter the ZIP.
+only the staged theme references and explicit companion files, so stale or extra
+PNGs never enter either ZIP.
 After successful rendering and optional packaging, publication creates the
 images directory if necessary and removes unreferenced PNG files. Other files
 are left alone; failed renders and cancelled builds leave existing PNGs intact.
-Each published file is replaced by rename, with the manifest last. This is not
-a power-loss-atomic transaction across the entire file set. SIGINT (Ctrl+C), SIGHUP and
+Each generated file is replaced by rename, with the theme manifest last within
+its distribution. The companion's authored manifest/HTML/CSS are never overwritten.
+This is not a power-loss-atomic transaction across the entire file set. SIGINT (Ctrl+C), SIGHUP and
 SIGTERM stop the active rendering/ZIP tool before removing the lock; renderer and
 ZIP failures also clean it automatically. An uncatchable kill or power loss can
 still leave `.build-lock/`: confirm no theme build is running before removing

@@ -47,7 +47,7 @@ one token file + one registry entry. `palette.test.ts` gates every edition
 (text 4.5:1, boundaries 3:1, warning ≠ action).
 
 `pnpm run tokens` updates web and egui outputs only. `pnpm run chrome-theme`
-runs tokens and assets, then stages the manifest and PNGs together. There is no
+runs tokens and assets, then stages the theme and Kagi new-tab companion together. There is no
 manifest-only mode. Palette edits affecting the theme require a full theme build
 before the strict manifest/token checks pass or the theme is distributed.
 
@@ -81,3 +81,10 @@ list), `index.d.ts` (Props), and the owned preview. Camelcase aliases in
 Chrome theme exception (owner-approved 2026-11-10): the new-tab page uses quiet
 terrain and the full bear. Package icons also use the full bear, per the
 subsequent review. This does not change the component-library terrain rules.
+
+The owner requested Kagi on the opening page (2026-11-11). `chrome-new-tab/` is
+a separate, locally loaded HTML/CSS companion with a direct Kagi search form.
+It uses the same generated PNGs/tokens, has no scripts or permissions, and leaves
+the address-bar provider unchanged. Both ZIPs stay in `chrome-theme-dist/`.
+The companion is not a Chrome Web Store submission; its search form would need
+adapting to the store search-API policy before publication.

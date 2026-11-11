@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "IRONMAW New Tab for Kagi",
+  "version": "1.0.0",
+  "description": "IRONMAW landscape with Kagi search. Local new-tab companion; leaves the address-bar search provider unchanged.",
+  "icons": {
+    "16": "images/icon-16.png",
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action https://kagi.com https://*.kagi.com"
+  }
+}
