@@ -1,8 +1,8 @@
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { hexToRgb } from './theme-colors.mjs';
 
 it('shares strict hex parsing between theme and native builds', () => {
@@ -37,11 +37,47 @@ describe.skipIf(process.platform === 'win32')('isolated Chrome theme build', () 
     for (const file of outputs) writeFileSync(join(dir, 'chrome-theme', file), 'previous generation');
     stub('rsvg-convert', `const fs = require('node:fs');
 const output = process.argv[process.argv.indexOf('--output') + 1];
-fs.writeFileSync(output, fs.readFileSync(0));
+fs.writeFileSync(output, fs.readFileSync(process.argv.at(-1)));
 if (fs.existsSync('fail-render') && output.endsWith('icon-48.png')) process.exit(1);`);
     stub('zip', `require('node:fs').writeFileSync('theme.zip', JSON.stringify(process.argv.slice(2)));`);
   });
   afterEach(() => rmSync(dir, { recursive: true, force: true }));
+
+  it.each([
+    ['rsvg-convert', 'SIGINT', 130], ['rsvg-convert', 'SIGTERM', 143],
+    ['zip', 'SIGINT', 130], ['zip', 'SIGTERM', 143]
+  ])('cancels %s on %s before releasing the lock', async (tool, signal, exitCode) => {
+    mkdirSync(join(dir, 'chrome-theme-dist'));
+    const archive = join(dir, 'chrome-theme-dist/ironmaw-oxide-chrome.zip');
+    writeFileSync(archive, 'previous archive');
+    stub(tool, `require('node:fs').writeFileSync('tool.pid', String(process.pid)); setInterval(() => {}, 1000);`);
+    const build = spawn(process.execPath, [join(dir, 'scripts/build-chrome-theme.mjs'), '--pack'], {
+      cwd: dir, stdio: 'ignore', timeout: 10_000, killSignal: 'SIGKILL',
+      env: { ...process.env, PATH: `${join(dir, 'bin')}:${process.env.PATH}` }
+    });
+    const finished = new Promise((resolve) => build.once('exit', (code, signal) => resolve({ code, signal })));
+    const pidFile = join(dir, tool === 'zip' ? 'chrome-theme/.build-lock/tool.pid' : 'tool.pid');
+    let toolPid;
+    try {
+      await vi.waitFor(() => expect(existsSync(pidFile)).toBe(true), { timeout: 5000 });
+      toolPid = Number(readFileSync(pidFile, 'utf8'));
+      build.kill(signal);
+      expect(await finished).toEqual({ code: exitCode, signal: null });
+      expect(() => process.kill(toolPid, 0)).toThrow();
+      unchanged();
+      expect(readFileSync(archive, 'utf8')).toBe('previous archive');
+      expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
+      stub(tool, `require('node:fs').writeFileSync(process.argv[process.argv.indexOf('--output') + 1] || 'theme.zip', 'rendered');`);
+      expect(run().status).toBe(0);
+    } finally {
+      build.kill('SIGKILL');
+      if (toolPid) {
+        try { process.kill(toolPid, 'SIGKILL'); }
+        catch (error) { if (error.code !== 'ESRCH') throw error; }
+      }
+      await finished;
+    }
+  });
 
   it('preserves all published files when a later render fails and releases the lock', () => {
     writeFileSync(join(dir, 'fail-render'), '');
@@ -78,10 +114,10 @@ if (fs.existsSync('fail-render') && output.endsWith('icon-48.png')) process.exit
     expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
   });
 
-  it('fails visibly when the shared terrain loses a required color marker', () => {
+  it('fails visibly when the shared terrain loses its styling hook', () => {
     const path = join(dir, 'src/lib/assets/terrain.ts');
-    writeFileSync(path, readFileSync(path, 'utf8').replace('var(--wm-accent)', 'currentColor'));
-    expect(run().stderr).toContain('Terrain color marker missing');
+    writeFileSync(path, readFileSync(path, 'utf8').replace('class=\\"contours\\"', 'class=\\"renamed\\"'));
+    expect(run().stderr).toContain('Terrain styling marker missing');
     unchanged();
   });
 
