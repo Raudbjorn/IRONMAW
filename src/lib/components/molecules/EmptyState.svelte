@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import { terrainSvg } from '../../assets/terrain.ts';
   import type { IconName } from '../../icons';
   import Heading from '../atoms/Heading.svelte';
   import Icon from '../atoms/Icon.svelte';
@@ -22,15 +23,7 @@
 <section data-wm="empty-state" data-terrain={terrain || undefined}>
   {#if terrain}
     <div class="terrain-crop" aria-hidden="true">
-      <svg viewBox="0 0 800 160" preserveAspectRatio="xMidYMid slice" focusable="false">
-        <g class="contours" fill="none" stroke="currentColor" stroke-width="1">
-          <path d="M-20 40c68 4 75 52 146 49 68-4 75-39 141-24 47 11 57 43 116 38 32-2 49-13 70-20" />
-          <path d="M-35 63c69 6 82 57 154 53 72-4 86-38 147-20 43 13 53 45 112 43 35-2 52-13 75-19" />
-          <path d="M310 30c73 6 90 59 164 57 77-3 90-38 151-18 45 15 55 45 113 45 34 0 54-11 78-17" />
-          <path d="M310 55c76 8 95 61 172 60 82-2 99-37 161-15 45 17 56 43 115 46 38 2 56-8 77-14" />
-        </g>
-        <path class="ridge" d="M120 149l34-30 18 15 31-37 23 21 37-45 42 43 21-18 49 49" fill="none" stroke="currentColor" stroke-width="2" />
-      </svg>
+      {@html terrainSvg}
     </div>
   {/if}
   <div class="content">
@@ -55,13 +48,15 @@
     inset: 0;
     z-index: -1;
     overflow: hidden;
-    color: var(--wm-structure);
     opacity: 0.3;
     pointer-events: none;
     mask-image: linear-gradient(to right, black 0%, transparent 28%, transparent 72%, black 100%);
   }
-  .terrain-crop svg { display: block; width: 100%; height: 100%; }
-  .terrain-crop .contours { color: var(--wm-accent); opacity: 0.6; }
+  .terrain-crop :global(svg) { display: block; width: 100%; height: 100%; }
+  @layer wm.base {
+    .terrain-crop { color: var(--wm-structure); }
+    .terrain-crop :global(.contours) { color: var(--wm-accent); }
+  }
   .content {
     display: flex;
     flex-direction: column;

@@ -80,15 +80,75 @@ if (fs.existsSync('fail-render') && output.endsWith('icon-48.png')) process.exit
   });
 
   it('preserves all published files when a later render fails and releases the lock', () => {
+    writeFileSync(join(dir, 'chrome-theme/images/old-icon.png'), 'unreferenced');
     writeFileSync(join(dir, 'fail-render'), '');
     expect(run().status).not.toBe(0);
+    unchanged();
+    expect(readFileSync(join(dir, 'chrome-theme/images/old-icon.png'), 'utf8')).toBe('unreferenced');
+    expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
+  });
+
+  it('cancels publication after the ZIP process exits but before its output pipe closes', async () => {
+    stub('zip', `const fs = require('node:fs');
+fs.writeFileSync('theme.zip', 'new archive');
+fs.writeFileSync('tool.pid', String(process.pid));
+require('node:child_process').spawn(process.execPath, ['-e', 'setTimeout(() => {}, 1200)'], { stdio: ['ignore', 1, 2] }).unref();`);
+    const build = spawn(process.execPath, [join(dir, 'scripts/build-chrome-theme.mjs'), '--pack'], {
+      cwd: dir, timeout: 10_000, killSignal: 'SIGKILL',
+      env: { ...process.env, PATH: `${join(dir, 'bin')}:${process.env.PATH}` }
+    });
+    let stdout = '';
+    build.stdout.on('data', (chunk) => { stdout += chunk; });
+    build.stderr.resume();
+    const finished = new Promise((resolve) => build.once('exit', (code) => resolve(code)));
+    try {
+      await vi.waitFor(() => {
+        const pid = Number(readFileSync(join(dir, 'chrome-theme/.build-lock/tool.pid'), 'utf8'));
+        expect(() => process.kill(pid, 0)).toThrow();
+      }, { timeout: 5000 });
+      build.kill('SIGINT');
+      expect(await finished).toBe(130);
+      expect(stdout).not.toContain('Chrome theme built');
+      unchanged();
+      expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
+    } finally {
+      build.kill('SIGKILL');
+      await finished;
+    }
+  });
+
+  it('recreates a missing published images directory', () => {
+    rmSync(join(dir, 'chrome-theme/images'), { recursive: true });
+    const result = run();
+    expect(result.status, result.stderr).toBe(0);
+    for (const file of outputs) expect(existsSync(join(dir, 'chrome-theme', file))).toBe(true);
+  });
+
+  it('refreshes only manifest colors without external tools', () => {
+    const path = join(dir, 'src/lib/tokens/resolved/oxide.tokens.json');
+    const tokens = JSON.parse(readFileSync(path, 'utf8'));
+    tokens.color.bg = '#010203';
+    writeFileSync(path, JSON.stringify(tokens));
+    const result = spawnSync(process.execPath, [join(dir, 'scripts/build-chrome-theme.mjs'), '--manifest-only'], {
+      cwd: dir, encoding: 'utf8', timeout: 10_000, env: { ...process.env, PATH: '' }
+    });
+    expect(result.status, result.stderr).toBe(0);
+    const manifest = JSON.parse(readFileSync(join(dir, 'chrome-theme/manifest.json'), 'utf8'));
+    expect(manifest.theme.colors.frame).toEqual([1, 2, 3]);
+    for (const file of outputs.slice(1)) expect(readFileSync(join(dir, 'chrome-theme', file), 'utf8')).toBe('previous generation');
+    expect(existsSync(join(dir, 'chrome-theme-dist'))).toBe(false);
+    expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
+  });
+
+  it('rejects manifest-only packaging without modifying published files', () => {
+    expect(run('--manifest-only', '--pack').stderr).toContain('--manifest-only cannot be combined with --pack');
     unchanged();
     expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
   });
 
-  it('refuses a concurrent build without touching its staging directory', () => {
+  it.each([[], ['--manifest-only']])('refuses a concurrent build with %j without touching its staging directory', (...args) => {
     mkdirSync(join(dir, 'chrome-theme/.build-lock'));
-    expect(run().stderr).toContain('EEXIST');
+    expect(run(...args).stderr).toContain('EEXIST');
     unchanged();
     expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(true);
   });
@@ -122,7 +182,8 @@ if (fs.existsSync('fail-render') && output.endsWith('icon-48.png')) process.exit
   });
 
   it('packages only the staged manifest references outside the npm dist directory', () => {
-    writeFileSync(join(dir, 'chrome-theme/images/old-icon.png'), 'unreferenced');
+    writeFileSync(join(dir, 'chrome-theme/images/old#icon.PNG'), 'unreferenced');
+    writeFileSync(join(dir, 'chrome-theme/images/notes.txt'), 'keep');
     const result = run('--pack');
     expect(result.status, result.stderr).toBe(0);
     const args = JSON.parse(readFileSync(join(dir, 'chrome-theme-dist/ironmaw-oxide-chrome.zip'), 'utf8'));
@@ -130,6 +191,8 @@ if (fs.existsSync('fail-render') && output.endsWith('icon-48.png')) process.exit
     expect(args.slice(2).sort()).toEqual([...outputs].sort());
     expect(existsSync(join(dir, 'dist'))).toBe(false);
     expect(existsSync(join(dir, 'chrome-theme/.build-lock'))).toBe(false);
+    expect(existsSync(join(dir, 'chrome-theme/images/old#icon.PNG'))).toBe(false);
+    expect(readFileSync(join(dir, 'chrome-theme/images/notes.txt'), 'utf8')).toBe('keep');
     const icon = readFileSync(join(dir, 'chrome-theme/images/icon-48.png'), 'utf8');
     expect(icon).toContain('height="96"');
     expect(icon).toContain('data:image/svg+xml;base64,');

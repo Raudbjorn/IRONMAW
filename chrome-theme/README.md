@@ -70,6 +70,14 @@ Use Node `^22.18.0 || >=24.0.0` and the pinned pnpm version. Asset generation
 also requires `rsvg-convert` (Arch: `librsvg`); ZIP packaging requires `zip`. No new npm
 dependencies are needed.
 
+For token work, `pnpm run tokens` refreshes web/native tokens and the Chrome
+manifest without either external tool. Its manifest step is also available as
+`node scripts/build-chrome-theme.mjs --manifest-only`. Both token and theme
+commands share `tokens:core`, including egui; the full theme build publishes its
+manifest only after rendering succeeds. If palette colors used in the artwork
+change, regenerate the PNGs with `pnpm run chrome-theme` before installing or
+distributing the theme. Manifest checks alone do not detect stale raster colors.
+
 From the repository root:
 
 ```bash
@@ -88,10 +96,12 @@ Edit `scripts/theme-colors.mjs` for mappings, `scripts/build-chrome-theme.mjs`
 for composition, and the DTCG source tokens for palette changes. The build runs
 the complete token pipeline, including egui, and refreshes the generated brand
 modules. It reuses the cleaned full bear for attribution and package icons.
-`assets/brand/terrain.svg` is the shared source for Panel and the theme; paths
-and bear colors are preserved. Panel applies terrain colors through its scoped
-`wm.base` CSS layer; the shared SVG has no inline color styles, so it works with
-strict style CSPs and allows unlayered consumer CSS overrides.
+`assets/brand/terrain.svg` is the shared source for Panel, EmptyState and the
+theme. EmptyState now uses the same paths, including pines, with its existing
+edge mask and opacity. Both components apply terrain colors through scoped
+`wm.base` CSS rules; the SVG has no inline color styles, so `wm.user` and
+unlayered consumer overrides work under strict style CSPs. Bear colors are
+preserved; attribution height and icon centering derive from its intrinsic ratio.
 Commit regenerated outputs alongside source changes. Theme releases are versioned
 independently of the npm library: bump `THEME_VERSION` in the generator before
 releasing changed colors or artwork. Rebuilding alone does not bump the version.
@@ -100,12 +110,18 @@ All colors and terrain markers are validated before rendering. Assets and the
 manifest are staged under `chrome-theme/.build-lock/` before publication; a
 concurrent theme build fails instead of interleaving writes. Packaging reads
 only the staged manifest references, so stale or extra PNGs never enter the ZIP.
+After successful rendering and optional packaging, publication creates the
+images directory if necessary and removes unreferenced PNG files. Other files
+are left alone; failed renders and cancelled builds leave existing PNGs intact.
+Manifest-only updates use the same lock and leave all images untouched.
 Each published file is replaced by rename, with the manifest last. This is not
 a power-loss-atomic transaction across the entire file set. SIGINT (Ctrl+C) and
 SIGTERM stop the active rendering/ZIP tool before removing the lock; renderer and
 ZIP failures also clean it automatically. An uncatchable kill or power loss can
 still leave `.build-lock/`: confirm no theme build is running before removing
 that directory and rebuilding.
+Cancellation is checked again before publication, including when a tool has
+already exited but its output pipe has not yet closed.
 The commands avoid shell globs and Unix directory commands; Windows still needs
 `rsvg-convert` and Info-ZIP `zip` on PATH and has not been exercised here.
 
@@ -156,6 +172,15 @@ The 1.2.1 pass also checked Panel's compiled CSS in Chromium with
 `style-src 'self'`: default ridge/contour colors and unlayered consumer overrides
 worked without CSP violations. The old SVG produced four inline-style violations
 across the same two panels. The library build and Svelte check passed.
+
+The third review pass ran 69 focused tests across theme generation, distribution,
+Panel, EmptyState and palette checks. The 16 build tests also passed on Node
+22.18.0. New coverage includes interruption after ZIP exit, missing image
+directories, stale-PNG cleanup and manifest generation with an empty PATH.
+Chromium checks confirmed that Panel and EmptyState both honor `wm.user` and
+unlayered overrides under `style-src 'self'`; the previous EmptyState ignored
+those overrides. Real rendering/packaging and the library build passed again,
+with browser colors and PNG bytes unchanged from 1.2.1.
 
 A pixel check of the 1.1.0
 background also found minimum contrast of 10.89:1 for text, 5.67:1 for headers

@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/svelte';
 import { createRawSnippet } from 'svelte';
 import { describe, expect, it } from 'vitest';
 import EmptyState from './EmptyState.svelte';
+import { terrainSvg } from '../../assets/terrain.ts';
 
 const children = createRawSnippet(() => ({ render: () => '<p>Adapt a main CV to this job.</p>' }));
 const actions = createRawSnippet(() => ({ render: () => '<button>Adapt main CV</button>' }));
@@ -22,5 +23,10 @@ describe('EmptyState', () => {
     expect(container.querySelector('.icon')).toBeInTheDocument();
     expect(container.querySelector('.terrain-crop')).toHaveAttribute('aria-hidden', 'true');
     expect(container.querySelector('[data-wm="empty-state"]')).toHaveAttribute('data-terrain');
+    // Brand edits must reach both terrain consumers without inline color overrides.
+    const master = document.createElement('div');
+    master.innerHTML = terrainSvg;
+    expect(container.querySelector('.terrain-crop')?.innerHTML.trim()).toBe(master.innerHTML);
+    expect(container.querySelector('.terrain-crop [style]')).toBeNull();
   });
 });

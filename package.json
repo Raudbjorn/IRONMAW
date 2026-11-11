@@ -29,10 +29,11 @@
   "scripts": {
     "dev": "vite dev",
     "build": "pnpm run tokens && pnpm run fonts && pnpm run assets && svelte-package && publint",
-    "tokens": "node scripts/build-tokens.mjs && node scripts/build-egui.mjs",
+    "tokens": "pnpm run tokens:core && node scripts/build-chrome-theme.mjs --manifest-only",
+    "tokens:core": "node scripts/build-tokens.mjs && node scripts/build-egui.mjs",
     "fonts": "node scripts/build-fonts.mjs",
     "assets": "node scripts/build-assets.mjs",
-    "chrome-theme": "pnpm run tokens && pnpm run assets && node scripts/build-chrome-theme.mjs",
+    "chrome-theme": "pnpm run tokens:core && pnpm run assets && node scripts/build-chrome-theme.mjs",
     "chrome-theme:pack": "pnpm run chrome-theme --pack",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run",

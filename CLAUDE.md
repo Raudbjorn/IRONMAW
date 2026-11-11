@@ -16,12 +16,14 @@ short uppercase labels only.
 
 Node `^22.18.0 || >=24.0.0`, pinned `pnpm@11.3.0`. `pnpm install` (esbuild build scripts are
 allowed via `pnpm-workspace.yaml`).
+The package engine range is an intentional support policy, aligned with the
+native TypeScript loading used by the token and asset generators.
 
 ```bash
 pnpm run check            # svelte-check (strict) — the type gate
 pnpm test                 # vitest unit (jsdom) + palette contrast gates
 pnpm run build            # tokens + fonts + assets + svelte-package + publint
-pnpm run tokens           # regenerate token outputs from DTCG source
+pnpm run tokens           # web/native tokens + Chrome manifest, no renderer needed
 pnpm run fonts            # subset fonts (needs pyftsubset / FontTools)
 pnpm run assets           # inline the bear SVG master
 pnpm dev                  # standalone Library gallery (src/Dev.svelte)
@@ -43,6 +45,11 @@ sources: `src/lib/tokens/{primitives,scale,oxide,bone}.tokens.json` +
 `palette.ts`, `resolved/*.json`. Never hand-edit outputs. Adding an edition =
 one token file + one registry entry. `palette.test.ts` gates every edition
 (text 4.5:1, boundaries 3:1, warning ≠ action).
+
+`pnpm run tokens` refreshes the Chrome manifest without rendering PNGs. Both it
+and `chrome-theme` use `tokens:core` for web/egui generation; the full theme build
+publishes its manifest with its rendered assets. Palette changes used by artwork
+still require `pnpm run chrome-theme` before distributing the theme.
 
 Cascade layers: `wm.base < wm.theme < wm.user`; unlayered consumer CSS wins.
 
