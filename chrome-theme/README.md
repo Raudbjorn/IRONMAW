@@ -32,6 +32,10 @@ retains tab geometry, spacing, fonts, close buttons, hover effects and dragging.
 
 ![Selected and unselected native Chrome tabs](preview-tabs.png)
 
+The unselected tabs remain distinct when another window has focus:
+
+![Unfocused native Chrome tabs](preview-tabs-unfocused.png)
+
 | Surface or text | Theme key | Oxide value |
 | --- | --- | --- |
 | Focused window frame | `frame` | `bg` / `#0F1416` |
@@ -39,7 +43,8 @@ retains tab geometry, spacing, fonts, close buttons, hover effects and dragging.
 | Selected tab label | `tab_text` | `text-strong` / `#F3F6F7` |
 | Unselected tabs | `background_tab` | `surface-1` / `#141B1E` |
 | Unselected tab labels | `tab_background_text` | `text-muted` / `#9EB1BA` |
-| Unfocused frame and unselected tabs | `frame_inactive`, `background_tab_inactive` | `surface-2` / `#192327` |
+| Unfocused frame | `frame_inactive` | `surface-2` / `#192327` |
+| Unfocused unselected tabs | `background_tab_inactive` | `surface-1` / `#141B1E` |
 
 The selected tab shares the toolbar background in
 [Chromium's native color mapping](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/chrome/browser/ui/color/tab_strip_color_mixer.cc).
@@ -84,18 +89,23 @@ for composition, and the DTCG source tokens for palette changes. The build runs
 the complete token pipeline, including egui, and refreshes the generated brand
 modules. It reuses the cleaned full bear for attribution and package icons.
 `assets/brand/terrain.svg` is the shared source for Panel and the theme; paths
-and bear colors are preserved. Commit regenerated outputs alongside source
-changes. Bump the manifest version in the generator
-for a released update.
+and bear colors are preserved. Panel applies terrain colors through its scoped
+`wm.base` CSS layer; the shared SVG has no inline color styles, so it works with
+strict style CSPs and allows unlayered consumer CSS overrides.
+Commit regenerated outputs alongside source changes. Theme releases are versioned
+independently of the npm library: bump `THEME_VERSION` in the generator before
+releasing changed colors or artwork. Rebuilding alone does not bump the version.
 
 All colors and terrain markers are validated before rendering. Assets and the
 manifest are staged under `chrome-theme/.build-lock/` before publication; a
 concurrent theme build fails instead of interleaving writes. Packaging reads
 only the staged manifest references, so stale or extra PNGs never enter the ZIP.
 Each published file is replaced by rename, with the manifest last. This is not
-a power-loss-atomic transaction across the entire file set. If a build is killed
-and leaves `.build-lock/`, confirm no theme build is running before removing
-that directory and rebuilding. Renderer and ZIP failures clean it automatically.
+a power-loss-atomic transaction across the entire file set. SIGINT (Ctrl+C) and
+SIGTERM stop the active rendering/ZIP tool before removing the lock; renderer and
+ZIP failures also clean it automatically. An uncatchable kill or power loss can
+still leave `.build-lock/`: confirm no theme build is running before removing
+that directory and rebuilding.
 The commands avoid shell globs and Unix directory commands; Windows still needs
 `rsvg-convert` and Info-ZIP `zip` on PATH and has not been exercised here.
 
@@ -110,7 +120,13 @@ custom fonts to browser UI.
 
 ## Validation
 
-Version 1.2.0 was loaded from the extracted ZIP in Chromium 156.0.8078.79 on
+Version 1.2.1 was loaded from the extracted ZIP in Chromium 156.0.8078.79 on
+Linux/Xvfb with the twm window manager. Moving focus to a second window changed
+the first frame to `#192327`, while its unselected tabs stayed `#141B1E` and the
+selected tab stayed `#1F2B30`. The unfocused preview is from this check; the other
+previews show 1.2.0, whose focused colors and artwork are unchanged.
+
+Version 1.2.0 was loaded in the same Chromium version on
 Linux/Xvfb with four native tabs open. Switching the selected tab moved the
 lighter surface correctly; screenshot samples matched the selected tab,
 unselected tab and frame colors in the table above.
@@ -125,16 +141,28 @@ were added only to the disposable test profile and are not installed by the them
 
 The 1.0.0 browser pass also checked incognito, which retained Chromium's
 default gray appearance without the themed background. Incognito was not
-retested for 1.2.0.
+retested for 1.2.1.
 
 The theme and existing palette checks cover RGB values, semantic mappings,
-asset paths and PNG dimensions, and text contrast. A pixel check of the 1.1.0
+asset paths and PNG dimensions, text contrast, and distinct frame/tab colors in
+all four mapped window states. The isolated build tests use stub `rsvg-convert`
+and `zip` executables to exercise failures, concurrent-build rejection and
+SIGINT/SIGTERM cleanup; those fixtures are skipped on Windows. Real librsvg
+rendering and Info-ZIP packaging were also run separately on Linux, including
+Node 22.18.0. All six ZIP entries passed CRC checks and matched the generated
+files byte for byte; an npm dry run excluded theme and ZIP artifacts.
+
+The 1.2.1 pass also checked Panel's compiled CSS in Chromium with
+`style-src 'self'`: default ridge/contour colors and unlayered consumer overrides
+worked without CSP violations. The old SVG produced four inline-style violations
+across the same two panels. The library build and Svelte check passed.
+
+A pixel check of the 1.1.0
 background also found minimum contrast of 10.89:1 for text, 5.67:1 for headers
 and 4.62:1 for teal links across the complete landscape. This pixel check was
 run separately with Pillow; it is not part of the Vitest suite. The ZIP inventory
 is checked separately. Google Chrome itself, Windows/macOS, HiDPI, and Chrome Web Store
-installation have not been tested. Xvfb did not establish native window-manager
-inactive-frame behavior. No personal browser profile was modified.
+installation have not been tested. No personal browser profile was modified.
 
 Never commit `.pem` signing keys or `.crx` files. This build uses an unsigned ZIP
 and does not generate keys. Build archives stay in ignored

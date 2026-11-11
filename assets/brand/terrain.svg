@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" style="color: var(--wm-structure)" viewBox="0 0 800 160" preserveAspectRatio="xMidYMid slice" focusable="false">
-  <g class="contours" style="color: var(--wm-accent)" opacity="0.6" fill="none" stroke="currentColor" stroke-width="1">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 160" preserveAspectRatio="xMidYMid slice" focusable="false">
+  <g class="contours" opacity="0.6" fill="none" stroke="currentColor" stroke-width="1">
     <path d="M355 -18c68 4 75 52 146 49 68-4 75-39 141-24 47 11 57 43 116 38 32-2 49-13 70-20" />
     <path d="M340 5c69 6 82 57 154 53 72-4 86-38 147-20 43 13 53 45 112 43 35-2 52-13 75-19" />
     <path d="M326 30c73 6 90 59 164 57 77-3 90-38 151-18 45 15 55 45 113 45 34 0 54-11 78-17" />

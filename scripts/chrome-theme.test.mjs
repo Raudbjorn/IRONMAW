@@ -10,6 +10,12 @@ const { color } = JSON.parse(readFileSync('src/lib/tokens/resolved/oxide.tokens.
 const hex = (rgb) => '#' + rgb.map((channel) => channel.toString(16).padStart(2, '0')).join('');
 
 describe('Chrome theme distribution', () => {
+  it('distinguishes unselected tabs from the frame in every window state', () => {
+    for (const suffix of ['', '_inactive', '_incognito', '_incognito_inactive']) {
+      expect(manifest.theme.colors[`background_tab${suffix}`]).not.toEqual(manifest.theme.colors[`frame${suffix}`]);
+    }
+  });
+
   it('is a theme-only MV3 manifest with bounded RGB values', () => {
     expect(Object.keys(manifest).sort()).toEqual(['description', 'icons', 'manifest_version', 'name', 'theme', 'version']);
     expect(manifest.manifest_version).toBe(3);

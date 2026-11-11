@@ -45,7 +45,11 @@
     font-family: var(--wm-font-sans);
   }
   [data-terrain] { position: relative; isolation: isolate; }
-  [data-terrain] > .terrain-crop { position: absolute; inset: 0; overflow: hidden; color: var(--wm-structure); opacity: 0.4; pointer-events: none; mask-image: linear-gradient(to right, transparent 20%, black 75%); }
+  [data-terrain] > .terrain-crop { position: absolute; inset: 0; overflow: hidden; opacity: 0.4; pointer-events: none; mask-image: linear-gradient(to right, transparent 20%, black 75%); }
+  @layer wm.base {
+    .terrain-crop { color: var(--wm-structure); }
+    .terrain-crop :global(.contours) { color: var(--wm-accent); }
+  }
   .terrain-crop :global(svg) { display: block; width: 100%; height: 100%; }
   [data-terrain] > .header,
   [data-terrain] > .body,

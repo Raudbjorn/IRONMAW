@@ -1,11 +1,18 @@
 // Oxide tokens + approved vectors -> an unpacked Chrome theme (no runtime code).
-import { execFileSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
 import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 import { chromeRoles, hexToRgb } from './theme-colors.mjs';
 import { bearMark } from '../src/lib/assets/bear-mark.ts';
 import { terrainSvg as terrainMaster } from '../src/lib/assets/terrain.ts';
 
+const THEME_VERSION = '1.2.1';
+const BACKGROUND_WIDTH_PX = 1920;
+const BACKGROUND_HEIGHT_PX = 1080;
+const TOOL_TIMEOUT_MS = 30_000;
+const TOOL_MAX_BUFFER_BYTES = 1024 * 1024;
+const execFileAsync = promisify(execFile);
 const root = new URL('../', import.meta.url);
 const read = (path) => readFileSync(new URL(path, root), 'utf8');
 const { color } = JSON.parse(read('src/lib/tokens/resolved/oxide.tokens.json'));
@@ -13,22 +20,21 @@ const { color } = JSON.parse(read('src/lib/tokens/resolved/oxide.tokens.json'));
 for (const role of new Set([...Object.values(chromeRoles), 'structure', 'accent'])) {
   if (!hexToRgb(color[role] ?? '')) throw new Error(`Invalid Oxide color: ${role}`);
 }
-let terrainSvg = terrainMaster;
-for (const role of ['structure', 'accent']) {
-  const marker = `var(--wm-${role})`;
-  if (!terrainSvg.includes(marker)) throw new Error(`Terrain color marker missing: ${marker}`);
-  terrainSvg = terrainSvg.replaceAll(marker, color[role]);
+for (const marker of ['class="contours"', '</svg>']) {
+  if (!terrainMaster.includes(marker)) throw new Error(`Terrain styling marker missing: ${marker}`);
 }
+// Raster-only styling keeps the shared vector free of colors that override consumer CSS.
+const terrainSvg = terrainMaster.replace('</svg>', `<style>svg { color: ${color.structure}; } .contours { color: ${color.accent}; }</style></svg>`);
 const dataUrl = (svg) => `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
 // Keep the center quiet for native search/shortcuts; depth lives along the lower edges.
-const background = `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+const background = `<svg xmlns="http://www.w3.org/2000/svg" width="${BACKGROUND_WIDTH_PX}" height="${BACKGROUND_HEIGHT_PX}" viewBox="0 0 ${BACKGROUND_WIDTH_PX} ${BACKGROUND_HEIGHT_PX}">
   <defs>
     <linearGradient id="fade"><stop offset="0.01" stop-color="black"/><stop offset="0.12" stop-color="white"/><stop offset="0.88" stop-color="white"/><stop offset="0.99" stop-color="black"/></linearGradient>
     <linearGradient id="ridge" x2="0" y2="1"><stop stop-color="${color.structure}" stop-opacity="0.18"/><stop offset="1" stop-color="${color['surface-2']}" stop-opacity="0.15"/></linearGradient>
     <radialGradient id="haze"><stop stop-color="${color.accent}" stop-opacity="0.10"/><stop offset="1" stop-color="${color.accent}" stop-opacity="0"/></radialGradient>
-    <mask id="edges" maskUnits="userSpaceOnUse"><rect width="1920" height="1080" fill="url(#fade)"/></mask>
+    <mask id="edges" maskUnits="userSpaceOnUse"><rect width="${BACKGROUND_WIDTH_PX}" height="${BACKGROUND_HEIGHT_PX}" fill="url(#fade)"/></mask>
   </defs>
-  <rect width="1920" height="1080" fill="${color.bg}"/>
+  <rect width="${BACKGROUND_WIDTH_PX}" height="${BACKGROUND_HEIGHT_PX}" fill="${color.bg}"/>
   <g mask="url(#edges)">
     <ellipse cx="960" cy="1030" rx="940" ry="290" fill="url(#haze)"/>
     <path d="M0 1004 180 934 310 958 470 814 544 882 600 850 730 974 878 1016 1030 1024 1160 986 1330 824 1400 878 1480 786 1650 930 1760 906 1920 992V1080H0Z" fill="url(#ridge)"/>
@@ -43,26 +49,45 @@ const output = new URL('chrome-theme/', root);
 const stage = new URL('.build-lock/', output);
 // Exclusive staging also keeps a second build from publishing during packaging.
 mkdirSync(stage);
+const controller = new AbortController();
+const interrupt = () => { process.exitCode = 130; controller.abort(); };
+const terminate = () => { process.exitCode = 143; controller.abort(); };
+process.on('SIGINT', interrupt);
+process.on('SIGTERM', terminate);
+const runTool = async (file, args, options = {}) => {
+  const task = execFileAsync(file, args, {
+    timeout: TOOL_TIMEOUT_MS, maxBuffer: TOOL_MAX_BUFFER_BYTES,
+    signal: controller.signal, killSignal: 'SIGKILL', ...options
+  });
+  // Abort rejects before close; wait until the tool can no longer write into staging.
+  const closed = new Promise((resolve) => task.child.once('close', resolve));
+  try { await task; }
+  finally { await closed; }
+};
 try {
   mkdirSync(new URL('images/', stage));
-  const render = (svg, filename, size) => execFileSync('rsvg-convert', [
-    ...(size ? ['--width', String(size), '--height', String(size)] : []),
-    '--output', fileURLToPath(new URL(`images/${filename}`, stage))
-  ], { input: svg, timeout: 30_000, maxBuffer: 1024 * 1024 });
-  render(background, 'new-tab.png');
+  const render = async (svg, filename, size) => {
+    const source = new URL(`${filename}.svg`, stage);
+    writeFileSync(source, svg);
+    await runTool('rsvg-convert', [
+      ...(size ? ['--width', String(size), '--height', String(size)] : []),
+      '--output', fileURLToPath(new URL(`images/${filename}`, stage)), fileURLToPath(source)
+    ]);
+  };
+  await render(background, 'new-tab.png');
   // Chrome anchors attribution independently of the cropped background and shortcut grid.
-  render(`<svg xmlns="http://www.w3.org/2000/svg" width="128" height="96"><image width="128" height="96" href="${bearMark}"/></svg>`, 'attribution.png');
+  await render(`<svg xmlns="http://www.w3.org/2000/svg" width="128" height="96"><image width="128" height="96" href="${bearMark}"/></svg>`, 'attribution.png');
   const icons = {};
   const icon = `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><image y="16" width="128" height="96" href="${bearMark}"/></svg>`;
   for (const size of [16, 48, 128]) {
-    render(icon, `icon-${size}.png`, size);
+    await render(icon, `icon-${size}.png`, size);
     icons[size] = `images/icon-${size}.png`;
   }
 
   const manifest = {
     manifest_version: 3,
     name: 'IRONMAW Oxide',
-    version: '1.2.0',
+    version: THEME_VERSION,
     description: 'Charcoal browser surfaces, misted slate ridges and a teal horizon. The original IRONMAW bear, quietly grounded.',
     icons,
     theme: {
@@ -75,9 +100,7 @@ try {
   const files = [...Object.values(icons), ...Object.values(manifest.theme.images), 'manifest.json'];
   if (process.argv.includes('--pack')) {
     // ZIP reads the complete staged generation, never arbitrary files in images/.
-    execFileSync('zip', ['-X', 'theme.zip', ...files], {
-      cwd: stage, timeout: 30_000, maxBuffer: 1024 * 1024
-    });
+    await runTool('zip', ['-X', 'theme.zip', ...files], { cwd: stage });
   }
   // shortcut: per-file renames are not power-loss atomic as a set; use versioned assets if that is required.
   for (const file of files) renameSync(new URL(file, stage), new URL(file, output));
@@ -86,6 +109,11 @@ try {
     renameSync(new URL('theme.zip', stage), new URL('chrome-theme-dist/ironmaw-oxide-chrome.zip', root));
   }
   console.log('Chrome theme built: chrome-theme/');
+} catch (error) {
+  if (!controller.signal.aborted) throw error;
+  console.error('Chrome theme build cancelled.');
 } finally {
   rmSync(stage, { recursive: true, force: true });
+  process.removeListener('SIGINT', interrupt);
+  process.removeListener('SIGTERM', terminate);
 }

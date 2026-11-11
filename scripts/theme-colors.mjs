@@ -9,8 +9,8 @@ export function hexToRgb(hex) {
 export const chromeRoles = {
   frame: 'bg', frame_inactive: 'surface-2',
   frame_incognito: 'bg', frame_incognito_inactive: 'surface-2',
-  background_tab: 'surface-1', background_tab_inactive: 'surface-2',
-  background_tab_incognito: 'surface-1', background_tab_incognito_inactive: 'surface-2',
+  background_tab: 'surface-1', background_tab_inactive: 'surface-1',
+  background_tab_incognito: 'surface-1', background_tab_incognito_inactive: 'surface-1',
   toolbar: 'surface-3', toolbar_text: 'text', toolbar_button_icon: 'text',
   tab_text: 'text-strong', bookmark_text: 'text',
   tab_background_text: 'text-muted', tab_background_text_inactive: 'text-muted',

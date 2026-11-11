@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "IRONMAW Oxide",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Charcoal browser surfaces, misted slate ridges and a teal horizon. The original IRONMAW bear, quietly grounded.",
   "icons": {
     "16": "images/icon-16.png",
@@ -36,9 +36,9 @@
         30
       ],
       "background_tab_inactive": [
-        25,
-        35,
-        39
+        20,
+        27,
+        30
       ],
       "background_tab_incognito": [
         20,
@@ -46,9 +46,9 @@
         30
       ],
       "background_tab_incognito_inactive": [
-        25,
-        35,
-        39
+        20,
+        27,
+        30
       ],
       "toolbar": [
         31,
