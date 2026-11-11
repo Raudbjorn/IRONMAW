@@ -70,13 +70,12 @@ Use Node `^22.18.0 || >=24.0.0` and the pinned pnpm version. Asset generation
 also requires `rsvg-convert` (Arch: `librsvg`); ZIP packaging requires `zip`. No new npm
 dependencies are needed.
 
-For token work, `pnpm run tokens` refreshes web/native tokens and the Chrome
-manifest without either external tool. Its manifest step is also available as
-`node scripts/build-chrome-theme.mjs --manifest-only`. Both token and theme
-commands share `tokens:core`, including egui; the full theme build publishes its
-manifest only after rendering succeeds. If palette colors used in the artwork
-change, regenerate the PNGs with `pnpm run chrome-theme` before installing or
-distributing the theme. Manifest checks alone do not detect stale raster colors.
+`pnpm run tokens` updates only web/native tokens; it never touches theme files
+or takes the theme lock. Run `pnpm run chrome-theme` after palette or artwork
+changes to regenerate the complete theme. The strict manifest/token tests fail
+when mapped colors are out of sync. The former `--manifest-only` mode was removed
+because it could publish new colors beside old PNGs. Neither ordinary library
+builds nor token generation need librsvg or ZIP.
 
 From the repository root:
 
@@ -97,10 +96,15 @@ for composition, and the DTCG source tokens for palette changes. The build runs
 the complete token pipeline, including egui, and refreshes the generated brand
 modules. It reuses the cleaned full bear for attribution and package icons.
 `assets/brand/terrain.svg` is the shared source for Panel, EmptyState and the
-theme. EmptyState now uses the same paths, including pines, with its existing
-edge mask and opacity. Both components apply terrain colors through scoped
-`wm.base` CSS rules; the SVG has no inline color styles, so `wm.user` and
-unlayered consumer overrides work under strict style CSPs. Bear colors are
+theme. The asset builder also generates `src/lib/assets/Terrain.svelte`, so
+Panel and EmptyState render compiled SVG without raw HTML insertion. EmptyState
+fits a mirrored copy onto each edge, keeping the pines visible at typical sizes.
+The shared component paints strokes with `--wm-terrain-structure` and
+`--wm-terrain-accent` (defaulting to the palette's structure/accent tokens).
+Set these inherited variables in consumer CSS, including `wm.user`; generic
+`color` resets no longer recolor the artwork. No inline style permission or
+Trusted Types default policy is needed; Svelte's `svelte-trusted-html` policy must
+be allowed when a `trusted-types` policy allowlist is used. Bear colors are
 preserved; attribution height and icon centering derive from its intrinsic ratio.
 Commit regenerated outputs alongside source changes. Theme releases are versioned
 independently of the npm library: bump `THEME_VERSION` in the generator before
@@ -113,9 +117,8 @@ only the staged manifest references, so stale or extra PNGs never enter the ZIP.
 After successful rendering and optional packaging, publication creates the
 images directory if necessary and removes unreferenced PNG files. Other files
 are left alone; failed renders and cancelled builds leave existing PNGs intact.
-Manifest-only updates use the same lock and leave all images untouched.
 Each published file is replaced by rename, with the manifest last. This is not
-a power-loss-atomic transaction across the entire file set. SIGINT (Ctrl+C) and
+a power-loss-atomic transaction across the entire file set. SIGINT (Ctrl+C), SIGHUP and
 SIGTERM stop the active rendering/ZIP tool before removing the lock; renderer and
 ZIP failures also clean it automatically. An uncatchable kill or power loss can
 still leave `.build-lock/`: confirm no theme build is running before removing
@@ -163,24 +166,24 @@ The theme and existing palette checks cover RGB values, semantic mappings,
 asset paths and PNG dimensions, text contrast, and distinct frame/tab colors in
 all four mapped window states. The isolated build tests use stub `rsvg-convert`
 and `zip` executables to exercise failures, concurrent-build rejection and
-SIGINT/SIGTERM cleanup; those fixtures are skipped on Windows. Real librsvg
+SIGINT/SIGTERM/SIGHUP cleanup; those fixtures are skipped on Windows. Real librsvg
 rendering and Info-ZIP packaging were also run separately on Linux, including
 Node 22.18.0. All six ZIP entries passed CRC checks and matched the generated
 files byte for byte; an npm dry run excluded theme and ZIP artifacts.
 
-The 1.2.1 pass also checked Panel's compiled CSS in Chromium with
-`style-src 'self'`: default ridge/contour colors and unlayered consumer overrides
-worked without CSP violations. The old SVG produced four inline-style violations
-across the same two panels. The library build and Svelte check passed.
-
-The third review pass ran 69 focused tests across theme generation, distribution,
-Panel, EmptyState and palette checks. The 16 build tests also passed on Node
-22.18.0. New coverage includes interruption after ZIP exit, missing image
-directories, stale-PNG cleanup and manifest generation with an empty PATH.
-Chromium checks confirmed that Panel and EmptyState both honor `wm.user` and
-unlayered overrides under `style-src 'self'`; the previous EmptyState ignored
-those overrides. Real rendering/packaging and the library build passed again,
-with browser colors and PNG bytes unchanged from 1.2.1.
+The PR #11 review pass checked client-mounted Panel and EmptyState in Chromium
+with `style-src 'self'` and Trusted Types enforcement, without a default policy.
+Both mount without CSP violations, retain their default inks under broad color
+resets, and inherit custom terrain inks from `wm.user`. At 800 x 280, EmptyState
+shows pines at both edges; the previous single cropped vector hid them entirely.
+These checks cover the components in an isolated browser page, not a synced
+design project. The build tests also exercise the ZIP-exit interruption using a
+signal handshake, packaging retries, and token generation with a leftover theme
+lock and missing/conflicted generated brand modules.
+The 78 focused tests passed; all 25 build/preflight tests also passed on Node
+22.18.0. Svelte check and the library/React-adapter build passed. The packed
+library installed with npm `--engine-strict` and imported its token exports on
+Node 22.12.0 and 23.6.0; this is not a full consuming-application test.
 
 A pixel check of the 1.1.0
 background also found minimum contrast of 10.89:1 for text, 5.67:1 for headers

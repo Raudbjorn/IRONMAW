@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import { terrainSvg } from '../../assets/terrain.ts';
+  import Terrain from '../../assets/Terrain.svelte';
   import type { HTMLAttributes } from 'svelte/elements';
 
   // A fitted surface: charcoal tonal step, quiet border, small radius.
@@ -25,7 +25,7 @@
 <svelte:element this={as} {...rest} data-wm="panel" data-surface={surface} data-padding={padding} data-elevated={elevated || undefined} data-terrain={terrain || undefined}>
   {#if terrain}
     <div class="terrain-crop" aria-hidden="true">
-      {@html terrainSvg}
+      <Terrain />
     </div>
   {/if}
   {#if header}<div class="header">{@render header()}</div>{/if}
@@ -46,10 +46,6 @@
   }
   [data-terrain] { position: relative; isolation: isolate; }
   [data-terrain] > .terrain-crop { position: absolute; inset: 0; overflow: hidden; opacity: 0.4; pointer-events: none; mask-image: linear-gradient(to right, transparent 20%, black 75%); }
-  @layer wm.base {
-    .terrain-crop { color: var(--wm-structure); }
-    .terrain-crop :global(.contours) { color: var(--wm-accent); }
-  }
   .terrain-crop :global(svg) { display: block; width: 100%; height: 100%; }
   [data-terrain] > .header,
   [data-terrain] > .body,

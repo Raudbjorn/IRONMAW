@@ -93,6 +93,16 @@
 
 ## Fixes log
 
+- **2026-11-11 PR #11 terrain corrections (local only).** The shared master now
+  generates `assets/Terrain.svelte` as well as `terrain.ts`. Panel and EmptyState
+  use compiled SVG, avoiding the raw HTML sink under Trusted Types. EmptyState
+  fits mirrored copies at both edges. Terrain ink now uses inherited
+  `--wm-terrain-structure` / `--wm-terrain-accent` variables with palette fallbacks,
+  independent of broad `color` resets. The Props documentation and owned preview
+  notes reflect this CSS contract; JS props, snippets and wrapper calls are unchanged.
+  Re-grade both terrain cards at the next supported sync. The moved-project block
+  below still applies; no upload was attempted.
+
 - **2026-11-11 project moved to Claude — sync blocked.** `get_project` on
   `ba980cbf-…` returns `moveState: "moved"`; the server refuses uploads and
   `/design-sync` can't send updates to Claude yet. The design system now lives

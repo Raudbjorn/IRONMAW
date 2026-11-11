@@ -5,8 +5,14 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { chromeRoles, hexToRgb } from './theme-colors.mjs';
-import { bearMark, BEAR_MARK_WIDTH, BEAR_MARK_HEIGHT } from '../src/lib/assets/bear-mark.ts';
-import { terrainSvg as terrainMaster } from '../src/lib/assets/terrain.ts';
+import './check-build-node.mjs';
+
+if (process.argv.slice(2).some((arg) => arg !== '--pack')) {
+  console.error('Usage: node scripts/build-chrome-theme.mjs [--pack]');
+  process.exit(1);
+}
+const { bearMark, BEAR_MARK_WIDTH, BEAR_MARK_HEIGHT } = await import('../src/lib/assets/bear-mark.ts');
+const { terrainSvg: terrainMaster } = await import('../src/lib/assets/terrain.ts');
 
 const THEME_VERSION = '1.2.1';
 const BACKGROUND_WIDTH_PX = 1920;
@@ -17,14 +23,12 @@ const BEAR_WIDTH_PX = 128;
 const BEAR_HEIGHT_PX = Math.round(BEAR_WIDTH_PX * BEAR_MARK_HEIGHT / BEAR_MARK_WIDTH);
 const ICON_INSET_Y_PX = (BEAR_WIDTH_PX - BEAR_HEIGHT_PX) / 2;
 const pack = process.argv.includes('--pack');
-const manifestOnly = process.argv.includes('--manifest-only');
-if (pack && manifestOnly) throw new Error('--manifest-only cannot be combined with --pack');
 const execFileAsync = promisify(execFile);
 const root = new URL('../', import.meta.url);
 const read = (path) => readFileSync(new URL(path, root), 'utf8');
 const { color } = JSON.parse(read('src/lib/tokens/resolved/oxide.tokens.json'));
 // Validate all palette inputs before generating any artwork.
-for (const role of new Set([...Object.values(chromeRoles), ...(!manifestOnly ? ['structure', 'accent'] : [])])) {
+for (const role of new Set([...Object.values(chromeRoles), 'structure', 'accent'])) {
   if (!hexToRgb(color[role] ?? '')) throw new Error(`Invalid Oxide color: ${role}`);
 }
 const icons = Object.fromEntries([16, 48, 128].map((size) => [size, `images/icon-${size}.png`]));
@@ -40,7 +44,7 @@ const manifest = {
     properties: { ntp_background_alignment: 'bottom', ntp_background_repeat: 'no-repeat', ntp_logo_alternate: 1 }
   }
 };
-if (!manifestOnly) for (const marker of ['class="contours"', '</svg>']) {
+for (const marker of ['class="contours"', '</svg>']) {
   if (!terrainMaster.includes(marker)) throw new Error(`Terrain styling marker missing: ${marker}`);
 }
 // Raster-only styling keeps the shared vector free of colors that override consumer CSS.
@@ -69,12 +73,19 @@ const background = `<svg xmlns="http://www.w3.org/2000/svg" width="${BACKGROUND_
 const output = new URL('chrome-theme/', root);
 const stage = new URL('.build-lock/', output);
 // Exclusive staging also keeps a second build from publishing during packaging.
-mkdirSync(stage);
+try { mkdirSync(stage); }
+catch (error) {
+  if (error.code !== 'EEXIST') throw error;
+  console.error('Chrome theme staging already exists: chrome-theme/.build-lock/. If no theme build is running, remove it and retry.');
+  process.exit(1);
+}
 const controller = new AbortController();
 const interrupt = () => { process.exitCode = 130; controller.abort(); };
 const terminate = () => { process.exitCode = 143; controller.abort(); };
+const hangup = () => { process.exitCode = 129; controller.abort(); };
 process.on('SIGINT', interrupt);
 process.on('SIGTERM', terminate);
+process.on('SIGHUP', hangup);
 const runTool = async (file, args, options = {}) => {
   const task = execFileAsync(file, args, {
     timeout: TOOL_TIMEOUT_MS, maxBuffer: TOOL_MAX_BUFFER_BYTES,
@@ -86,50 +97,52 @@ const runTool = async (file, args, options = {}) => {
   finally { await closed; }
 };
 try {
-  if (!manifestOnly) {
-    mkdirSync(new URL('images/', stage));
-    const render = async (svg, filename, size) => {
-      const source = new URL(`${filename}.svg`, stage);
-      writeFileSync(source, svg);
-      await runTool('rsvg-convert', [
-        ...(size ? ['--width', String(size), '--height', String(size)] : []),
-        '--output', fileURLToPath(new URL(`images/${filename}`, stage)), fileURLToPath(source)
-      ]);
-    };
-    await render(background, 'new-tab.png');
-    // Chrome anchors attribution independently of the cropped background and shortcut grid.
-    await render(`<svg xmlns="http://www.w3.org/2000/svg" width="${BEAR_WIDTH_PX}" height="${BEAR_HEIGHT_PX}"><image width="${BEAR_WIDTH_PX}" height="${BEAR_HEIGHT_PX}" href="${bearMark}"/></svg>`, 'attribution.png');
-    const icon = `<svg xmlns="http://www.w3.org/2000/svg" width="${BEAR_WIDTH_PX}" height="${BEAR_WIDTH_PX}" viewBox="0 0 ${BEAR_WIDTH_PX} ${BEAR_WIDTH_PX}"><image y="${ICON_INSET_Y_PX}" width="${BEAR_WIDTH_PX}" height="${BEAR_HEIGHT_PX}" href="${bearMark}"/></svg>`;
-    for (const size of Object.keys(icons)) {
-      await render(icon, `icon-${size}.png`, size);
-    }
+  mkdirSync(new URL('images/', stage));
+  const render = async (svg, filename, size) => {
+    const source = new URL(`${filename}.svg`, stage);
+    writeFileSync(source, svg);
+    await runTool('rsvg-convert', [
+      ...(size ? ['--width', String(size), '--height', String(size)] : []),
+      '--output', fileURLToPath(new URL(`images/${filename}`, stage)), fileURLToPath(source)
+    ]);
+  };
+  await render(background, 'new-tab.png');
+  // Chrome anchors attribution independently of the cropped background and shortcut grid.
+  await render(`<svg xmlns="http://www.w3.org/2000/svg" width="${BEAR_WIDTH_PX}" height="${BEAR_HEIGHT_PX}"><image width="${BEAR_WIDTH_PX}" height="${BEAR_HEIGHT_PX}" href="${bearMark}"/></svg>`, 'attribution.png');
+  const icon = `<svg xmlns="http://www.w3.org/2000/svg" width="${BEAR_WIDTH_PX}" height="${BEAR_WIDTH_PX}" viewBox="0 0 ${BEAR_WIDTH_PX} ${BEAR_WIDTH_PX}"><image y="${ICON_INSET_Y_PX}" width="${BEAR_WIDTH_PX}" height="${BEAR_HEIGHT_PX}" href="${bearMark}"/></svg>`;
+  for (const size of Object.keys(icons)) {
+    await render(icon, `icon-${size}.png`, size);
   }
   writeFileSync(new URL('manifest.json', stage), JSON.stringify(manifest, null, 2) + '\n');
-  const files = manifestOnly ? ['manifest.json'] : [...Object.values(icons), ...Object.values(manifest.theme.images), 'manifest.json'];
+  const files = [...Object.values(icons), ...Object.values(manifest.theme.images), 'manifest.json'];
   if (pack) {
     // ZIP reads the complete staged generation, never arbitrary files in images/.
     await runTool('zip', ['-X', 'theme.zip', ...files], { cwd: stage });
   }
-  controller.signal.throwIfAborted();
-  const images = new URL('images/', output);
-  if (!manifestOnly) mkdirSync(images, { recursive: true });
-  // shortcut: per-file renames are not power-loss atomic as a set; use versioned assets if that is required.
-  for (const file of files) renameSync(new URL(file, stage), new URL(file, output));
-  if (!manifestOnly) for (const entry of readdirSync(images, { withFileTypes: true })) {
-    if (entry.isFile() && /\.png$/i.test(entry.name) && !files.includes(`images/${entry.name}`)) {
-      rmSync(join(fileURLToPath(images), entry.name));
+  if (controller.signal.aborted) {
+    console.error('Chrome theme build cancelled.');
+  } else {
+    const images = new URL('images/', output);
+    mkdirSync(images, { recursive: true });
+    // shortcut: per-file renames are not power-loss atomic as a set; use versioned assets if that is required.
+    for (const file of files) renameSync(new URL(file, stage), new URL(file, output));
+    for (const entry of readdirSync(images, { withFileTypes: true })) {
+      if (entry.isFile() && /\.png$/i.test(entry.name) && !files.includes(`images/${entry.name}`)) {
+        rmSync(join(fileURLToPath(images), entry.name));
+      }
     }
+    if (pack) {
+      mkdirSync(new URL('chrome-theme-dist/', root), { recursive: true });
+      renameSync(new URL('theme.zip', stage), new URL('chrome-theme-dist/ironmaw-oxide-chrome.zip', root));
+    }
+    console.log('Chrome theme built: chrome-theme/');
   }
-  if (pack) {
-    mkdirSync(new URL('chrome-theme-dist/', root), { recursive: true });
-    renameSync(new URL('theme.zip', stage), new URL('chrome-theme-dist/ironmaw-oxide-chrome.zip', root));
-  }
-  console.log(manifestOnly ? 'Chrome theme manifest built: chrome-theme/manifest.json' : 'Chrome theme built: chrome-theme/');
 } catch (error) {
-  if (!controller.signal.aborted) throw error;
+  if (!controller.signal.aborted || error.name !== 'AbortError') throw error;
   console.error('Chrome theme build cancelled.');
 } finally {
   rmSync(stage, { recursive: true, force: true });
   process.removeListener('SIGINT', interrupt);
   process.removeListener('SIGTERM', terminate);
+  process.removeListener('SIGHUP', hangup);
 }

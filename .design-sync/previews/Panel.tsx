@@ -1,4 +1,5 @@
 // Mirrors src/stories/layout/Panel.stories.svelte
+// Terrain inks inherit --wm-terrain-structure and --wm-terrain-accent from the host.
 import * as React from 'react';
 import { Heading, Kicker, Panel, Stack, StatusLabel, Text } from '@svnbjrn/ironmaw';
 

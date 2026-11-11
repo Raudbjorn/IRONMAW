@@ -11,8 +11,13 @@ describe('Panel terrain', () => {
     const decoration = container.querySelector('.terrain-crop');
     expect(decoration).toHaveAttribute('aria-hidden', 'true');
     expect(decoration?.querySelectorAll('path')).toHaveLength(6);
-    // Inline colors block CSP and prevent the vector inheriting consumer overrides.
+    // Compiled SVG avoids raw HTML insertion and keeps paint in the stylesheet.
     expect(decoration?.querySelector('[style]')).toBeNull();
-    expect(terrainSvg).toContain('focusable="false"');
+    expect(decoration?.querySelector('svg')).toHaveAttribute('focusable', 'false');
+    expect(decoration?.querySelector('svg')).toHaveAttribute('preserveAspectRatio', 'xMidYMid slice');
+    const master = document.createElement('div');
+    master.innerHTML = terrainSvg;
+    expect([...decoration!.querySelectorAll('path')].map((path) => path.getAttribute('d')))
+      .toEqual([...master.querySelectorAll('path')].map((path) => path.getAttribute('d')));
   });
 });

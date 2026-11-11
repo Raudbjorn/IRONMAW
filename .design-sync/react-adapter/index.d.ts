@@ -247,7 +247,7 @@ export interface PanelProps {
   surface?: 1 | 2 | 3;
   padding?: 0 | 2 | 3 | 4 | 6;
   elevated?: boolean;
-  /** Contour and mountain treatment for brand headers and empty states. */
+  /** Brand terrain; inherits --wm-terrain-structure and --wm-terrain-accent. */
   terrain?: boolean;
   'aria-label'?: string;
   header?: React.ReactNode;
@@ -719,6 +719,7 @@ export declare const StatusBar: React.FC<StatusBarProps>;
 export interface EmptyStateProps {
   title: string;
   icon?: IconName;
+  /** Fitted terrain on both edges; inherits --wm-terrain-structure and --wm-terrain-accent. */
   terrain?: boolean;
   actions?: React.ReactNode;
   children?: React.ReactNode;

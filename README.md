@@ -49,6 +49,11 @@ pnpm add @svnbjrn/ironmaw   # once published; today: pnpm link from this repo
 <Button variant="primary">Copy passage with source</Button>
 ```
 
+`Panel terrain` and `EmptyState terrain` inherit `--wm-terrain-structure` and
+`--wm-terrain-accent` from consumer CSS, defaulting to the palette's structure and
+accent tokens. Use those variables to recolor terrain; broad `color` rules do not
+change its strokes. EmptyState fits the shared artwork onto both edges.
+
 ## Parts
 
 | Group | Components |
@@ -79,6 +84,9 @@ The supplied alternate cyan/orange and pixel bear concepts remain visual
 references; they are distinct marks, not automatic variants of the master.
 
 ## Develop
+
+Use Node `^22.18.0 || >=24.0.0` for generators and the pinned pnpm version.
+The published library supports Node `>=22`.
 
 ```bash
 pnpm install
