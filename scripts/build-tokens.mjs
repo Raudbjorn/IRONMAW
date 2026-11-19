@@ -10,7 +10,9 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { themes } from '../src/lib/tokens/themes.ts';
+import './check-build-node.mjs';
+
+const { themes } = await import('../src/lib/tokens/themes.ts');
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const TOKENS_DIR = join(here, '..', 'src', 'lib', 'tokens');

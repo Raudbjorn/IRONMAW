@@ -23,10 +23,16 @@ describe('EmptyState', () => {
     expect(container.querySelector('.icon')).toBeInTheDocument();
     expect(container.querySelector('.terrain-crop')).toHaveAttribute('aria-hidden', 'true');
     expect(container.querySelector('[data-wm="empty-state"]')).toHaveAttribute('data-terrain');
-    // Brand edits must reach both terrain consumers without inline color overrides.
+    // Each fitted edge keeps the shared paths; a single cropped SVG loses the pines.
     const master = document.createElement('div');
     master.innerHTML = terrainSvg;
-    expect(container.querySelector('.terrain-crop')?.innerHTML.trim()).toBe(master.innerHTML);
+    const paths = [...master.querySelectorAll('path')].map((path) => path.getAttribute('d'));
+    const edges = container.querySelectorAll('.terrain-edge svg');
+    expect(edges).toHaveLength(2);
+    for (const edge of edges) {
+      expect(edge).toHaveAttribute('preserveAspectRatio', 'xMidYMax meet');
+      expect([...edge.querySelectorAll('path')].map((path) => path.getAttribute('d'))).toEqual(paths);
+    }
     expect(container.querySelector('.terrain-crop [style]')).toBeNull();
   });
 });

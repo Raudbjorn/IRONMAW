@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import { terrainSvg } from '../../assets/terrain.ts';
+  import Terrain from '../../assets/Terrain.svelte';
   import type { IconName } from '../../icons';
   import Heading from '../atoms/Heading.svelte';
   import Icon from '../atoms/Icon.svelte';
@@ -23,7 +23,8 @@
 <section data-wm="empty-state" data-terrain={terrain || undefined}>
   {#if terrain}
     <div class="terrain-crop" aria-hidden="true">
-      {@html terrainSvg}
+      <div class="terrain-edge left"><Terrain preserveAspectRatio="xMidYMax meet" /></div>
+      <div class="terrain-edge right"><Terrain preserveAspectRatio="xMidYMax meet" /></div>
     </div>
   {/if}
   <div class="content">
@@ -53,10 +54,9 @@
     mask-image: linear-gradient(to right, black 0%, transparent 28%, transparent 72%, black 100%);
   }
   .terrain-crop :global(svg) { display: block; width: 100%; height: 100%; }
-  @layer wm.base {
-    .terrain-crop { color: var(--wm-structure); }
-    .terrain-crop :global(.contours) { color: var(--wm-accent); }
-  }
+  .terrain-edge { position: absolute; inset-block: 0; width: 50%; }
+  .left { left: 0; transform: scaleX(-1); }
+  .right { right: 0; }
   .content {
     display: flex;
     flex-direction: column;
